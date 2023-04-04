@@ -33,13 +33,13 @@ class SideMenu extends StatelessWidget {
                       width: _width/48
                     ),
                     Padding(padding: const EdgeInsets.only(right:12),
-                    child: Icon(Icons.local_police_outlined),
+                    child: Icon(Icons.cabin_outlined, color: darke,),
                     ),
                     Flexible(child: CustomText(
-                      text: "Primis",
+                      text: "HRMS",
                       size: 20,
                       weight: FontWeight.bold,
-                      color: active,
+                      color: darke,
                     ),
                     ),
                   ],

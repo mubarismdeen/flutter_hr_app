@@ -4,41 +4,53 @@ import 'package:flutter/material.dart';
 
 import 'custom_text.dart';
 
-AppBar topNavigationBar (BuildContext context, GlobalKey<ScaffoldState> key) =>
+AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
     AppBar(
-      leading: !ResponsiveWidget.isSmallScreen(context)?
-            Row(
-                children: [
-                    Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: const Icon(Icons.local_police_outlined, size:25),
-                    )
-                ],
-            ) : IconButton(icon: const Icon(Icons.menu_outlined), onPressed: (){
-                key.currentState?.openDrawer();}),
+      leading: !ResponsiveWidget.isSmallScreen(context)
+          ? Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Icon(
+                    Icons.cabin_outlined,
+                    size: 25,
+                    color: darke,
+                  ),
+                )
+              ],
+            )
+          : IconButton(
+              icon: const Icon(Icons.menu_outlined),
+              onPressed: () {
+                key.currentState?.openDrawer();
+              }),
       elevation: 0,
-      title: Wrap(
-        children: [Row(
+      title: Wrap(children: [
+        Row(
           children: [
-            Visibility(child: CustomText(
-              text: 'Primis',
-              color: Colors.black,
+            Visibility(
+                child: CustomText(
+              text: 'HRMS',
+              color: darke,
               weight: FontWeight.bold,
-              size: 16 ,)
-            ),
+              size: 16,
+            )),
             Expanded(child: Container()),
             IconButton(
               icon: Icon(
                 Icons.settings,
                 color: lightGrey.withOpacity(.7),
               ),
-              onPressed: (){},
+              onPressed: () {},
             ),
             Stack(
               children: [
                 IconButton(
-                    icon: Icon(Icons.notifications, color: lightGrey.withOpacity(.7),),
-                    onPressed: (){}),
+                    icon: Icon(
+                      Icons.notifications,
+                      color: lightGrey.withOpacity(.7),
+                    ),
+                    onPressed: () {}),
                 Positioned(
                     top: 7,
                     right: 7,
@@ -47,10 +59,9 @@ AppBar topNavigationBar (BuildContext context, GlobalKey<ScaffoldState> key) =>
                       height: 12,
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: active,
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: light, width: 2)
-                      ),
+                          color: active,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: light, width: 2)),
                     ))
               ],
             ),
@@ -62,28 +73,32 @@ AppBar topNavigationBar (BuildContext context, GlobalKey<ScaffoldState> key) =>
             const SizedBox(
               width: 5,
             ),
-            CustomText(text: "Mabuchi Nyirenda", size: 16, color: lightGrey, weight: FontWeight.bold),
-
+            CustomText(
+                text: "Mabuchi Nyirenda",
+                size: 16,
+                color: lightGrey,
+                weight: FontWeight.bold),
             SizedBox(
               width: 5,
             ),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(30)),
               child: Container(
                 padding: EdgeInsets.all(2),
                 margin: EdgeInsets.all(2),
                 child: CircleAvatar(
                   backgroundColor: light,
-                  child: Icon(Icons.person_outline, color: lightGrey,),),
+                  child: Icon(
+                    Icons.person_outline,
+                    color: lightGrey,
+                  ),
+                ),
               ),
             )
           ],
         ),
-      ]
-      ),
+      ]),
       iconTheme: IconThemeData(color: lightGrey),
       backgroundColor: Colors.transparent,
     );
