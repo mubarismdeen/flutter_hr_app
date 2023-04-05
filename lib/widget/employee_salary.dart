@@ -30,67 +30,62 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
             const SizedBox(
               height: 10,
             ),
-            const CustomText(
-              text: "Salary",
-              size: 18,
-              color: Colors.black,
-              weight: FontWeight.bold,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Employee Name',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+            Expanded(
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Employee Name',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Working Days',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Working Days',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Holidays Taken',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Holidays Taken',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Overtime Hours',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Overtime Hours',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Net Payout',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Net Payout',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
+                  rows: salaryData
+                      .map((salary) => DataRow(cells: [
+                    DataCell(Text(salary.employeeName)),
+                    DataCell(Text(salary.workingDays.toString())),
+                    DataCell(Text(salary.holidaysTaken.toString())),
+                    DataCell(Text(salary.overtimeHours.toString())),
+                    DataCell(Text(salary.netPayout.toStringAsFixed(2))),
+                  ]))
+                      .toList(),
                 ),
-              ],
-              rows: salaryData
-                  .map((salary) => DataRow(cells: [
-                DataCell(Text(salary.employeeName)),
-                DataCell(Text(salary.workingDays.toString())),
-                DataCell(Text(salary.holidaysTaken.toString())),
-                DataCell(Text(salary.overtimeHours.toString())),
-                DataCell(Text(salary.netPayout.toStringAsFixed(2))),
-              ]))
-                  .toList(),
+              ),
             ),
           ],
         ),

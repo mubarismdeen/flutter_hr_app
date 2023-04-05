@@ -30,49 +30,44 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
             const SizedBox(
               height: 10,
             ),
-            const CustomText(
-              text: "Attendance",
-              size: 18,
-              color: Colors.black,
-              weight: FontWeight.bold,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Employee Name',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+            Expanded(
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Employee Name',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Date',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Date',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Attendance Status',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Attendance Status',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
+                  rows: attendanceData
+                      .map((attendance) => DataRow(cells: [
+                            DataCell(Text(attendance.employeeName)),
+                            DataCell(Text(formatDate(attendance.date, [yyyy, '-', mm, '-', dd]))),
+                            DataCell(Text(attendance.attendanceStatus)),
+                          ]))
+                      .toList(),
                 ),
-              ],
-              rows: attendanceData
-                  .map((attendance) => DataRow(cells: [
-                        DataCell(Text(attendance.employeeName)),
-                        DataCell(Text(formatDate(attendance.date, [yyyy, '-', mm, '-', dd]))),
-                        DataCell(Text(attendance.attendanceStatus)),
-                      ]))
-                  .toList(),
+              ),
             ),
           ],
         ),

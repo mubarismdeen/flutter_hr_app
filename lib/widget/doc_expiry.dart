@@ -21,6 +21,141 @@ class _DocExpiryState extends State<DocExpiry> {
       "Expiry": "01/02/2024",
     },
     {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
+      "Employee": "Muthu",
+      "Document": "Permit",
+      "Expiry": "01/02/2024",
+    },
+    {
       "Employee": "Munna",
       "Document": "Iqama",
       "Expiry": "01/02/2024",
@@ -31,12 +166,12 @@ class _DocExpiryState extends State<DocExpiry> {
   Widget build(BuildContext context) {
     return Card(
       shadowColor: shadowColor,
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.all(20),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(
               height: 10,
@@ -50,48 +185,52 @@ class _DocExpiryState extends State<DocExpiry> {
             const SizedBox(
               height: 10,
             ),
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Employee',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Document',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Expiry',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-              ],
-              rows: tableData
-                  .map(
-                    (tableRow) => DataRow(cells: [
-                      DataCell(
-                        Text(tableRow['Employee'].toString()),
+            Expanded(
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Employee',
+                          style: tableHeaderStyle,
+                        ),
                       ),
-                      DataCell(
-                        Text(tableRow['Document'].toString()),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Document',
+                          style: tableHeaderStyle,
+                        ),
                       ),
-                      DataCell(
-                        Text(tableRow['Expiry'].toString()),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Expiry',
+                          style: tableHeaderStyle,
+                        ),
                       ),
-                    ]),
-                  )
-                  .toList(),
+                    ),
+                  ],
+                  rows: tableData
+                      .map(
+                        (tableRow) => DataRow(cells: [
+                          DataCell(
+                            Text(tableRow['Employee'].toString()),
+                          ),
+                          DataCell(
+                            Text(tableRow['Document'].toString()),
+                          ),
+                          DataCell(
+                            Text(tableRow['Expiry'].toString()),
+                          ),
+                        ]),
+                      )
+                      .toList(),
+                ),
+              ),
             ),
           ],
         ),

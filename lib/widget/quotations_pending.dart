@@ -24,6 +24,36 @@ class _QuotationsPendingState extends State<QuotationsPending> {
       "Quotation": "Inventory",
       "Company": "GHI",
       "State": "In transit",
+    },
+    {
+      "Quotation": "Purchase",
+      "Company": "ABC",
+      "State": "Negotiation",
+    },
+    {
+      "Quotation": "Claims",
+      "Company": "DEF",
+      "State": "Order placed",
+    },
+    {
+      "Quotation": "Inventory",
+      "Company": "GHI",
+      "State": "In transit",
+    },
+    {
+      "Quotation": "Purchase",
+      "Company": "ABC",
+      "State": "Negotiation",
+    },
+    {
+      "Quotation": "Claims",
+      "Company": "DEF",
+      "State": "Order placed",
+    },
+    {
+      "Quotation": "Inventory",
+      "Company": "GHI",
+      "State": "In transit",
     }
   ];
 
@@ -31,12 +61,12 @@ class _QuotationsPendingState extends State<QuotationsPending> {
   Widget build(BuildContext context) {
     return Card(
       shadowColor: shadowColor,
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.all(20),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(
               height: 10,
@@ -50,48 +80,52 @@ class _QuotationsPendingState extends State<QuotationsPending> {
             const SizedBox(
               height: 10,
             ),
-            DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Quotation',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Company',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'State',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-              ],
-              rows: tableData
-                  .map(
-                    (tableRow) => DataRow(cells: [
-                      DataCell(
-                        Text(tableRow['Quotation'].toString()),
+            Expanded(
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Quotation',
+                          style: tableHeaderStyle,
+                        ),
                       ),
-                      DataCell(
-                        Text(tableRow['Company'].toString()),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Company',
+                          style: tableHeaderStyle,
+                        ),
                       ),
-                      DataCell(
-                        Text(tableRow['State'].toString()),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'State',
+                          style: tableHeaderStyle,
+                        ),
                       ),
-                    ]),
-                  )
-                  .toList(),
+                    ),
+                  ],
+                  rows: tableData
+                      .map(
+                        (tableRow) => DataRow(cells: [
+                          DataCell(
+                            Text(tableRow['Quotation'].toString()),
+                          ),
+                          DataCell(
+                            Text(tableRow['Company'].toString()),
+                          ),
+                          DataCell(
+                            Text(tableRow['State'].toString()),
+                          ),
+                        ]),
+                      )
+                      .toList(),
+                ),
+              ),
             ),
           ],
         ),

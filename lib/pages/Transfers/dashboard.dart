@@ -28,24 +28,13 @@ class Dashboard extends StatelessWidget {
               )
             ],
           )),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+      Container(height: 400,
+        child: Row(
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 10,
-                ),
-                DocExpiry(),
-                SizedBox(
-                  width: 10,
-                ),
-                QuotationsPending(),
-              ],
-            ),
+            Expanded(child: DocExpiry()),
+            Expanded(child: QuotationsPending()),
           ],
+          crossAxisAlignment: CrossAxisAlignment.start,
         ),
       ),
     ]);
