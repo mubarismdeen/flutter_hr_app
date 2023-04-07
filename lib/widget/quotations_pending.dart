@@ -1,5 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/widget/custom_text.dart';
+import 'package:admin/widget/quotations_pending_expanded.dart';
 import 'package:flutter/material.dart';
 
 class QuotationsPending extends StatefulWidget {
@@ -127,9 +128,34 @@ class _QuotationsPendingState extends State<QuotationsPending> {
                 ),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16.0),
+                  ),
+                  onPressed: _openDialog,
+                  child: const Text('View Details', style: TextStyle(fontWeight: FontWeight.bold, color: themeColor)),
+                ),
+              ],
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void _openDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Quotations Pending'),
+          content: QuotationsPendingExpanded(),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 100),
+        );
+      },
     );
   }
 }

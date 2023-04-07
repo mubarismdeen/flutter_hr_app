@@ -11,7 +11,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
               children: [
                 Container(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Icon(
+                  child: const Icon(
                     Icons.cabin_outlined,
                     size: 25,
                     color: darke,
@@ -28,7 +28,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
       title: Wrap(children: [
         Row(
           children: [
-            Visibility(
+            const Visibility(
                 child: CustomText(
               text: 'HRMS',
               color: darke,
@@ -57,7 +57,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                     child: Container(
                       width: 8,
                       height: 12,
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                           color: active,
                           borderRadius: BorderRadius.circular(30),
@@ -73,12 +73,12 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
             const SizedBox(
               width: 5,
             ),
-            CustomText(
-                text: "Mabuchi Nyirenda",
+            const CustomText(
+                text: "Master User",
                 size: 16,
                 color: lightGrey,
                 weight: FontWeight.bold),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
             Container(
@@ -87,7 +87,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
               child: Container(
                 padding: EdgeInsets.all(2),
                 margin: EdgeInsets.all(2),
-                child: CircleAvatar(
+                child: const CircleAvatar(
                   backgroundColor: light,
                   child: Icon(
                     Icons.person_outline,
@@ -99,6 +99,6 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
           ],
         ),
       ]),
-      iconTheme: IconThemeData(color: lightGrey),
+      iconTheme: const IconThemeData(color: lightGrey),
       backgroundColor: Colors.transparent,
     );

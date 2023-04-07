@@ -30,11 +30,11 @@ class Dashboard extends StatelessWidget {
           )),
       Container(height: 400,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(child: DocExpiry()),
             Expanded(child: QuotationsPending()),
           ],
-          crossAxisAlignment: CrossAxisAlignment.start,
         ),
       ),
     ]);

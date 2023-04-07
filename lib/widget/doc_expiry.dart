@@ -1,5 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/widget/custom_text.dart';
+import 'package:admin/widget/doc_expiry_expanded.dart';
 import 'package:flutter/material.dart';
 
 class DocExpiry extends StatefulWidget {
@@ -8,157 +9,46 @@ class DocExpiry extends StatefulWidget {
 }
 
 class _DocExpiryState extends State<DocExpiry> {
-  // final List<String> tableColumns = ["Employee", "Document", "Expiry"];
   final List<Map<String, String>> tableData = [
     {
-      "Employee": "Haadhi",
-      "Document": "Passport",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     },
     {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Muthu",
-      "Document": "Permit",
-      "Expiry": "01/02/2024",
-    },
-    {
-      "Employee": "Munna",
-      "Document": "Iqama",
-      "Expiry": "01/02/2024",
+      "EmpName": "Haadhi",
+      "DocType": "Passport",
+      "DueDate": "01/02/2024",
     }
   ];
 
@@ -177,7 +67,7 @@ class _DocExpiryState extends State<DocExpiry> {
               height: 10,
             ),
             const CustomText(
-              text: "Upcoming Expiries",
+              text: "Document Details",
               size: 18,
               color: Colors.black,
               weight: FontWeight.bold,
@@ -192,7 +82,7 @@ class _DocExpiryState extends State<DocExpiry> {
                     DataColumn(
                       label: Expanded(
                         child: Text(
-                          'Employee',
+                          'Emp Name',
                           style: tableHeaderStyle,
                         ),
                       ),
@@ -200,7 +90,7 @@ class _DocExpiryState extends State<DocExpiry> {
                     DataColumn(
                       label: Expanded(
                         child: Text(
-                          'Document',
+                          'Doc Type',
                           style: tableHeaderStyle,
                         ),
                       ),
@@ -208,7 +98,7 @@ class _DocExpiryState extends State<DocExpiry> {
                     DataColumn(
                       label: Expanded(
                         child: Text(
-                          'Expiry',
+                          'Due Date',
                           style: tableHeaderStyle,
                         ),
                       ),
@@ -218,13 +108,13 @@ class _DocExpiryState extends State<DocExpiry> {
                       .map(
                         (tableRow) => DataRow(cells: [
                           DataCell(
-                            Text(tableRow['Employee'].toString()),
+                            Text(tableRow['EmpName'].toString()),
                           ),
                           DataCell(
-                            Text(tableRow['Document'].toString()),
+                            Text(tableRow['DocType'].toString()),
                           ),
                           DataCell(
-                            Text(tableRow['Expiry'].toString()),
+                            Text(tableRow['DueDate'].toString()),
                           ),
                         ]),
                       )
@@ -232,9 +122,34 @@ class _DocExpiryState extends State<DocExpiry> {
                 ),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16.0),
+                  ),
+                  onPressed: _openDialog,
+                  child: const Text('View Details', style: TextStyle(fontWeight: FontWeight.bold, color: themeColor)),
+                ),
+              ],
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void _openDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Document Details'),
+          content: DocExpiryExpanded(),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 100),
+        );
+      },
     );
   }
 }
