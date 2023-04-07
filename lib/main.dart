@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:admin/contollers/navigation_controller.dart';
 import 'package:admin/constants/style.dart';
-import 'layout.dart';
 
 void main() {
   Get.put(CustomMenuController());
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
         //     TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
         //   }
         // ),
-        primaryColor: Colors.blue
+        colorScheme: ColorScheme.light(primary: themeColor)
       ),
       home: LoginPage(),
     );

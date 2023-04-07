@@ -151,7 +151,7 @@ class _QuotationsPendingState extends State<QuotationsPending> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Quotations Pending'),
+          title: const Text('Quotations Pending', style: TextStyle(fontWeight: FontWeight.bold),),
           content: QuotationsPendingExpanded(),
           insetPadding: const EdgeInsets.symmetric(horizontal: 100),
         );

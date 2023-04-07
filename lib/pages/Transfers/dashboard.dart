@@ -28,7 +28,7 @@ class Dashboard extends StatelessWidget {
               )
             ],
           )),
-      Container(height: 400,
+      Container(height: 450,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

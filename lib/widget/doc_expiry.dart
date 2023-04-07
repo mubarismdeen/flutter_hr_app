@@ -162,8 +162,8 @@ class _DocExpiryState extends State<DocExpiry> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return  AlertDialog(
-              title: const Text('Document Details'),
+        return AlertDialog(
+              title: const Text('Document Details', style: TextStyle(fontWeight: FontWeight.bold),),
               content: DocExpiryExpanded(tableData:tableData),
               insetPadding: const EdgeInsets.symmetric(horizontal: 100),
             );
