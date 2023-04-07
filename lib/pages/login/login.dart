@@ -84,6 +84,7 @@ class _MainViewState extends State<_MainView> {
     final isDesktop = screenw > 700 ? true :false;
     List<Widget> listViewChildren;
     String logStatus = "0";
+    bool logStatus1 = false;
 
     if (isDesktop) {
       final desktopMaxWidth = screenw / 4;
@@ -101,8 +102,8 @@ class _MainViewState extends State<_MainView> {
         _LoginButton(
           maxWidth: 400,
           onTap: () async {
-            logStatus = await userValidation(widget.usernameController!.text,widget.passwordController!.text);
-            if(logStatus == "1") {
+            logStatus1 = await userValidate(widget.usernameController!.text,widget.passwordController!.text);
+            if(logStatus1) {
               showError = false;
               _login(context);
             }else{
