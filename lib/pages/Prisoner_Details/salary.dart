@@ -2,7 +2,6 @@ import 'package:admin/constants/style.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/employee_salary_form.dart';
 import 'package:admin/widget/employee_salary.dart';
-import 'package:admin/widget/employee_attendance_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -45,9 +44,7 @@ class _SalaryState extends State<Salary> {
           ),
         ],
       ),
-      Expanded(
-        child: EmployeeSalary(),
-      ),
+      EmployeeSalary(),
     ]);
   }
 

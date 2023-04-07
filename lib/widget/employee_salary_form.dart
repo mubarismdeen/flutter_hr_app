@@ -4,26 +4,32 @@ import 'package:flutter/material.dart';
 class EmployeeSalaryForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  String _employeeName = '';
+  String _employeeId = '';
 
-  int _workingDays = 0;
+  String _molIdNo = '';
 
-  int _holidaysTaken = 0;
+  double _preFixedMonthlySalary = 0;
 
-  int _overtimeHours = 0;
+  double _normalOvertimeRate = 0;
 
-  double _netPayout = 0.0;
+  double _specialOvertimeRate = 0;
+
+  double _overSeasRate = 0.0;
+
+  double _anchorageRate = 0.0;
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
       // Submit the form data to a backend API or do something else with it
       print('Submitted form data:');
-      print('Employee Name: $_employeeName');
-      print('Working Days: $_workingDays');
-      print('Holidays Taken: $_holidaysTaken');
-      print('Overtime Hours: $_overtimeHours');
-      print('Net Payout: $_netPayout');
+      print('Employee ID: $_employeeId');
+      print('MOL ID No: $_molIdNo');
+      print('Pre-fixed Monthly Salary: $_preFixedMonthlySalary');
+      print('Normal Overtime Rate: $_normalOvertimeRate');
+      print('Special Overtime Rate: $_specialOvertimeRate');
+      print('OverSeas Rate: $_overSeasRate');
+      print('OverSeas Rate: $_anchorageRate');
     }
   }
 
@@ -36,7 +42,7 @@ class EmployeeSalaryForm extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
-            decoration: InputDecoration(labelText: 'Employee Name'),
+            decoration: InputDecoration(labelText: 'Employee Id'),
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter employee name';
@@ -44,15 +50,27 @@ class EmployeeSalaryForm extends StatelessWidget {
               return null;
             },
             onSaved: (value) {
-              _employeeName = value!;
+              _employeeId = value!;
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'Working Days'),
+            decoration: InputDecoration(labelText: 'MOL ID No'),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter MOL ID No';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              _molIdNo = value!;
+            },
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
             keyboardType: TextInputType.number,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter working days';
+                return 'Please enter pre-fixed monthly salary';
               }
               if (int.tryParse(value) == null) {
                 return 'Please enter a valid number';
@@ -60,15 +78,15 @@ class EmployeeSalaryForm extends StatelessWidget {
               return null;
             },
             onSaved: (value) {
-              _workingDays = int.parse(value!);
+              _preFixedMonthlySalary = double.parse(value!);
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'Holidays Taken'),
+            decoration: InputDecoration(labelText: 'Normal Overtime Rate'),
             keyboardType: TextInputType.number,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter holidays taken';
+                return 'Please enter Normal Overtime Rate';
               }
               if (int.tryParse(value) == null) {
                 return 'Please enter a valid number';
@@ -76,15 +94,15 @@ class EmployeeSalaryForm extends StatelessWidget {
               return null;
             },
             onSaved: (value) {
-              _holidaysTaken = int.parse(value!);
+              _normalOvertimeRate = double.parse(value!);
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'Overtime Hours'),
+            decoration: InputDecoration(labelText: 'Special Overtime Rate'),
             keyboardType: TextInputType.number,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter overtime hours';
+                return 'Please enter Special Overtime Rate';
               }
               if (int.tryParse(value) == null) {
                 return 'Please enter a valid number';
@@ -92,15 +110,15 @@ class EmployeeSalaryForm extends StatelessWidget {
               return null;
             },
             onSaved: (value) {
-              _overtimeHours = int.parse(value!);
+              _specialOvertimeRate = double.parse(value!);
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'Net Payout'),
+            decoration: InputDecoration(labelText: 'Overseas Rate'),
             keyboardType: TextInputType.number,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter net payout';
+                return 'Please enter Overseas Rate';
               }
               if (double.tryParse(value) == null) {
                 return 'Please enter a valid number';
@@ -108,7 +126,23 @@ class EmployeeSalaryForm extends StatelessWidget {
               return null;
             },
             onSaved: (value) {
-              _netPayout = double.parse(value!);
+              _overSeasRate = double.parse(value!);
+            },
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Anchorage Rate'),
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter Anchorage Rate';
+              }
+              if (double.tryParse(value) == null) {
+                return 'Please enter a valid number';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              _anchorageRate = double.parse(value!);
             },
           ),
           SizedBox(height: 16.0),
