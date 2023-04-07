@@ -108,7 +108,6 @@ class _MainViewState extends State<_MainView> {
               _login(context);
             }else{
               showError = true;
-
               setState(() {
               });
             }

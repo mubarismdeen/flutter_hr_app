@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'models/docDetails.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 var url = 'http://192.168.0.134:5001/api/Notes/';
@@ -72,6 +73,49 @@ Future<bool> userValidate(String userID, String password) async {
     }
   } catch (e) {
     // Get.to(ErrorPage());
+    throw Exception('Failed');
+  }
+
+}
+
+Future<List<DocDetails>> getDocumentDetails() async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getDocDetails"));
+    if (response.statusCode == 200) {
+      List<DocDetails> userMap = DocDetails.toJson() as List<DocDetails>;
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => DocDetails.fromJson(job)).toList();
+      }
+      return userMap;
+    } else {
+      // globals.show = false;
+      // globals.showLoading = false;
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    // Get.to(ErrorPage());
+    // globals.showLoading = false;
+    // globals.show = false;
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getDocDetails() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getDocDetails"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
     throw Exception('Failed');
   }
 }

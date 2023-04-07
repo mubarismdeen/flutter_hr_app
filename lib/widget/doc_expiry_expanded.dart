@@ -2,12 +2,14 @@ import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 
 class DocExpiryExpanded extends StatefulWidget {
+  DocExpiryExpanded({required this.tableData});
+  List<Map<String, dynamic>> tableData ;
   @override
   _DocExpiryExpandedState createState() => _DocExpiryExpandedState();
 }
 
 class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
-  final List<Map<String, String>> tableData = [
+  final List<Map<String, String>> tableData0 = [
     {
       "EmpCode": "EMP001",
       "EmpName": "Mubaris",
@@ -149,10 +151,18 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
       child: SingleChildScrollView(
         child: DataTable(
           columns: const <DataColumn>[
+            // DataColumn(
+            //   label: Expanded(
+            //     child: Text(
+            //       'Emp Code',
+            //       style: tableHeaderStyle,
+            //     ),
+            //   ),
+            // ),
             DataColumn(
               label: Expanded(
                 child: Text(
-                  'Emp Code',
+                  'Narration',
                   style: tableHeaderStyle,
                 ),
               ),
@@ -160,27 +170,19 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
             DataColumn(
               label: Expanded(
                 child: Text(
-                  'Emp Name',
+                  'Document',
                   style: tableHeaderStyle,
                 ),
               ),
             ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Doc ID',
-                  style: tableHeaderStyle,
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Doc Type',
-                  style: tableHeaderStyle,
-                ),
-              ),
-            ),
+            // DataColumn(
+            //   label: Expanded(
+            //     child: Text(
+            //       'Doc Type',
+            //       style: tableHeaderStyle,
+            //     ),
+            //   ),
+            // ),
             DataColumn(
               label: Expanded(
                 child: Text(
@@ -230,38 +232,32 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
               ),
             ),
           ],
-          rows: tableData
+          rows: widget.tableData
               .map(
                 (tableRow) => DataRow(cells: [
                   DataCell(
-                    Text(tableRow['EmpCode'].toString()),
+                    Text(tableRow['narration'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['EmpName'].toString()),
+                    Text(tableRow['doctype'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['DocId'].toString()),
+                    Text(tableRow['dueDate'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['DocType'].toString()),
+                    Text(tableRow['renewedDate'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['DueDate'].toString()),
+                    Text(tableRow['editBy'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['RenewedDate'].toString()),
+                    Text(tableRow['editDt'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['EditBy'].toString()),
+                    Text(tableRow['creatBy'].toString()),
                   ),
                   DataCell(
-                    Text(tableRow['EditDate'].toString()),
-                  ),
-                  DataCell(
-                    Text(tableRow['CreateBy'].toString()),
-                  ),
-                  DataCell(
-                    Text(tableRow['CreateDate'].toString()),
+                    Text(tableRow['creatDt'].toString()),
                   )
                 ]),
               )
