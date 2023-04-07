@@ -17,14 +17,14 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     return Container(
-      color: drawerColor,
+      color: themeColor,
       child: ListView(
         children: [
           if(ResponsiveWidget.isSmallScreen(context))
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Row(
@@ -32,10 +32,10 @@ class SideMenu extends StatelessWidget {
                     SizedBox(
                       width: _width/48
                     ),
-                    Padding(padding: const EdgeInsets.only(right:12),
+                    const Padding(padding: EdgeInsets.only(right:12),
                     child: Icon(Icons.cabin_outlined, color: darke,),
                     ),
-                    Flexible(child: CustomText(
+                    const Flexible(child: CustomText(
                       text: "HRMS",
                       size: 20,
                       weight: FontWeight.bold,
