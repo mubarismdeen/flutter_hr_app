@@ -37,137 +37,139 @@ class EmployeeSalaryForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Employee Id'),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter employee name';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _employeeId = value!;
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'MOL ID No'),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter MOL ID No';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _molIdNo = value!;
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter pre-fixed monthly salary';
-              }
-              if (int.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _preFixedMonthlySalary = double.parse(value!);
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Normal Overtime Rate'),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter Normal Overtime Rate';
-              }
-              if (int.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _normalOvertimeRate = double.parse(value!);
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Special Overtime Rate'),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter Special Overtime Rate';
-              }
-              if (int.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _specialOvertimeRate = double.parse(value!);
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Overseas Rate'),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter Overseas Rate';
-              }
-              if (double.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _overSeasRate = double.parse(value!);
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Anchorage Rate'),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter Anchorage Rate';
-              }
-              if (double.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _anchorageRate = double.parse(value!);
-            },
-          ),
-          SizedBox(height: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: themeColor,
+      child: SingleChildScrollView(
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Employee Id'),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter employee name';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _employeeId = value!;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'MOL ID No'),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter MOL ID No';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _molIdNo = value!;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter pre-fixed monthly salary';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _preFixedMonthlySalary = double.parse(value!);
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Normal Overtime Rate'),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter Normal Overtime Rate';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _normalOvertimeRate = double.parse(value!);
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Special Overtime Rate'),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter Special Overtime Rate';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _specialOvertimeRate = double.parse(value!);
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Overseas Rate'),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter Overseas Rate';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _overSeasRate = double.parse(value!);
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Anchorage Rate'),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter Anchorage Rate';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _anchorageRate = double.parse(value!);
+              },
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: themeColor,
+                  ),
+                  onPressed: _submitForm,
+                  child: Text('Submit'),
                 ),
-                onPressed: _submitForm,
-                child: Text('Submit'),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: themeColor,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: themeColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'),
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Cancel'),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

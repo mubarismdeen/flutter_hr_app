@@ -12,31 +12,33 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Obx(() => Row(
+    return SingleChildScrollView(
+      child: Column(children: [
+        Obx(() => Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                      top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6,
+                      left: 10),
+                  child: CustomText(
+                    text: menuController.activeItem.value,
+                    size: 24,
+                    weight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            )),
+        Container(height: 450,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(
-                    top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6,
-                    left: 10),
-                child: CustomText(
-                  text: menuController.activeItem.value,
-                  size: 24,
-                  weight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              )
+              Expanded(child: DocExpiry()),
+              Expanded(child: QuotationsPending()),
             ],
-          )),
-      Container(height: 450,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: DocExpiry()),
-            Expanded(child: QuotationsPending()),
-          ],
+          ),
         ),
-      ),
-    ]);
+      ]),
+    );
   }
 }

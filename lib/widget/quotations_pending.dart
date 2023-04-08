@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/quotations_pending_expanded.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,9 @@ class _QuotationsPendingState extends State<QuotationsPending> {
                     padding: const EdgeInsets.all(16.0),
                   ),
                   onPressed: _openDialog,
-                  child: const Text('View Details', style: TextStyle(fontWeight: FontWeight.bold, color: themeColor)),
+                  child: const Text('View Details',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: themeColor)),
                 ),
               ],
             ),
@@ -150,10 +153,9 @@ class _QuotationsPendingState extends State<QuotationsPending> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Quotations Pending', style: TextStyle(fontWeight: FontWeight.bold),),
-          content: QuotationsPendingExpanded(),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 100),
+        return CustomAlertDialog(
+          'Quotations Pending',
+          QuotationsPendingExpanded(),
         );
       },
     );

@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/employee_salary_form.dart';
 import 'package:admin/widget/employee_salary.dart';
@@ -19,44 +20,42 @@ class _SalaryState extends State<Salary> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Obx(() => Row(
-        children: [
-          Container(
-            margin: EdgeInsets.only(
-                top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6,
-                left: 10),
-            child: CustomText(
-              text: menuController.activeItem.value,
-              size: 24,
-              weight: FontWeight.bold,
-              color: Colors.black,
+    return SingleChildScrollView(
+      child: Column(children: [
+        Obx(() => Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6,
+                  left: 10),
+              child: CustomText(
+                text: menuController.activeItem.value,
+                size: 24,
+                weight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            )
+          ],
+        )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 35.0, top: 35.0),
+              child: _uploadButton(),
             ),
-          )
-        ],
-      )),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 35.0, top: 35.0),
-            child: _uploadButton(),
-          ),
-        ],
-      ),
-      EmployeeSalary(),
-    ]);
+          ],
+        ),
+        EmployeeSalary(),
+      ]),
+    );
   }
 
   void _openDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Upload Salary Details'),
-          content: EmployeeSalaryForm(),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 100),
-        );
+        return CustomAlertDialog('Upload Salary Details', EmployeeSalaryForm(),);
       },
     );
   }

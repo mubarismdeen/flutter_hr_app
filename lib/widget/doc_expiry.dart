@@ -1,17 +1,19 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/doc_expiry_expanded.dart';
 import 'package:flutter/material.dart';
 
 import '../api.dart';
 import 'package:intl/intl.dart';
+
 class DocExpiry extends StatefulWidget {
   @override
   _DocExpiryState createState() => _DocExpiryState();
 }
 
 class _DocExpiryState extends State<DocExpiry> {
-  late  final List<Map<String, String>> tableData0 = [
+  late final List<Map<String, String>> tableData0 = [
     {
       "EmpName": "Haadhi",
       "DocType": "Passport",
@@ -121,8 +123,7 @@ class _DocExpiryState extends State<DocExpiry> {
                         ],
                         rows: tableData
                             .map(
-                              (tableRow) =>
-                              DataRow(cells: [
+                              (tableRow) => DataRow(cells: [
                                 DataCell(
                                   Text(tableRow['narration']),
                                 ),
@@ -130,10 +131,12 @@ class _DocExpiryState extends State<DocExpiry> {
                                   Text(tableRow['doctype']),
                                 ),
                                 DataCell(
-                                  Text(DateFormat("yyyy-MM-dd").parse(tableRow['dueDate']).toString()),
+                                  Text(DateFormat("yyyy-MM-dd")
+                                      .parse(tableRow['dueDate'])
+                                      .toString()),
                                 ),
                               ]),
-                        )
+                            )
                             .toList(),
                       ),
                     ),
@@ -146,8 +149,10 @@ class _DocExpiryState extends State<DocExpiry> {
                           padding: const EdgeInsets.all(16.0),
                         ),
                         onPressed: _openDialog,
-                        child: const Text('View Details', style: TextStyle(
-                            fontWeight: FontWeight.bold, color: themeColor)),
+                        child: const Text('View Details',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: themeColor)),
                       ),
                     ],
                   ),
@@ -162,11 +167,10 @@ class _DocExpiryState extends State<DocExpiry> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-              title: const Text('Document Details', style: TextStyle(fontWeight: FontWeight.bold),),
-              content: DocExpiryExpanded(tableData:tableData),
-              insetPadding: const EdgeInsets.symmetric(horizontal: 100),
-            );
+        return CustomAlertDialog(
+          'Document Details',
+          DocExpiryExpanded(tableData: tableData),
+        );
       },
     );
   }

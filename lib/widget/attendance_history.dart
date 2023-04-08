@@ -38,6 +38,22 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
           date: '2023-04-04',
           attendanceStatus: 'Present'),
       AttendanceHistory(
+          employeeName: 'Raju',
+          date: '2023-04-04',
+          attendanceStatus: 'Present'),
+      AttendanceHistory(
+          employeeName: 'Raju',
+          date: '2023-04-04',
+          attendanceStatus: 'Present'),
+      AttendanceHistory(
+          employeeName: 'Raju',
+          date: '2023-04-04',
+          attendanceStatus: 'Present'),
+      AttendanceHistory(
+          employeeName: 'Raju',
+          date: '2023-04-04',
+          attendanceStatus: 'Present'),
+      AttendanceHistory(
           employeeName: 'Rajesh Kumar',
           date: '2023-04-04',
           attendanceStatus: 'Absent'),
@@ -46,82 +62,85 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 20),
-        if (!_attendanceHistoryList.isNotEmpty)
-          Column(
-          children: [
-            const Text('Select a date:'),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16.0),
-                backgroundColor: themeColor,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 20),
+          if (!_attendanceHistoryList.isNotEmpty)
+            Column(
+            children: [
+              const Text('Select a date:'),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16.0),
+                  backgroundColor: themeColor,
+                ),
+                child: const Text('Pick a date'),
+                onPressed: () async {
+                  final DateTime? selectedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2010),
+                    lastDate: DateTime(2050),
+                  );
+                  if (selectedDate != null) {
+                    setState(() {
+                      _attendanceHistoryList.clear();
+                    });
+                    await _getAttendanceHistory(selectedDate);
+                  }
+                },
               ),
-              child: const Text('Pick a date'),
-              onPressed: () async {
-                final DateTime? selectedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2010),
-                  lastDate: DateTime(2050),
-                );
-                if (selectedDate != null) {
-                  setState(() {
-                    _attendanceHistoryList.clear();
-                  });
-                  await _getAttendanceHistory(selectedDate);
-                }
-              },
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-        if (_attendanceHistoryList.isNotEmpty)
-          SizedBox(
-            height: 250,
-            child: SingleChildScrollView(
-              child: DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Employee Name',
-                        style: tableHeaderStyle,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Date',
-                        style: tableHeaderStyle,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Attendance Status',
-                        style: tableHeaderStyle,
-                      ),
-                    ),
-                  ),
-                ],
-                rows: _attendanceHistoryList
-                    .map((attendanceHistory) => DataRow(cells: [
-                          DataCell(Text(attendanceHistory.employeeName)),
-                          DataCell(Text(attendanceHistory.date)),
-                          DataCell(Text(attendanceHistory
-                              .attendanceStatus)), // DataCell(Text(attendance.attendanceStatus)),
-                        ]))
-                    .toList(),
-              ),
-            ),
+              const SizedBox(height: 20),
+            ],
           ),
-      ],
+          if (_attendanceHistoryList.isNotEmpty)
+            Container(
+              constraints: BoxConstraints(maxHeight: 250, minHeight: 5),
+              // height: 250,
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Employee Name',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Date',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          'Attendance Status',
+                          style: tableHeaderStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: _attendanceHistoryList
+                      .map((attendanceHistory) => DataRow(cells: [
+                            DataCell(Text(attendanceHistory.employeeName)),
+                            DataCell(Text(attendanceHistory.date)),
+                            DataCell(Text(attendanceHistory
+                                .attendanceStatus)), // DataCell(Text(attendance.attendanceStatus)),
+                          ]))
+                      .toList(),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
