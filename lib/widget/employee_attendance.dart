@@ -43,11 +43,12 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       // width: 500,
       child: Card(
         shadowColor: shadowColor,
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -150,69 +151,13 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
                                 DataCell(Text(attendance.employeeId)),
                                 DataCell(Text(attendance.employeeName)),
                                 DataCell(Text(attendance.molId)),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalAttendance =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalOffAndSickDays =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalLossOfPaymentDays =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalNormalOvertimeHours =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalSpecialOvertimeHours =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalOverseasDays =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
-                                DataCell(
-                                  TextField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      attendance.totalAnchorageDays =
-                                          double.parse(value);
-                                    },
-                                  ),
-                                ),
+                                _getCustomDataCell(field: attendance.totalAttendance),
+                                _getCustomDataCell(field: attendance.totalOffAndSickDays),
+                                _getCustomDataCell(field: attendance.totalLossOfPaymentDays),
+                                _getCustomDataCell(field: attendance.totalNormalOvertimeHours),
+                                _getCustomDataCell(field: attendance.totalSpecialOvertimeHours),
+                                _getCustomDataCell(field: attendance.totalOverseasDays),
+                                _getCustomDataCell(field: attendance.totalAnchorageDays),
                               ]))
                           .toList(),
                     ),
@@ -226,11 +171,25 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
                     backgroundColor: themeColor,
                   ),
                   onPressed: () {},
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  DataCell _getCustomDataCell({required double field}) {
+    return DataCell(
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 77),
+        child: TextField(
+          keyboardType: TextInputType.number,
+          onChanged: (value) {
+            field = double.parse(value);
+          },
         ),
       ),
     );
