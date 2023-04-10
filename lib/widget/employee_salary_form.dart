@@ -1,10 +1,13 @@
 import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 
+import '../api.dart';
+import '../models/salaryMaster.dart';
+
 class EmployeeSalaryForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  String _employeeId = '';
+  int _employeeId = 0;
 
   String _molIdNo = '';
 
@@ -17,6 +20,11 @@ class EmployeeSalaryForm extends StatelessWidget {
   double _overSeasRate = 0.0;
 
   double _anchorageRate = 0.0;
+
+   // final  _salaryMaster =   SalaryMaster();
+
+  final _salaryMaster = SalaryMaster( id: 0, empCode: 0, salary: 0, nOtr: 0, sOtr: 0, overseas: 0, anchorage: 0, editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt:  DateTime.now());
+
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -31,6 +39,14 @@ class EmployeeSalaryForm extends StatelessWidget {
       print('OverSeas Rate: $_overSeasRate');
       print('OverSeas Rate: $_anchorageRate');
     }
+    _salaryMaster.empCode = _employeeId;
+    _salaryMaster.salary = _preFixedMonthlySalary;
+    _salaryMaster.nOtr = _normalOvertimeRate;
+    _salaryMaster.sOtr = _specialOvertimeRate;
+    _salaryMaster.overseas = _overSeasRate;
+    _salaryMaster.anchorage = _anchorageRate;
+
+    saveSalaryMaster(_salaryMaster);
   }
 
   @override
@@ -51,7 +67,7 @@ class EmployeeSalaryForm extends StatelessWidget {
                 return null;
               },
               onSaved: (value) {
-                _employeeId = value!;
+                _employeeId = int.parse(value!);
               },
             ),
             TextFormField(

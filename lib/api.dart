@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'models/docDetails.dart';
+import 'models/salaryMaster.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 var url = 'http://192.168.0.134:5001/api/Notes/';
@@ -117,5 +118,23 @@ Future<List<Map<String, dynamic>>> getDocDetails() async {
     }
   } catch (e) {
     throw Exception('Failed');
+  }
+}
+
+Future<bool> saveSalaryMaster(SalaryMaster salaryMaster) async {
+  try {
+    var jsonData = jsonEncode(salaryMaster);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveSalaryMaster'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+    throw Exception('failed to save ');
   }
 }

@@ -128,7 +128,7 @@ class _DocExpiryState extends State<DocExpiry> {
                                   Text(tableRow['narration']),
                                 ),
                                 DataCell(
-                                  Text(tableRow['doctype']),
+                                  Text(tableRow['docType']),
                                 ),
                                 DataCell(
                                   Text(DateFormat("yyyy-MM-dd")
