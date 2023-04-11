@@ -1,32 +1,35 @@
 import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../api.dart';
 import '../models/salaryMaster.dart';
 
-class EmployeeSalaryForm extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class EmployeeSalaryForm extends StatefulWidget {
+  const EmployeeSalaryForm({Key? key}) : super(key: key);
 
-  int _employeeId = 0;
+  @override
+  State<EmployeeSalaryForm> createState() => _EmployeeSalaryFormState();
+}
+  class _EmployeeSalaryFormState extends State<EmployeeSalaryForm> {
+
+  final _formKey = GlobalKey<FormState>();
 
   String _molIdNo = '';
 
-  double _preFixedMonthlySalary = 0;
-
-  double _normalOvertimeRate = 0;
-
-  double _specialOvertimeRate = 0;
-
-  double _overSeasRate = 0.0;
-
-  double _anchorageRate = 0.0;
-
-   // final  _salaryMaster =   SalaryMaster();
-
-  final _salaryMaster = SalaryMaster( id: 0, empCode: 0, salary: 0, nOtr: 0, sOtr: 0, overseas: 0, anchorage: 0, editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt:  DateTime.now());
+  var _employeeId = TextEditingController();
+  var _preFixedMonthlySalary = TextEditingController();
+  var _normalOvertimeRate = TextEditingController();
+  var _specialOvertimeRate = TextEditingController();
+  var _overSeasRate = TextEditingController();
+  var _anchorageRate = TextEditingController();
 
 
-  void _submitForm() {
+   SalaryMaster _salaryMaster = SalaryMaster( id: 0, empCode: 0, salary: 0, nOtr: 0, sOtr: 0, overseas: 0, anchorage: 0, editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt:  DateTime.now());
+
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
       // Submit the form data to a backend API or do something else with it
@@ -39,14 +42,52 @@ class EmployeeSalaryForm extends StatelessWidget {
       print('OverSeas Rate: $_overSeasRate');
       print('OverSeas Rate: $_anchorageRate');
     }
-    _salaryMaster.empCode = _employeeId;
-    _salaryMaster.salary = _preFixedMonthlySalary;
-    _salaryMaster.nOtr = _normalOvertimeRate;
-    _salaryMaster.sOtr = _specialOvertimeRate;
-    _salaryMaster.overseas = _overSeasRate;
-    _salaryMaster.anchorage = _anchorageRate;
+    _salaryMaster.empCode = int.parse(_employeeId.text);
+    _salaryMaster.salary = double.parse(_preFixedMonthlySalary.text);
+    _salaryMaster.nOtr = double.parse(_normalOvertimeRate.text) ;
+    _salaryMaster.sOtr = double.parse(_specialOvertimeRate.text);
+    _salaryMaster.overseas = double.parse(_overSeasRate.text);
+    _salaryMaster.anchorage = double.parse(_anchorageRate.text);
 
-    saveSalaryMaster(_salaryMaster);
+    bool status = await saveSalaryMaster(_salaryMaster);
+    if( status){
+      Fluttertoast.showToast(
+          msg: "Saved",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+          webPosition :"center",
+          webShowClose :false,
+      );
+    _employeeId.clear();
+
+      _molIdNo = '';
+
+      _preFixedMonthlySalary.clear();
+
+      _normalOvertimeRate.clear();
+
+      _specialOvertimeRate.clear();
+
+      _overSeasRate.clear();
+
+      _anchorageRate.clear();
+
+      setState(() {  });
+       // _salaryMaster = SalaryMaster as SalaryMaster;
+    }else{
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: "failed to save",
+          message: '',
+          icon: Icon(Icons.refresh),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override
@@ -66,22 +107,23 @@ class EmployeeSalaryForm extends StatelessWidget {
                 }
                 return null;
               },
+              controller: _employeeId,
               onSaved: (value) {
-                _employeeId = int.parse(value!);
+                // _employeeId = int.parse(value!);
               },
             ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'MOL ID No'),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter MOL ID No';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _molIdNo = value!;
-              },
-            ),
+            // TextFormField(
+            //   decoration: InputDecoration(labelText: 'MOL ID No'),
+            //   validator: (value) {
+            //     if (value!.isEmpty) {
+            //       return 'Please enter MOL ID No';
+            //     }
+            //     return null;
+            //   },
+            //   onSaved: (value) {
+            //     _molIdNo = value!;
+            //   },
+            // ),
             TextFormField(
               decoration: InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
               keyboardType: TextInputType.number,
@@ -94,8 +136,9 @@ class EmployeeSalaryForm extends StatelessWidget {
                 }
                 return null;
               },
+                controller:_preFixedMonthlySalary,
               onSaved: (value) {
-                _preFixedMonthlySalary = double.parse(value!);
+                // _preFixedMonthlySalary = double.parse(value!);
               },
             ),
             TextFormField(
@@ -110,8 +153,9 @@ class EmployeeSalaryForm extends StatelessWidget {
                 }
                 return null;
               },
+              controller:_normalOvertimeRate ,
               onSaved: (value) {
-                _normalOvertimeRate = double.parse(value!);
+                // _normalOvertimeRate = double.parse(value!);
               },
             ),
             TextFormField(
@@ -126,11 +170,13 @@ class EmployeeSalaryForm extends StatelessWidget {
                 }
                 return null;
               },
+              controller:_specialOvertimeRate ,
               onSaved: (value) {
-                _specialOvertimeRate = double.parse(value!);
+                // _specialOvertimeRate = double.parse(value!);
               },
             ),
             TextFormField(
+              controller: _overSeasRate,
               decoration: InputDecoration(labelText: 'Overseas Rate'),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -143,7 +189,7 @@ class EmployeeSalaryForm extends StatelessWidget {
                 return null;
               },
               onSaved: (value) {
-                _overSeasRate = double.parse(value!);
+                // _overSeasRate = double.parse(value!);
               },
             ),
             TextFormField(
@@ -158,8 +204,9 @@ class EmployeeSalaryForm extends StatelessWidget {
                 }
                 return null;
               },
+              controller: _anchorageRate,
               onSaved: (value) {
-                _anchorageRate = double.parse(value!);
+                // _anchorageRate = double.parse(value!);
               },
             ),
             SizedBox(height: 16.0),
