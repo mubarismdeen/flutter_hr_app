@@ -55,7 +55,7 @@ class _SalaryState extends State<Salary> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlertDialog('Upload Salary Details', EmployeeSalaryForm(),);
+        return CustomAlertDialog('Upload Salary Details', const EmployeeSalaryForm(),);
       },
     );
   }

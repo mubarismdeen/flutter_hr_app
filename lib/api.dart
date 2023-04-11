@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:admin/models/quotationDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -135,6 +136,39 @@ Future<bool> saveSalaryMaster(SalaryMaster salaryMaster) async {
 
   } catch (e) {
     return false;
-    throw Exception('failed to save ');
+  }
+}
+
+Future<bool> saveDocDetails(DocDetails docDetails) async {
+  try {
+    var jsonData = jsonEncode(docDetails);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveDocDetails'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
+  try {
+    var jsonData = jsonEncode(quotationDetails);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveQuotationDetails'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
   }
 }

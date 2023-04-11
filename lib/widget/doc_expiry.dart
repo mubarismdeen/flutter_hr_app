@@ -1,6 +1,7 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
+import 'package:admin/widget/doc_details_upload.dart';
 import 'package:admin/widget/doc_expiry_expanded.dart';
 import 'package:flutter/material.dart';
 
@@ -83,11 +84,30 @@ class _DocExpiryState extends State<DocExpiry> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const CustomText(
-                    text: "Document Details",
-                    size: 18,
-                    color: Colors.black,
-                    weight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CustomText(
+                        text: "Document Details",
+                        size: 18,
+                        color: Colors.black,
+                        weight: FontWeight.bold,
+                      ),
+                      TextButton(
+                        onPressed: _openUploadDialog,
+                        child: Row(
+                          children: const [
+                            Icon(Icons.add, size: 16,weight: 900),
+                            SizedBox(width: 5,),
+                            CustomText(
+                                text: "Add New",
+                                size: 14,
+                                color: themeColor,
+                                weight: FontWeight.bold),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 10,
@@ -148,7 +168,7 @@ class _DocExpiryState extends State<DocExpiry> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(16.0),
                         ),
-                        onPressed: _openDialog,
+                        onPressed: _openViewDialog,
                         child: const Text('View Details',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -163,7 +183,7 @@ class _DocExpiryState extends State<DocExpiry> {
         });
   }
 
-  void _openDialog() {
+  void _openViewDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -174,4 +194,14 @@ class _DocExpiryState extends State<DocExpiry> {
       },
     );
   }
+
+  void _openUploadDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog('Upload Document Details', const DocDetailsUpload(),);
+      },
+    );
+  }
+
 }

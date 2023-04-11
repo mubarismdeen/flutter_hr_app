@@ -2,6 +2,7 @@ import 'package:admin/constants/style.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/quotations_pending_expanded.dart';
+import 'package:admin/widget/quotations_upload.dart';
 import 'package:flutter/material.dart';
 
 class QuotationsPending extends StatefulWidget {
@@ -73,11 +74,30 @@ class _QuotationsPendingState extends State<QuotationsPending> {
             const SizedBox(
               height: 10,
             ),
-            const CustomText(
-              text: "Quotations Pending",
-              size: 18,
-              color: Colors.black,
-              weight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const CustomText(
+                  text: "Quotations",
+                  size: 18,
+                  color: Colors.black,
+                  weight: FontWeight.bold,
+                ),
+                TextButton(
+                  onPressed: _openUploadDialog,
+                  child: Row(
+                    children: const [
+                      Icon(Icons.add, size: 16,weight: 900),
+                      SizedBox(width: 5,),
+                      CustomText(
+                          text: "Add New",
+                          size: 14,
+                          color: themeColor,
+                          weight: FontWeight.bold),
+                    ],
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -154,9 +174,18 @@ class _QuotationsPendingState extends State<QuotationsPending> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Quotations Pending',
+          'Quotations',
           QuotationsPendingExpanded(),
         );
+      },
+    );
+  }
+
+  void _openUploadDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog('Upload Quotation Details', const QuotationsUpload(),);
       },
     );
   }
