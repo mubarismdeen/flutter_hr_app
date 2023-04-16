@@ -1,5 +1,12 @@
+import 'dart:async';
+
+import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/empMaster.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../models/attendance.dart';
 
 class EmployeeAttendance extends StatefulWidget {
   @override
@@ -7,22 +14,24 @@ class EmployeeAttendance extends StatefulWidget {
 }
 
 class _EmployeeAttendanceState extends State<EmployeeAttendance> {
-  List<AttendanceDto> attendances = [
-    AttendanceDto("EMP001", "John", "1234567890", 24, 5, 2, 10, 5, 0, 3),
-    AttendanceDto("EMP002", "Carl", "1234567891", 24, 4, 2, 11, 5, 0, 1),
-    AttendanceDto("EMP003", "Max", "1234567892", 24, 3, 2, 8, 5, 0, 0),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-    AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
-  ];
+  // List<AttendanceDto> attendances = [
+  //   AttendanceDto("EMP001", "John", "1234567890", 24, 5, 2, 10, 5, 0, 3),
+  //   AttendanceDto("EMP002", "Carl", "1234567891", 24, 4, 2, 11, 5, 0, 1),
+  //   AttendanceDto("EMP003", "Max", "1234567892", 24, 3, 2, 8, 5, 0, 0),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  //   AttendanceDto("EMP004", "Hitler", "1234567893", 24, 2, 2, 12, 5, 0, 1),
+  // ];
+  List<AttendanceDto> attendances = List<AttendanceDto>.empty();
+  List<Attendance> _attendanceList = List<Attendance>.empty();
 
   List<Map<String, String>> employees = [
     {
@@ -41,182 +50,412 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     }
   ];
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      // width: 500,
-      child: Card(
-        shadowColor: shadowColor,
-        margin: const EdgeInsets.only(top: 20),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 500,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Text(
-                            'Employee \n     ID',
-                            style: tableHeaderStyle,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Employee \n  Name',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'MOL ID \n    No',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              '     Total \nAttendance',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Off Days and \n  Sick Leave',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              '      Loss of \nPayment Days',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              '       Normal \nOvertime Hours',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              '        Special \nOvertime Hours',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Overseas \n    Days',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Anchorage \n      Days',
-                              style: tableHeaderStyle,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: attendances
-                          .map((attendance) => DataRow(cells: [
-                                DataCell(Text(attendance.employeeId)),
-                                DataCell(Text(attendance.employeeName)),
-                                DataCell(Text(attendance.molId)),
-                                _getCustomDataCell(field: attendance.totalAttendance),
-                                _getCustomDataCell(field: attendance.totalOffAndSickDays),
-                                _getCustomDataCell(field: attendance.totalLossOfPaymentDays),
-                                _getCustomDataCell(field: attendance.totalNormalOvertimeHours),
-                                _getCustomDataCell(field: attendance.totalSpecialOvertimeHours),
-                                _getCustomDataCell(field: attendance.totalOverseasDays),
-                                _getCustomDataCell(field: attendance.totalAnchorageDays),
-                              ]))
-                          .toList(),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: themeColor,
-                  ),
-                  onPressed: () {},
-                  child: const Text('Submit'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+  Future<String> _selectTime() async {
+    TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 00, minute: 00),
+      initialEntryMode: TimePickerEntryMode.input,
     );
+    return newTime.toString();
   }
 
-  DataCell _getCustomDataCell({required double field}) {
-    return DataCell(
-      ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 77),
-        child: TextField(
-          keyboardType: TextInputType.number,
-          onChanged: (value) {
-            field = double.parse(value);
-          },
-        ),
+  void listUpdate(rowIndex, val, column) {
+    // int rowIndex = processTail.indexWhere((element) => element.srl == int.parse(_srlId));
+
+    int rowLength = _attendanceList.length;
+
+    if (rowLength > rowIndex) {
+      switch (column) {
+        case 'empId':
+          _attendanceList[rowIndex].empCode = val;
+          break;
+        case 'ancDays':
+          _attendanceList[rowIndex].anchorage = val;
+          break;
+        case 'sOvt':
+          _attendanceList[rowIndex].sovt = val;
+          break;
+        case 'nOvt':
+          _attendanceList[rowIndex].novt = val;
+          break;
+        case 'ovrDays':
+          _attendanceList[rowIndex].overseas = val;
+          break;
+        case 'att':
+          _attendanceList[rowIndex].attendance = val;
+          break;
+        case 'lop':
+          _attendanceList[rowIndex].lop = val;
+          break;
+        case 'off':
+          _attendanceList[rowIndex].offdays = val;
+          break;
+      }
+    } else {
+      _attendanceList.add(Attendance(
+          id: 0,
+          empCode: 0,
+          attendance: 0,
+          offdays: 0,
+          lop: 0,
+          novt: 0,
+          sovt: 0,
+          overseas: 0,
+          anchorage: 0,
+          editBy: 1,
+          editDt: DateTime.now(),
+          creatBy: 1,
+          creatDt: DateTime.now()));
+    }
+  }
+
+  _loadData() async {
+    for (int i = 0; i < 1; i++) {
+      AttendanceDto obj = attendances[i];
+      // _attendanceList.add(Attendance(id: 0, empCode: obj.employeeId, attendance: obj.totalAttendance, offdays: obj.totalOffAndSickDays, lop: obj.totalLossOfPaymentDays, novt: obj.totalNormalOvertimeHours, sovt: obj.totalSpecialOvertimeHours, overseas: obj.totalOverseasDays, anchorage: obj.totalAnchorageDays, editBy: 1, editDt: DateTime.now(), creatBy: 1, creatDt:  DateTime.now()));
+      _attendanceList = [
+        Attendance(
+            id: 0,
+            empCode: obj.employeeId,
+            attendance: obj.totalAttendance,
+            offdays: obj.totalOffAndSickDays,
+            lop: obj.totalLossOfPaymentDays,
+            novt: obj.totalNormalOvertimeHours,
+            sovt: obj.totalSpecialOvertimeHours,
+            overseas: obj.totalOverseasDays,
+            anchorage: obj.totalAnchorageDays,
+            editBy: 1,
+            editDt: DateTime.now(),
+            creatBy: 1,
+            creatDt: DateTime.now())
+      ];
+    }
+  }
+
+  getData() async {
+    var empList = await getEmpDetails();
+    for (int i = 0; i < empList.length; i++) {
+      EmpMaster emp = empList[i];
+      var r = emp.empCode;
+      var n = emp.name;
+      if (i == 0) {
+        attendances = [
+          AttendanceDto(
+              employeeId: emp.empCode,
+              employeeName: emp.name,
+              totalAttendance: 0.0,
+              totalOffAndSickDays: 0.0,
+              totalLossOfPaymentDays: 0.0,
+              totalNormalOvertimeHours: 0.0,
+              totalSpecialOvertimeHours: 0.0,
+              totalOverseasDays: 0.0,
+              totalAnchorageDays: 0.0,
+              molId: ''),
+        ];
+        _attendanceList = [
+          Attendance(
+              id: 0,
+              empCode: emp.empCode,
+              attendance: 0,
+              offdays: 0,
+              lop: 0,
+              novt: 0,
+              sovt: 0,
+              overseas: 0,
+              anchorage: 0,
+              editBy: 1,
+              editDt: DateTime.now(),
+              creatBy: 1,
+              creatDt: DateTime.now())
+        ];
+      } else {
+        attendances.add(AttendanceDto(
+            employeeId: emp.empCode,
+            employeeName: emp.name,
+            totalAttendance: 0.0,
+            totalOffAndSickDays: 0.0,
+            totalLossOfPaymentDays: 0.0,
+            totalNormalOvertimeHours: 0.0,
+            totalSpecialOvertimeHours: 0.0,
+            totalOverseasDays: 0.0,
+            totalAnchorageDays: 0.0,
+            molId: ''));
+    _attendanceList.add(Attendance(
+    id: 0,
+    empCode: emp.empCode,
+    attendance: 0,
+    offdays: 0,
+    lop: 0,
+    novt: 0,
+    sovt: 0,
+    overseas: 0,
+    anchorage: 0,
+    editBy: 1,
+    editDt: DateTime.now(),
+    creatBy: 1,
+    creatDt: DateTime.now()));
+    }
+      // Call complete() on the Completer to signal that the operation is complete.
+      // completer.complete();
+      //
+      // // Wait for the Completer's future to complete before continuing.
+      // await completer.future;
+    }
+    // setState(() { });
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getData();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
+        future: getData(),
+        builder: (context, AsyncSnapshot<dynamic> _data) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            // width: 500,
+            child: Card(
+              shadowColor: shadowColor,
+              margin: const EdgeInsets.only(top: 20),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 500,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Employee \n     ID',
+                                  style: tableHeaderStyle,
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Employee \n  Name',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              // DataColumn(
+                              // label: Expanded(
+                              // child: Text(
+                              // 'MOL ID \n    No',
+                              // style: tableHeaderStyle,
+                              // ),
+                              // ),
+                              // ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    '     Total \nAttendance',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Off Days and \n  Sick Leave',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    '      Loss of \nPayment Days',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    '       Normal \nOvertime Hours',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    '        Special \nOvertime Hours',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Overseas \n    Days',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Anchorage \n      Days',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            rows: attendances
+                                .map((att) => DataRow(cells: [
+                                      DataCell(Text(
+                                          att.employeeId.toString())),
+                                      DataCell(Text(att.employeeName)),
+                                      // DataCell(Text(attendance.molId)),
+                                      _getCustomDataCell(
+                                        field: att.totalAttendance,
+                                        index:attendances.indexOf(att),
+                                        column: 'att'
+                                      ),
+                                      _getCustomDataCell(
+                                          field: att.totalOffAndSickDays,
+                                          index:attendances.indexOf(att),
+                                          column: 'off'),
+                                      _getCustomDataCell(
+                                          field: att.totalLossOfPaymentDays,
+                                          index:attendances.indexOf(att),
+                                          column: 'lop'),
+                                      _getCustomDataCell(
+                                          field: att.totalNormalOvertimeHours,
+                                          index:attendances.indexOf(att),
+                                          column: 'nOvt'),
+                                      _getCustomDataCell(
+                                          field: att.totalSpecialOvertimeHours,
+                                          index:attendances.indexOf(att),
+                                          column: 'sOvt'),
+                                      _getCustomDataCell(
+                                          field: att.totalOverseasDays,
+                                          index:attendances.indexOf(att),
+                                          column: 'ovrDays'),
+                                      _getCustomDataCell(
+                                          field: att.totalAnchorageDays,
+                                          index:attendances.indexOf(att),
+                                          column: 'ancDays'),
+                                    ]))
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: themeColor,
+                        ),
+                        onPressed: () async {
+                          // await _loadData();
+                          bool status = await saveAttendance(_attendanceList);
+                          if( status) {
+                            Fluttertoast.showToast(
+                              msg: "Saved",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                              webPosition: "center",
+                              webShowClose: false,
+                            );
+                          }
+                        },
+                        child: const Text('Save'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  DataCell _getCustomDataCell({required double field, index, column}) {
+    return DataCell(ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 77),
+      child: TextField(
+        keyboardType: TextInputType.number,
+        onChanged: (value) {
+          field = double.parse(value);
+          listUpdate(index, field, column);
+        },
       ),
-    );
+    ));
   }
 }
 
 class AttendanceDto {
-  String employeeId;
+  int employeeId;
   String employeeName;
   String molId;
-  double totalAttendance = 0.0;
-  double totalOffAndSickDays;
-  double totalLossOfPaymentDays;
-  double totalNormalOvertimeHours;
-  double totalSpecialOvertimeHours;
-  double totalOverseasDays;
-  double totalAnchorageDays;
+  double totalAttendance;
+  double totalOffAndSickDays = 0.0;
+  double totalLossOfPaymentDays = 0.0;
+  double totalNormalOvertimeHours = 0.0;
+  double totalSpecialOvertimeHours = 0.0;
+  double totalOverseasDays = 0.0;
+  double totalAnchorageDays = 0.0;
 
   AttendanceDto(
-      this.employeeId,
-      this.employeeName,
-      this.molId,
-      this.totalAttendance,
-      this.totalOffAndSickDays,
-      this.totalLossOfPaymentDays,
-      this.totalNormalOvertimeHours,
-      this.totalSpecialOvertimeHours,
-      this.totalOverseasDays,
-      this.totalAnchorageDays);
+      {required this.employeeId,
+      required this.employeeName,
+      required this.molId,
+      required this.totalAttendance,
+      required this.totalOffAndSickDays,
+      required this.totalLossOfPaymentDays,
+      required this.totalNormalOvertimeHours,
+      required this.totalSpecialOvertimeHours,
+      required this.totalOverseasDays,
+      required this.totalAnchorageDays});
 }
+
+// class AttendanceDto {
+//   int empCode;
+//   int attendance;
+//   int offdays;
+//   int lop;
+//   String novt;
+//   String sovt;
+//   int overseas;
+//   int anchorage;
+//   int editBy;
+//   DateTime editDt;
+//   int creatBy;
+//   DateTime creatDt;
+//
+//   AttendanceDto(this.empCode,
+//       this.attendance,
+//       this.offdays,
+//       this.lop,
+//       this.novt,
+//       this.sovt,
+//       this.overseas,
+//       this.anchorage,
+//       this.editBy,
+//       this.editDt,
+//       this.creatBy,
+//       this.creatDt,);
+// }

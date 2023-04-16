@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'models/attendance.dart';
 import 'models/docDetails.dart';
+import 'models/empMaster.dart';
 import 'models/salaryMaster.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
@@ -170,5 +172,46 @@ Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
 
   } catch (e) {
     return false;
+  }
+}
+
+Future<bool> saveAttendance(List<Attendance> attendanceList) async {
+  try {
+    var jsonData = jsonEncode(attendanceList);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveAttendance'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
+
+Future<List<EmpMaster>> getEmpDetails() async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getEmpDetails"));
+    if (response.statusCode == 200) {
+      List<EmpMaster> userMap = List<EmpMaster>.empty();
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => EmpMaster.fromJson(job)).toList();
+      }
+      return userMap;
+    } else {
+      // globals.show = false;
+      // globals.showLoading = false;
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    // Get.to(ErrorPage());
+    // globals.showLoading = false;
+    // globals.show = false;
+    throw Exception('Failed');
   }
 }

@@ -12,6 +12,7 @@ class _EmployeeAttendanceFormState extends State<EmployeeAttendanceForm> {
   DateTime _date = DateTime.now();
   String _attendanceStatus = 'Present';
 
+
   // Define methods to update the state variables based on user input
   // ...
 
