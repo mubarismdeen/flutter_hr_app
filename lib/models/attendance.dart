@@ -10,6 +10,7 @@ class Attendance {
   double sovt;
   double overseas;
   double anchorage;
+  String date;
   int editBy;
   DateTime editDt;
   int creatBy;
@@ -25,6 +26,7 @@ class Attendance {
     required this.sovt,
     required this.overseas,
     required this.anchorage,
+    required this.date,
     required this.editBy,
     required this.editDt,
     required this.creatBy,
@@ -58,6 +60,7 @@ class Attendance {
     data['sovt'] = sovt;
     data['overseas'] = overseas;
     data['anchorage'] = anchorage;
+    data['date'] = DateFormat('MM-yyyy').format(DateTime.now());
     data['editBy'] = editBy;
     data['editDt'] = DateFormat('yyyy-MM-dd HH:mm').format(editDt);
     data['creatBy'] = creatBy;
