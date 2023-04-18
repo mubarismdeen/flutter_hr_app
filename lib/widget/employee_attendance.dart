@@ -122,7 +122,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     }
   }
   getAttendanceData() async {
-    attendances = await getAttendanceDetails("04-2023");
+    attendances = await getAttendanceDetails("2023-03");
   }
 
   getData() async {
@@ -238,7 +238,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
 
   Widget _attendanceTable() {
     return FutureBuilder<dynamic>(
-      future: getData(),
+      future: attendances.isEmpty ? getData() : getAttendanceData(),
       builder: (context, AsyncSnapshot<dynamic> _data) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -248,7 +248,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
             margin: const EdgeInsets.only(top: 20),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _getDataTable(),
+              child: _editable ? _getDataTable() : _getViewDataTable(),
             ),
           ),
         );
@@ -410,6 +410,127 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
       ],
     );
   }
+
+  Column _getViewDataTable() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 500,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'Employee \n     ID',
+                      style: tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Employee \n  Name',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  // DataColumn(
+                  // label: Expanded(
+                  // child: Text(
+                  // 'MOL ID \n    No',
+                  // style: tableHeaderStyle,
+                  // ),
+                  // ),
+                  // ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        '     Total \nAttendance',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Off Days and \n  Sick Leave',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        '      Loss of \nPayment Days',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        '       Normal \nOvertime Hours',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        '        Special \nOvertime Hours',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Overseas \n    Days',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Anchorage \n      Days',
+                        style: tableHeaderStyle,
+                      ),
+                    ),
+                  ),
+                ],
+                rows: attendances
+                    .map((att) => DataRow(cells: [
+                  DataCell(Text(att.employeeId.toString())),
+                  DataCell(Text(att.employeeName)),
+                  // DataCell(Text(attendance.molId)),
+                  DataCell(Text(att.totalAttendance.toString())),
+                  DataCell(Text(att.totalOffAndSickDays.toString())),
+                  DataCell(Text(att.totalLossOfPaymentDays.toString())),
+                  DataCell(Text(att.totalNormalOvertimeHours.toString())),
+                  DataCell(Text(att.totalSpecialOvertimeHours.toString())),
+                  DataCell(Text(att.totalOverseasDays.toString())),
+                  DataCell(Text(att.totalAnchorageDays.toString())),
+                ]))
+                    .toList(),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 30),
+        _editable ? _saveButton() : _editButton(),
+      ],
+    );
+  }
+
 
   Widget _enterAttendanceButton() {
     return CustomElevatedButton(
