@@ -16,7 +16,7 @@ class EmployeeAttendance extends StatefulWidget {
 
 class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   // List<AttendanceDto> attendances = List<AttendanceDto>.empty();
-  List<AttendanceDto> attendances = getAttendanceDetails("2023-03") as List<AttendanceDto>;
+  List<AttendanceDto> attendances =  List<AttendanceDto>.empty();
   List<Attendance> _attendanceList = List<Attendance>.empty();
   bool _editable = false;
   bool _enterAttendance = false;
@@ -121,6 +121,9 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
       ];
     }
   }
+  getAttendanceData() async {
+    attendances = await getAttendanceDetails("04-2023");
+  }
 
   getData() async {
     var empList = await getEmpDetails();
@@ -204,7 +207,11 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
+        future: getAttendanceData(),
+        builder: (context, AsyncSnapshot<dynamic> _data) {
     return attendances.isEmpty && !_enterAttendance ? _attendanceNotFoundContainer() : _attendanceTable();
+    });
   }
 
   Widget _attendanceNotFoundContainer() {
@@ -483,16 +490,16 @@ class AttendanceDto {
       required this.totalAnchorageDays});
 
   AttendanceDto.fromJson(Map<String, dynamic> json) {
-    employeeId = json['employeeId'];
-    employeeName = json['employeeName'];
-    molId = json['molId'];
-    totalAttendance = json['totalAttendance'];
-    totalOffAndSickDays = json['totalOffAndSickDays'] ?? 0.0;
-    totalLossOfPaymentDays = json['totalLossOfPaymentDays'] ?? 0.0;
-    totalNormalOvertimeHours = json['totalNormalOvertimeHours'] ?? 0.0;
-    totalSpecialOvertimeHours = json['totalSpecialOvertimeHours'] ?? 0.0;
-    totalOverseasDays = json['totalOverseasDays'] ?? 0.0;
-    totalAnchorageDays = json['totalAnchorageDays'] ?? 0.0;
+    employeeId = json['id']?? 0;
+    employeeName = json['name']??'NULL';
+    molId = json['molId']??'NULL';
+    totalAttendance = json['attendance']?? 0.0;
+    totalOffAndSickDays = json['offDays'] ?? 0.0;
+    totalLossOfPaymentDays = json['lop'] ?? 0.0;
+    totalNormalOvertimeHours = json['novt'] ?? 0.0;
+    totalSpecialOvertimeHours = json['sovt'] ?? 0.0;
+    totalOverseasDays = json['overseas'] ?? 0.0;
+    totalAnchorageDays = json['anchorage'] ?? 0.0;
   }
 }
 
