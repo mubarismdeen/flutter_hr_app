@@ -152,7 +152,7 @@ class _DocExpiryState extends State<DocExpiry> {
                                 ),
                                 DataCell(
                                   Text(DateFormat("yyyy-MM-dd")
-                                      .parse(tableRow['dueDate'])
+                                      .format(DateTime.parse(tableRow['dueDate']))
                                       .toString()),
                                 ),
                               ]),

@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:admin/models/quotationDetails.dart';
+import 'package:admin/widget/employee_attendance.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'models/attendance.dart';
@@ -201,6 +200,31 @@ Future<List<EmpMaster>> getEmpDetails() async {
       if (jsonResponse.isNotEmpty) {
         userMap =
             jsonResponse.map((job) => EmpMaster.fromJson(job)).toList();
+      }
+      return userMap;
+    } else {
+      // globals.show = false;
+      // globals.showLoading = false;
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    // Get.to(ErrorPage());
+    // globals.showLoading = false;
+    // globals.show = false;
+    throw Exception('Failed');
+  }
+}
+
+Future<List<AttendanceDto>> getAttendanceDetails(String date) async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getAttendance?date=$date"));
+    if (response.statusCode == 200) {
+      List<AttendanceDto>? userMap = List<AttendanceDto>.empty();
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => AttendanceDto.fromJson(job)).cast<AttendanceDto>().toList();
       }
       return userMap;
     } else {
