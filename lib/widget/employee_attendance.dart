@@ -368,8 +368,8 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
                 ],
                 rows: attendances
                     .map((att) => DataRow(cells: [
-                          DataCell(Text(att.employeeId.toString())),
-                          DataCell(Text(att.employeeName)),
+                          DataCell(Center(child: Text(att.employeeId.toString()))),
+                          DataCell(Center(child: Text(att.employeeName))),
                           // DataCell(Text(attendance.molId)),
                           _getCustomDataCell(
                               field: att.totalAttendance,
@@ -509,16 +509,16 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
                 ],
                 rows: attendances
                     .map((att) => DataRow(cells: [
-                  DataCell(Text(att.employeeId.toString())),
-                  DataCell(Text(att.employeeName)),
+                  DataCell(Center(child: Text(att.employeeId.toString()))),
+                  DataCell(Center(child: Text(att.employeeName))),
                   // DataCell(Text(attendance.molId)),
-                  DataCell(Text(att.totalAttendance.toString())),
-                  DataCell(Text(att.totalOffAndSickDays.toString())),
-                  DataCell(Text(att.totalLossOfPaymentDays.toString())),
-                  DataCell(Text(att.totalNormalOvertimeHours.toString())),
-                  DataCell(Text(att.totalSpecialOvertimeHours.toString())),
-                  DataCell(Text(att.totalOverseasDays.toString())),
-                  DataCell(Text(att.totalAnchorageDays.toString())),
+                  DataCell(Center(child: Text(att.totalAttendance.toString()))),
+                  DataCell(Center(child: Text(att.totalOffAndSickDays.toString()))),
+                  DataCell(Center(child: Text(att.totalLossOfPaymentDays.toString()))),
+                  DataCell(Center(child: Text(att.totalNormalOvertimeHours.toString()))),
+                  DataCell(Center(child: Text(att.totalSpecialOvertimeHours.toString()))),
+                  DataCell(Center(child: Text(att.totalOverseasDays.toString()))),
+                  DataCell(Center(child: Text(att.totalAnchorageDays.toString()))),
                 ]))
                     .toList(),
               ),

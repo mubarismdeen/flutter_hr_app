@@ -3,13 +3,13 @@
 
 #define MyAppName "HR Mate"
 #define MyAppVersion "1.0"
-#define MyAppPublisher "CodeWave Technologies"
+#define MyAppPublisher "Code Wave Technologies"
 #define MyAppExeName "flutter_hr_app.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{D4790A64-2671-4C7E-8C08-DB280AD10BAF}
+AppId={{BB02CD3C-CE9C-4A30-B05F-028C8873C878}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\mubar\OneDrive\Desktop\flutter project\flutter_hr_app\installers
 OutputBaseFilename=hr_mate_setup
-SetupIconFile=C:\Users\mubar\OneDrive\Desktop\flutter project\flutter_hr_app\windows\runner\resources\app_icon.ico
+SetupIconFile=C:\Users\mubar\Downloads\app_icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
