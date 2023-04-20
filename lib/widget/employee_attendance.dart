@@ -6,6 +6,7 @@ import 'package:admin/models/empMaster.dart';
 import 'package:admin/widget/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../models/attendance.dart';
 
@@ -122,7 +123,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     }
   }
   getAttendanceData() async {
-    attendances = await getAttendanceDetails("2023-03");
+    attendances = await getAttendanceDetails(DateFormat('yyyy-MM').format(DateTime.now()));
   }
 
   getData() async {
