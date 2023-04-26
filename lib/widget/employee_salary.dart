@@ -109,7 +109,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Holidays Taken',
+                                  'Normal Overtime',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -117,7 +117,31 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Overtime Hours',
+                                  'Special Overtime',
+                                  style: tableHeaderStyle,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'overseas',
+                                  style: tableHeaderStyle,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'anchorage',
+                                  style: tableHeaderStyle,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Due',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -140,6 +164,9 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                                 DataCell(Text(salary.attendance.toString())),
                                 DataCell(Text(salary.nOtr.toString())),
                                 DataCell(Text(salary.sOtr.toString())),
+                                DataCell(Text(salary.overseas.toString())),
+                                DataCell(Text(salary.anchorage.toString())),
+                                DataCell(Text(salary.due.toString())),
                                 DataCell(
                                     Text(salary.total.toString())),
                               ]))
