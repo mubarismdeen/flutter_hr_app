@@ -11,7 +11,7 @@ import 'models/empMaster.dart';
 import 'models/salaryMaster.dart';
 import 'models/salaryPay.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 var url = 'http://192.168.0.134:5001/api/Notes/';
 // String ip = "10.0.2.2:5001";
 //  String ip = gip;
@@ -31,7 +31,7 @@ Future<bool> userValidation(String userID, String password) async {
   // }
   try {
     final response = await http.get(
-        Uri.parse(url + 'userValidat?userCd=' + userID + '&password=' + password));
+        Uri.parse('${url}userValidat?userCd=$userID&password=$password'));
     if (response.statusCode == 200) {
       // globals.isLoggedIn = true;
       // var data = json.decode(response.body);
