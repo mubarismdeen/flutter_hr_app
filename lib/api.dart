@@ -9,6 +9,7 @@ import 'models/attendance.dart';
 import 'models/docDetails.dart';
 import 'models/empMaster.dart';
 import 'models/salaryMaster.dart';
+import 'models/salaryPay.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 var url = 'http://192.168.0.134:5001/api/Notes/';
@@ -225,6 +226,31 @@ Future<List<AttendanceDto>> getAttendanceDetails(String date) async {
       if (jsonResponse.isNotEmpty) {
         userMap =
             jsonResponse.map((job) => AttendanceDto.fromJson(job)).cast<AttendanceDto>().toList();
+      }
+      return userMap;
+    } else {
+      // globals.show = false;
+      // globals.showLoading = false;
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    // Get.to(ErrorPage());
+    // globals.showLoading = false;
+    // globals.show = false;
+    throw Exception('Failed');
+  }
+}
+
+Future<List<SalaryPay>> getSalaryPay(String date) async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getSalaryPay?date=$date"));
+    if (response.statusCode == 200) {
+      List<SalaryPay>? userMap = List<SalaryPay>.empty();
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => SalaryPay.fromJson(job)).cast<SalaryPay>().toList();
       }
       return userMap;
     } else {
