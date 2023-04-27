@@ -1,6 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../api.dart';
 import '../models/salaryPay.dart';
 
@@ -48,7 +48,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
 
 
   getData() async {
-    _salaryPay = await getSalaryPay("04-2023");
+    _salaryPay = await getSalaryPay(DateFormat('yyyy-MM').format(DateTime.now()));
   }
 
   @override

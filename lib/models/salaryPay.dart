@@ -60,8 +60,8 @@ class SalaryPay{
     id= json['id'] ?? 0;
     empCode = json['empCode']??0;
     name = json['name']??'';
-    nOtr = json['nOtr']??0.0;
-    sOtr = json['sOtr']??0.0;
+    nOtr = json['novt']??0.0;
+    sOtr = json['sovt']??0.0;
     overseas = json['overseas']??0.0;
     anchorage = json['anchorage']??0.0;
     editBy = json['editBy']??0;
