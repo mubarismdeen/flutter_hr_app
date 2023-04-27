@@ -91,7 +91,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
           sovt: 0,
           overseas: 0,
           anchorage: 0,
-          date:'',
+          date:DateFormat('yyyy-MM').format(DateTime.now()).toString(),
           editBy: 1,
           editDt: DateTime.now(),
           creatBy: 1,
@@ -260,7 +260,8 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   DataCell _getCustomDataCell({required double field, index, column}) {
     return DataCell(ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 77),
-      child: TextField(
+      child: TextFormField(
+        initialValue: field==0 ? "" : field.toString(),
         enabled: _editable,
         keyboardType: TextInputType.number,
         onChanged: (value) {
