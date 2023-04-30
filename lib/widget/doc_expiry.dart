@@ -14,54 +14,7 @@ class DocExpiry extends StatefulWidget {
 }
 
 class _DocExpiryState extends State<DocExpiry> {
-  late final List<Map<String, String>> tableData0 = [
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    },
-    {
-      "EmpName": "Haadhi",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-    }
-  ];
-
   List<Map<String, dynamic>> tableData = <Map<String, String>>[];
-
-  // void init() {
-  //   tableData = getDocDetails();
-  // }
 
   getData() async {
     tableData = await getDocDetails();
@@ -97,8 +50,10 @@ class _DocExpiryState extends State<DocExpiry> {
                         onPressed: _openUploadDialog,
                         child: Row(
                           children: const [
-                            Icon(Icons.add, size: 16,weight: 900),
-                            SizedBox(width: 5,),
+                            Icon(Icons.add, size: 16, weight: 900),
+                            SizedBox(
+                              width: 5,
+                            ),
                             CustomText(
                                 text: "Add New",
                                 size: 14,
@@ -143,7 +98,9 @@ class _DocExpiryState extends State<DocExpiry> {
                         ],
                         rows: tableData
                             .map(
-                              (tableRow) => DataRow(cells: [
+                              (tableRow) => DataRow(
+                                  color: MaterialStateColor.resolveWith((states) => _getRowColor(DateTime.parse(tableRow['dueDate']))),
+                                  cells: [
                                 DataCell(
                                   Text(tableRow['narration']),
                                 ),
@@ -152,7 +109,8 @@ class _DocExpiryState extends State<DocExpiry> {
                                 ),
                                 DataCell(
                                   Text(DateFormat("yyyy-MM-dd")
-                                      .format(DateTime.parse(tableRow['dueDate']))
+                                      .format(
+                                          DateTime.parse(tableRow['dueDate']))
                                       .toString()),
                                 ),
                               ]),
@@ -183,6 +141,18 @@ class _DocExpiryState extends State<DocExpiry> {
         });
   }
 
+  Color _getRowColor(DateTime docDate) {
+    DateTime today = DateTime.now();
+    int differenceInDays = docDate.difference(today).inDays;
+    Color rowColor = Colors.transparent;
+    if (differenceInDays < 0) {
+      rowColor = Colors.red;
+    } else if (differenceInDays < 10) {
+      rowColor = Colors.orange;
+    }
+    return rowColor;
+  }
+
   void _openViewDialog() {
     showDialog(
       context: context,
@@ -199,9 +169,11 @@ class _DocExpiryState extends State<DocExpiry> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlertDialog('Upload Document Details', const DocDetailsUpload(),);
+        return CustomAlertDialog(
+          'Upload Document Details',
+          const DocDetailsUpload(),
+        );
       },
     );
   }
-
 }
