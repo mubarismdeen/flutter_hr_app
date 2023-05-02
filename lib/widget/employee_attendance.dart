@@ -124,6 +124,10 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   }
   getAttendanceData() async {
     attendances = await getAttendanceDetails(DateFormat('yyyy-MM').format(DateTime.now()));
+    _attendanceList = attendances.map((att) => Attendance(id:att.id,empCode: att.employeeId, attendance: att.totalAttendance,
+    offdays:att.totalOffAndSickDays,lop:att.totalOffAndSickDays,novt:att.totalNormalOvertimeHours,
+    sovt:att.totalSpecialOvertimeHours,overseas:att.totalSpecialOvertimeHours,anchorage:att.totalAnchorageDays,
+    date:DateFormat('yyyy-MM').format(DateTime.now()),editBy:1,editDt:DateTime.now(),creatBy:1,creatDt:DateTime.now())).toList();
   }
 
   getData() async {
@@ -135,6 +139,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
       if (i == 0) {
         attendances = [
           AttendanceDto(
+              id:0,
               employeeId: emp.empCode,
               employeeName: emp.name,
               totalAttendance: 0.0,
@@ -165,6 +170,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
         ];
       } else {
         attendances.add(AttendanceDto(
+            id: 0,
             employeeId: emp.empCode,
             employeeName: emp.name,
             totalAttendance: 0.0,
@@ -589,6 +595,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
 }
 
 class AttendanceDto {
+  int id = 0;
   int employeeId = 0;
   String employeeName = '';
   String molId = '';
@@ -601,7 +608,9 @@ class AttendanceDto {
   double totalAnchorageDays = 0.0;
 
   AttendanceDto(
-      {required this.employeeId,
+      {
+      required this.id,
+      required this.employeeId,
       required this.employeeName,
       required this.molId,
       required this.totalAttendance,
@@ -613,7 +622,8 @@ class AttendanceDto {
       required this.totalAnchorageDays});
 
   AttendanceDto.fromJson(Map<String, dynamic> json) {
-    employeeId = json['id']?? 0;
+    id = json['id']?? 0;
+    employeeId = json['empCode']?? 0;
     employeeName = json['name']??'NULL';
     molId = json['molId']??'NULL';
     totalAttendance = json['attendance']?? 0.0;
