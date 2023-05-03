@@ -146,9 +146,9 @@ class _DocExpiryState extends State<DocExpiry> {
     int differenceInDays = docDate.difference(today).inDays;
     Color rowColor = Colors.transparent;
     if (differenceInDays < 0) {
-      rowColor = Colors.red;
+      rowColor = Colors.red.shade400;
     } else if (differenceInDays < 10) {
-      rowColor = Colors.orange;
+      rowColor = Colors.orange.shade400;
     }
     return rowColor;
   }

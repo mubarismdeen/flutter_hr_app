@@ -1,9 +1,11 @@
 
+import 'package:admin/pages/Salary/leave_salary.dart';
+import 'package:admin/pages/Salary/salary_payout.dart';
 import 'package:admin/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/Overviewpage/overviewpage.dart';
-import '../pages/Prisoner_Details/salary.dart';
+import '../pages/Salary/salary_master.dart';
 import '../pages/Profile/attendance.dart';
 import '../pages/Transfers/dashboard.dart';
 
@@ -17,8 +19,12 @@ Route<dynamic> generateRoute(RouteSettings settings){
       return _getPageRoute(const Attendance());
     case DashboardRoute:
       return _getPageRoute(const Dashboard());
-    case SalaryRoute:
-      return _getPageRoute(const Salary());
+    case SalaryMasterRoute:
+      return _getPageRoute(const SalaryMaster());
+    case SalaryPayoutRoute:
+      return _getPageRoute(const SalaryPayout());
+    case LeaveSalaryRoute:
+      return _getPageRoute(const LeaveSalary());
     default:
       return _getPageRoute(const Attendance());
   }

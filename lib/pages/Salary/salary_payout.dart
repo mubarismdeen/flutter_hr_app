@@ -9,14 +9,14 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../constants/controllers.dart';
 import '../../helpers/responsiveness.dart';
 
-class Salary extends StatefulWidget {
-  const Salary({Key? key}) : super(key: key);
+class SalaryPayout extends StatefulWidget {
+  const SalaryPayout({Key? key}) : super(key: key);
 
   @override
-  State<Salary> createState() => _SalaryState();
+  State<SalaryPayout> createState() => _SalaryPayoutState();
 }
 
-class _SalaryState extends State<Salary> {
+class _SalaryPayoutState extends State<SalaryPayout> {
 
   @override
   Widget build(BuildContext context) {
@@ -37,37 +37,9 @@ class _SalaryState extends State<Salary> {
             )
           ],
         )),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(right: 35.0, top: 35.0),
-              child: _uploadButton(),
-            ),
-          ],
-        ),
+        const SizedBox(height: 20),
         EmployeeSalary(),
       ]),
-    );
-  }
-
-  void _openDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomAlertDialog('Upload Salary Details', const EmployeeSalaryForm(),);
-      },
-    );
-  }
-
-  Widget _uploadButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(16.0),
-        backgroundColor: themeColor,
-      ),
-      onPressed: _openDialog,
-      child: const Text('Upload Salary', style: TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 

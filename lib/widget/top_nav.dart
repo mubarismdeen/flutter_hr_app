@@ -29,11 +29,13 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
         Row(
           children: [
             const Visibility(
-                child: CustomText(
-              text: 'HRMS',
-              color: darke,
-              weight: FontWeight.bold,
-              size: 16,
+                child: Text(
+              'HR Mate',
+              style: TextStyle(
+                  color: darke,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'LobsterFont'),
             )),
             Expanded(child: Container()),
             IconButton(

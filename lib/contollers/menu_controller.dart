@@ -29,8 +29,12 @@ class CustomMenuController extends GetxController{
         return _customIcon(Icons.people_rounded, itemName);
       case DashboardRoute:
         return _customIcon(Icons.dashboard, itemName);
-      case SalaryRoute:
+      case SalaryMasterRoute:
         return _customIcon(Icons.monetization_on_outlined, itemName);
+      case SalaryPayoutRoute:
+        return _customIcon(Icons.payments_outlined, itemName);
+      case LeaveSalaryRoute:
+        return _customIcon(Icons.account_balance_wallet_outlined, itemName);
       case AuthenticationPageRoute:
         return _customIcon(Icons.exit_to_app, itemName);
       default:

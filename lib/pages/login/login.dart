@@ -4,6 +4,7 @@
 
 import 'dart:ui';
 
+import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,9 @@ import '../../helpers/image_placeholder.dart';
 import '../../layout.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key, }) : super(key: key);
+  const LoginPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -39,13 +42,13 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromRGBO(102, 102, 102, 2),
-        body: SafeArea(
-          child: _MainView(
-            usernameController: _usernameController.value,
-            passwordController: _passwordController.value,
-          ),
+      backgroundColor: const Color.fromRGBO(102, 102, 102, 2),
+      body: SafeArea(
+        child: _MainView(
+          usernameController: _usernameController.value,
+          passwordController: _passwordController.value,
         ),
+      ),
     );
   }
 
@@ -66,7 +69,6 @@ class _MainView extends StatefulWidget {
   final TextEditingController? usernameController;
   final TextEditingController? passwordController;
 
-
   @override
   _MainViewState createState() => _MainViewState();
 }
@@ -81,7 +83,7 @@ class _MainViewState extends State<_MainView> {
   @override
   Widget build(BuildContext context) {
     var screenw = MediaQuery.of(context).size.width;
-    final isDesktop = screenw > 700 ? true :false;
+    final isDesktop = screenw > 700 ? true : false;
     List<Widget> listViewChildren;
     String logStatus = "0";
     bool logStatus1 = false;
@@ -89,6 +91,7 @@ class _MainViewState extends State<_MainView> {
     if (isDesktop) {
       final desktopMaxWidth = screenw / 4;
       listViewChildren = [
+        const _AppLogo(),
         _UsernameInput(
           maxWidth: 400,
           usernameController: widget.usernameController,
@@ -102,14 +105,14 @@ class _MainViewState extends State<_MainView> {
         _LoginButton(
           maxWidth: 400,
           onTap: () async {
-            logStatus1 = await userValidate(widget.usernameController!.text,widget.passwordController!.text);
-            if(logStatus1) {
+            logStatus1 = await userValidate(widget.usernameController!.text,
+                widget.passwordController!.text);
+            if (logStatus1) {
               showError = false;
               _login(context);
-            }else{
+            } else {
               showError = true;
-              setState(() {
-              });
+              setState(() {});
             }
           },
           status: showError,
@@ -117,7 +120,7 @@ class _MainViewState extends State<_MainView> {
       ];
     } else {
       listViewChildren = [
-        const _SmallLogo(),
+        const _AppLogo(),
         _UsernameInput(
           usernameController: widget.usernameController,
         ),
@@ -135,7 +138,7 @@ class _MainViewState extends State<_MainView> {
 
     return Column(
       children: [
-        if (isDesktop) const _TopBar(),
+        // if (isDesktop) const _TopBar(),
         Expanded(
           child: Align(
             alignment: isDesktop ? Alignment.center : Alignment.topCenter,
@@ -212,21 +215,36 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-class _SmallLogo extends StatelessWidget {
-  const _SmallLogo();
+class _AppLogo extends StatelessWidget {
+  const _AppLogo();
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 64),
-      child: SizedBox(
-        height: 160,
-        child: ExcludeSemantics(
-          child: FadeInImagePlaceholder(
-            image: AssetImage('logo.png', package: 'rally_assets'),
-            placeholder: SizedBox.shrink(),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 70),
+      child: Column(
+        children:  const [
+          SizedBox(
+            height: 160,
+            child: ExcludeSemantics(
+              child: FadeInImagePlaceholder(
+                image: AssetImage('images/app_icon.png'),
+                placeholder: SizedBox.shrink(),
+              ),
+            ),
           ),
-        ),
+          SizedBox(height: 30),
+          Center(
+            child: Text(
+              "HR Mate",
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 30,
+                  fontFamily: "LobsterFont",
+                  color: Colors.black54 ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -356,12 +374,7 @@ class _ThumbButtonState extends State<_ThumbButton> {
 }
 
 class _LoginButton extends StatefulWidget {
-
-   _LoginButton({
-    required this.onTap,
-    this.maxWidth,
-    required this.status
-  });
+  _LoginButton({required this.onTap, this.maxWidth, required this.status});
 
   bool status;
   final double? maxWidth;
@@ -374,20 +387,23 @@ class _LoginButton extends StatefulWidget {
 class _LoginButtonState extends State<_LoginButton> {
   BoxDecoration? borderDecoration;
 
-
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
       child: Container(
-        constraints: BoxConstraints(maxWidth: widget.maxWidth ?? double.infinity),
+        constraints:
+            BoxConstraints(maxWidth: widget.maxWidth ?? double.infinity),
         padding: const EdgeInsets.symmetric(vertical: 30),
         child: Row(
           children: [
-            widget.status? const Icon(Icons.error_outline_rounded,
-                color: Colors.red):Container(),
-            widget.status? const SizedBox(width: 12):Container(),
-            widget.status? const Text("user name or password is wrong"):Container(),
+            widget.status
+                ? const Icon(Icons.error_outline_rounded, color: Colors.red)
+                : Container(),
+            widget.status ? const SizedBox(width: 12) : Container(),
+            widget.status
+                ? const Text("user name or password is wrong")
+                : Container(),
             const Expanded(child: SizedBox.shrink()),
             _FilledButton(
               text: "Login",
