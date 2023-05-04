@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/quotationDetails.dart';
 import 'package:admin/widget/employee_attendance.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ var url = 'http://192.168.0.134:5001/api/Notes/';
 // String ip = "192.168.1.200:81";
 //String ip = "192.168.1.127:5001";
 String ip = "localhost:5001";
+// String ip = "localhost:81";       // IIS
 // String ip = "172.11.7.254:88"; //live
 //String ip = "172.11.7.254:98"; //test
 
@@ -251,6 +253,31 @@ Future<List<SalaryPay>> getSalaryPay(String date) async {
       if (jsonResponse.isNotEmpty) {
         userMap =
             jsonResponse.map((job) => SalaryPay.fromJson(job)).cast<SalaryPay>().toList();
+      }
+      return userMap;
+    } else {
+      // globals.show = false;
+      // globals.showLoading = false;
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    // Get.to(ErrorPage());
+    // globals.showLoading = false;
+    // globals.show = false;
+    throw Exception('Failed');
+  }
+}
+
+Future<List<LeaveSalary>> getLeaveSalary(String year) async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getLeaveSalary?year=$year"));
+    if (response.statusCode == 200) {
+      List<LeaveSalary>? userMap = List<LeaveSalary>.empty();
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => LeaveSalary.fromJson(job)).cast<LeaveSalary>().toList();
       }
       return userMap;
     } else {
