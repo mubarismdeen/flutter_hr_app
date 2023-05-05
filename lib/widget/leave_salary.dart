@@ -10,45 +10,76 @@ class LeaveSalaryWidget extends StatefulWidget {
 }
 
 class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
-  List<Salary> salaryData = [
-    Salary(
-        "EMP001",
-        "John Smith",
-        "1234567890",
-        20,
-        2,
-        5,
-        2500.0),
-    Salary(
-        "EMP002",
-        "Jane Doe",
-        "1234567891",
-        22,
-        1,
-        2,
-        2800.0),
-    Salary(
-        "EMP003",
-        "Mary Johnson",
-        "1234567892",
-        21,
-        3,
-        3,
-        2600.0),
-    Salary(
-        "EMP004",
-        "Elizabeth Parker",
-        "1234567893",
-        22,
-        1,
-        2,
-        2800.0),
-  ];
   List<LeaveSalary> _leaveSalaries = List<LeaveSalary>.empty();
 
 
   getData() async {
     _leaveSalaries = await getLeaveSalary(DateFormat('yyyy').format(DateTime.now()));
+  }
+
+  void _showPaymentDialog(LeaveSalary salary) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        double paidAmount = salary.pendingAmt;
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Payment to ${salary.name} (#${salary.empCode})'),
+              const SizedBox(
+                width: 35,
+              ),
+              TextButton(
+                style: const ButtonStyle(alignment: Alignment.topRight),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Icon(
+                  Icons.clear,
+                  color: themeColor,
+                ),
+              ),
+            ],
+          ),
+          content: TextFormField(
+            initialValue: paidAmount.toString(),
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              paidAmount = double.tryParse(value) ?? paidAmount;
+            },
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: themeColor,
+                    ),
+                    onPressed: () {
+                      // ToDo : Integrate API
+                    },
+                    child: const Text('Submit'),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: themeColor,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -70,7 +101,8 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Expanded(
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: SingleChildScrollView(
                         child: DataTable(
                           columns: const <DataColumn>[
@@ -138,6 +170,14 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                                 ),
                               ),
                             ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Payment',
+                                  style: tableHeaderStyle,
+                                ),
+                              ),
+                            ),
                           ],
                           rows: _leaveSalaries
                               .map((salary) =>
@@ -150,6 +190,14 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                                 DataCell(Text(salary.payAmt.toString())),
                                 DataCell(Text(salary.paidAmt.toString())),
                                 DataCell(Text(salary.pendingAmt.toString())),
+                                DataCell(
+                                  salary.pendingAmt == 0
+                                      ? const Icon(Icons.check_circle_outline, color: Colors.green,)
+                                      : TextButton(
+                                    onPressed: () => _showPaymentDialog(salary),
+                                    child: const Text('Pay', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+                                  ),
+                                ),
                               ]))
                               .toList(),
                         ),
@@ -162,16 +210,4 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
           );
         });
   }
-}
-class Salary {
-  String employeeId;
-  String employeeName;
-  String molId;
-  int workingDays;
-  int holidaysTaken;
-  int overtimeHours;
-  double netPayout;
-
-  Salary(this.employeeId, this.employeeName, this.molId, this.workingDays, this.holidaysTaken,
-      this.overtimeHours, this.netPayout);
 }
