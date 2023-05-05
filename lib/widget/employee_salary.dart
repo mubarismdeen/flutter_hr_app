@@ -110,7 +110,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Employee ID',
+                                  'Employee\nID',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -118,7 +118,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Employee Name',
+                                  'Employee\nName',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -134,7 +134,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Working Days',
+                                  'Working\nDays',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -142,7 +142,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Normal Overtime',
+                                  'Normal\nOvertime',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -150,7 +150,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Special Overtime',
+                                  'Special\nOvertime',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -182,7 +182,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Net Payout',
+                                  'Net\nPayout',
                                   style: tableHeaderStyle,
                                 ),
                               ),
