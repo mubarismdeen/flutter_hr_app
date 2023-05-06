@@ -1,7 +1,11 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/leaveSalary.dart';
+import 'package:admin/models/salaryPaid.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../api.dart';
 
 class LeaveSalaryWidget extends StatefulWidget {
@@ -11,7 +15,9 @@ class LeaveSalaryWidget extends StatefulWidget {
 
 class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
   List<LeaveSalary> _leaveSalaries = List<LeaveSalary>.empty();
-
+  double _paidAmount=0;
+  
+  SalaryPaid _salaryPaid = SalaryPaid(id: 0, empCode: 0, type: 0, payable: 0, totalPaid: 0, due: 0, date: '', paidBy: 0, paid: 0, paidDt: DateTime.now(), editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt: DateTime.now());
 
   getData() async {
     _leaveSalaries = await getLeaveSalary(DateFormat('yyyy').format(DateTime.now()));
@@ -21,7 +27,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
     showDialog(
       context: context,
       builder: (context) {
-        double paidAmount = salary.pendingAmt;
+        _paidAmount = salary.pendingAmt;
         return AlertDialog(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,10 +49,10 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
             ],
           ),
           content: TextFormField(
-            initialValue: paidAmount.toString(),
+            initialValue: _paidAmount.toString(),
             keyboardType: TextInputType.number,
             onChanged: (value) {
-              paidAmount = double.tryParse(value) ?? paidAmount;
+              _paidAmount = double.tryParse(value) ?? _paidAmount;
             },
           ),
           actions: [
@@ -60,7 +66,8 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                       backgroundColor: themeColor,
                     ),
                     onPressed: () {
-                      // ToDo : Integrate API
+                      _submitForm(salary);
+                      Navigator.of(context).pop();
                     },
                     child: const Text('Submit'),
                   ),
@@ -81,6 +88,47 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
       },
     );
   }
+
+  Future<void> _submitForm(LeaveSalary salary) async {
+
+    _salaryPaid.empCode = salary.empCode;
+    _salaryPaid.type = 1;
+    _salaryPaid.payable = salary.pendingAmt;
+    _salaryPaid.totalPaid = _paidAmount;
+    _salaryPaid.due = salary.pendingAmt - _paidAmount;
+    _salaryPaid.date = DateFormat('yyyy-MM').format(DateTime.now()).toString();
+    _salaryPaid.paidBy = 1;
+    _salaryPaid.paid = salary.pendingAmt == _paidAmount ? 1 : 0;
+    _salaryPaid.creatBy = 1;
+    _salaryPaid.editBy = 1;
+
+    bool status = await saveSalaryPaid(_salaryPaid);
+    if( status){
+      Fluttertoast.showToast(
+        msg: "Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition :"center",
+        webShowClose :false,
+      );
+
+      setState(() {  });
+    }else{
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: "failed to save",
+          message: '',
+          icon: Icon(Icons.refresh),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

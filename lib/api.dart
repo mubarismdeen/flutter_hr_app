@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/quotationDetails.dart';
+import 'package:admin/models/salaryPaid.dart';
 import 'package:admin/widget/employee_attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -290,5 +291,22 @@ Future<List<LeaveSalary>> getLeaveSalary(String year) async {
     // globals.showLoading = false;
     // globals.show = false;
     throw Exception('Failed');
+  }
+}
+
+Future<bool> saveSalaryPaid(SalaryPaid salaryPaid) async {
+  try {
+    var jsonData = jsonEncode(salaryPaid);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveSalaryPaid'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
   }
 }
