@@ -27,10 +27,6 @@ class SalaryMasterGet {
     required this.creatDt,
   });
 
-
-  // SalaryMaster.toJson();
-
-
   Map<String, dynamic> toJson() => {
     'id': id,
     'empCode': empCode,
