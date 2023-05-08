@@ -277,15 +277,3 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
         });
   }
 }
-class Salary {
-  String employeeId;
-  String employeeName;
-  String molId;
-  int workingDays;
-  int holidaysTaken;
-  int overtimeHours;
-  double netPayout;
-
-  Salary(this.employeeId, this.employeeName, this.molId, this.workingDays, this.holidaysTaken,
-      this.overtimeHours, this.netPayout);
-}
