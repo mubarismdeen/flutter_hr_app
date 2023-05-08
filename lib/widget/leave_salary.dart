@@ -17,7 +17,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
   List<LeaveSalary> _leaveSalaries = List<LeaveSalary>.empty();
   double _paidAmount=0;
   
-  SalaryPaid _salaryPaid = SalaryPaid(id: 0, empCode: 0, type: 0, payable: 0, totalPaid: 0, due: 0, date: '', paidBy: 0, paid: 0, paidDt: DateTime.now(), editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt: DateTime.now());
+  SalaryPaid _salaryPaid = SalaryPaid(id: 0, empCode: 0, type: 2, payable: 0, totalPaid: 0, due: 0, date: '', paidBy: 0, paid: false, paidDt: DateTime.now(), editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt: DateTime.now());
 
   getData() async {
     _leaveSalaries = await getLeaveSalary(DateFormat('yyyy').format(DateTime.now()));
@@ -92,13 +92,13 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
   Future<void> _submitForm(LeaveSalary salary) async {
 
     _salaryPaid.empCode = salary.empCode;
-    _salaryPaid.type = 1;
     _salaryPaid.payable = salary.pendingAmt;
     _salaryPaid.totalPaid = _paidAmount;
     _salaryPaid.due = salary.pendingAmt - _paidAmount;
     _salaryPaid.date = DateFormat('yyyy-MM').format(DateTime.now()).toString();
     _salaryPaid.paidBy = 1;
-    _salaryPaid.paid = salary.pendingAmt == _paidAmount ? 1 : 0;
+    // _salaryPaid.paid = salary.pendingAmt == _paidAmount ? 1 : 0;
+    _salaryPaid.paid = salary.pendingAmt == _paidAmount ? true : false;
     _salaryPaid.creatBy = 1;
     _salaryPaid.editBy = 1;
 

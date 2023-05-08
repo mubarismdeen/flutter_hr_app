@@ -7,7 +7,7 @@ class SalaryPaid {
   double due;
   String date;
   int paidBy;
-  int paid;
+  bool paid;
   DateTime paidDt;
   int editBy;
   DateTime editDt;

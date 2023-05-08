@@ -1,7 +1,11 @@
 import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 import '../api.dart';
+import '../models/salaryPaid.dart';
 import '../models/salaryPay.dart';
 
 class EmployeeSalary extends StatefulWidget {
@@ -11,11 +15,53 @@ class EmployeeSalary extends StatefulWidget {
 
 class _EmployeeSalaryState extends State<EmployeeSalary> {
   List<SalaryPay> _salaryPay = List<SalaryPay>.empty();
-
+  double _paidAmount=0;
+  SalaryPaid _salaryPaid = SalaryPaid(id: 0, empCode: 0, type: 1, payable: 0, totalPaid: 0, due: 0, date: '', paidBy: 0, paid: false, paidDt: DateTime.now(), editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt: DateTime.now());
 
   getData() async {
     _salaryPay = await getSalaryPay(DateFormat('yyyy-MM').format(DateTime.now()));
   }
+
+  Future<void> _submitForm(SalaryPay salary) async {
+
+    _salaryPaid.empCode = salary.empCode;
+    _salaryPaid.payable = salary.due;
+    _salaryPaid.totalPaid = _paidAmount;
+    _salaryPaid.due = salary.due - _paidAmount;
+    _salaryPaid.date = DateFormat('yyyy-MM').format(DateTime.now()).toString();
+    _salaryPaid.paidBy = 1;
+    _salaryPaid.paid = salary.due == _paidAmount ? true : false;
+    // _salaryPaid.paid = salary.due == _paidAmount ? 1 : 0;
+    _salaryPaid.creatBy = 1;
+    _salaryPaid.editBy = 1;
+
+    bool status = await saveSalaryPaid(_salaryPaid);
+    if( status){
+      Fluttertoast.showToast(
+        msg: "Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition :"center",
+        webShowClose :false,
+      );
+
+      setState(() {  });
+    }else{
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: "failed to save",
+          message: '',
+          icon: Icon(Icons.refresh),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
 
   void _showPaymentDialog(SalaryPay salary) {
     showDialog(
@@ -60,7 +106,8 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                       backgroundColor: themeColor,
                     ),
                     onPressed: () {
-                      // ToDo : Integrate API
+                      _submitForm(salary);
+                      Navigator.of(context).pop();
                     },
                     child: const Text('Submit'),
                   ),
