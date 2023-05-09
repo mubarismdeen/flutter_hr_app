@@ -20,8 +20,8 @@ var url = 'http://192.168.0.134:5001/api/Notes/';
 //  String ip = gip;
 // String ip = "192.168.1.200:81";
 //String ip = "192.168.1.127:5001";
-String ip = "localhost:5001";
-// String ip = "localhost:81";       // IIS
+// String ip = "localhost:5001";
+String ip = "localhost:81";       // IIS
 // String ip = "172.11.7.254:88"; //live
 //String ip = "172.11.7.254:98"; //test
 

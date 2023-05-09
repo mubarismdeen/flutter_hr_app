@@ -21,11 +21,11 @@ class _EmployeeSalaryMasterState extends State<EmployeeSalaryMaster> {
     return FutureBuilder<dynamic>(
         future: getData(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-          return SizedBox(
-            height: 600,
+          return ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 600),
             child: Card(
               shadowColor: shadowColor,
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

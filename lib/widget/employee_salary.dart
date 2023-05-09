@@ -67,7 +67,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
     showDialog(
       context: context,
       builder: (context) {
-        double paidAmount = salary.due;
+        _paidAmount = salary.due;
         return AlertDialog(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,10 +89,10 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
             ],
           ),
           content: TextFormField(
-            initialValue: paidAmount.toString(),
+            initialValue: _paidAmount.toString(),
             keyboardType: TextInputType.number,
             onChanged: (value) {
-              paidAmount = double.tryParse(value) ?? paidAmount;
+              _paidAmount = double.tryParse(value) ?? _paidAmount;
             },
           ),
           actions: [
@@ -135,11 +135,11 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
     return FutureBuilder<dynamic>(
         future: getData(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-          return SizedBox(
-            height: 600,
+          return ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 600),
             child: Card(
               shadowColor: shadowColor,
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -221,7 +221,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Due',
+                                  'Payable\nAmount',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -229,7 +229,15 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Net\nPayout',
+                                  'Paid\nAmount',
+                                  style: tableHeaderStyle,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Pending\nAmount',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -254,8 +262,9 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
                                 DataCell(Text(salary.sOtr.toString())),
                                 DataCell(Text(salary.overseas.toString())),
                                 DataCell(Text(salary.anchorage.toString())),
-                                DataCell(Text(salary.due.toString())),
                                 DataCell(Text(salary.total.toString())),
+                                DataCell(Text((salary.total - salary.due).toString())),
+                                DataCell(Text(salary.due.toString())),
                                 DataCell(
                                   salary.due == 0
                                       ? const Icon(Icons.check_circle_outline, color: Colors.green,)

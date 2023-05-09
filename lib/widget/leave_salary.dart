@@ -135,11 +135,11 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
     return FutureBuilder<dynamic>(
         future: getData(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-          return SizedBox(
-            height: 600,
+          return ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 600),
             child: Card(
               shadowColor: shadowColor,
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -197,7 +197,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Pay Amount',
+                                  'Payable Amount',
                                   style: tableHeaderStyle,
                                 ),
                               ),
@@ -236,7 +236,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                                 DataCell(Text(salary.attendance.toString())),
                                 DataCell(Text(salary.sickLeave.toString())),
                                 DataCell(Text(salary.payAmt.toString())),
-                                DataCell(Text(salary.paidAmt.toString())),
+                                DataCell(Text((salary.payAmt - salary.pendingAmt).toString())),
                                 DataCell(Text(salary.pendingAmt.toString())),
                                 DataCell(
                                   salary.pendingAmt == 0
