@@ -60,7 +60,7 @@ class AttendanceModel {
     data['sovt'] = sovt;
     data['overseas'] = overseas;
     data['anchorage'] = anchorage;
-    data['date'] = DateFormat('yyyy-MM').format(DateTime.now());
+    data['date'] = date;
     data['editBy'] = editBy;
     data['editDt'] = DateFormat('yyyy-MM-dd HH:mm').format(editDt);
     data['creatBy'] = creatBy;
