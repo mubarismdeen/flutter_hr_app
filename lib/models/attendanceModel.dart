@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class Attendance {
+class AttendanceModel {
   int id;
   int empCode;
   double attendance;
@@ -16,7 +16,7 @@ class Attendance {
   int creatBy;
   DateTime creatDt;
 
-  Attendance({
+  AttendanceModel({
     required this.id,
     required this.empCode,
     required this.attendance,

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/quotationDetails.dart';
 import 'package:admin/models/salaryPaid.dart';
-import 'package:admin/widget/employee_attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'models/attendance.dart';
+import 'models/attedanceDto.dart';
+import 'models/attendanceModel.dart';
 import 'models/docDetails.dart';
 import 'models/empMaster.dart';
 import 'models/salaryMaster.dart';
@@ -179,7 +179,7 @@ Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
   }
 }
 
-Future<bool> saveAttendance(List<Attendance> attendanceList) async {
+Future<bool> saveAttendance(List<AttendanceModel> attendanceList) async {
   try {
     var jsonData = jsonEncode(attendanceList);
     final response = await http.post(Uri.parse('http://$ip/Hrms/saveAttendance'),

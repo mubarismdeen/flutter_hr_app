@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/empMaster.dart';
@@ -8,45 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-import '../models/attendance.dart';
+import '../models/attedanceDto.dart';
+import '../models/attendanceModel.dart';
 
 class EmployeeAttendance extends StatefulWidget {
+  DateTime pickedDate;
+  EmployeeAttendance(this.pickedDate);
+
   @override
-  _EmployeeAttendanceState createState() => _EmployeeAttendanceState();
+  _EmployeeAttendanceState createState() => _EmployeeAttendanceState(pickedDate);
 }
 
 class _EmployeeAttendanceState extends State<EmployeeAttendance> {
-  // List<AttendanceDto> attendances = List<AttendanceDto>.empty();
-  List<AttendanceDto> attendances =  List<AttendanceDto>.empty();
-  List<Attendance> _attendanceList = List<Attendance>.empty();
+  DateTime _pickedDate;
+  List<AttendanceDto> attendances = List<AttendanceDto>.empty();
+  List<AttendanceModel> _attendanceList = List<AttendanceModel>.empty();
   bool _editable = false;
   bool _enterAttendance = false;
 
-  List<Map<String, String>> employees = [
-    {
-      "EmpId": "EMP001",
-      "EmpName": "Muthu",
-      "MolIdNo": "1234567890",
-      "TotalAttendance": "24",
-    },
-    {
-      "EmpName": "Munna",
-      "AttStatus": "Absent",
-    },
-    {
-      "EmpName": "Haadhi",
-      "AttStatus": "Late",
-    }
-  ];
-
-  Future<String> _selectTime() async {
-    TimeOfDay? newTime = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 00, minute: 00),
-      initialEntryMode: TimePickerEntryMode.input,
-    );
-    return newTime.toString();
-  }
+  _EmployeeAttendanceState(this._pickedDate);
 
   void listUpdate(rowIndex, val, column) {
     // int rowIndex = processTail.indexWhere((element) => element.srl == int.parse(_srlId));
@@ -81,7 +59,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
           break;
       }
     } else {
-      _attendanceList.add(Attendance(
+      _attendanceList.add(AttendanceModel(
           id: 0,
           empCode: 0,
           attendance: 0,
@@ -91,7 +69,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
           sovt: 0,
           overseas: 0,
           anchorage: 0,
-          date:DateFormat('yyyy-MM').format(DateTime.now()).toString(),
+          date: DateFormat('yyyy-MM').format(DateTime.now()).toString(),
           editBy: 1,
           editDt: DateTime.now(),
           creatBy: 1,
@@ -99,47 +77,61 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     }
   }
 
-  _loadData() async {
-    for (int i = 0; i < 1; i++) {
-      AttendanceDto obj = attendances[i];
-      // _attendanceList.add(Attendance(id: 0, empCode: obj.employeeId, attendance: obj.totalAttendance, offdays: obj.totalOffAndSickDays, lop: obj.totalLossOfPaymentDays, novt: obj.totalNormalOvertimeHours, sovt: obj.totalSpecialOvertimeHours, overseas: obj.totalOverseasDays, anchorage: obj.totalAnchorageDays, editBy: 1, editDt: DateTime.now(), creatBy: 1, creatDt:  DateTime.now()));
-      _attendanceList = [
-        Attendance(
-            id: 0,
-            empCode: obj.employeeId,
-            attendance: obj.totalAttendance,
-            offdays: obj.totalOffAndSickDays,
-            lop: obj.totalLossOfPaymentDays,
-            novt: obj.totalNormalOvertimeHours,
-            sovt: obj.totalSpecialOvertimeHours,
-            overseas: obj.totalOverseasDays,
-            anchorage: obj.totalAnchorageDays,
-            date:'',
+  // _loadData() async {
+  //   for (int i = 0; i < 1; i++) {
+  //     AttendanceDto obj = attendances[i];
+  //     // _attendanceList.add(Attendance(id: 0, empCode: obj.employeeId, attendance: obj.totalAttendance, offdays: obj.totalOffAndSickDays, lop: obj.totalLossOfPaymentDays, novt: obj.totalNormalOvertimeHours, sovt: obj.totalSpecialOvertimeHours, overseas: obj.totalOverseasDays, anchorage: obj.totalAnchorageDays, editBy: 1, editDt: DateTime.now(), creatBy: 1, creatDt:  DateTime.now()));
+  //     _attendanceList = [
+  //       Attendance(
+  //           id: 0,
+  //           empCode: obj.employeeId,
+  //           attendance: obj.totalAttendance,
+  //           offdays: obj.totalOffAndSickDays,
+  //           lop: obj.totalLossOfPaymentDays,
+  //           novt: obj.totalNormalOvertimeHours,
+  //           sovt: obj.totalSpecialOvertimeHours,
+  //           overseas: obj.totalOverseasDays,
+  //           anchorage: obj.totalAnchorageDays,
+  //           date: '',
+  //           editBy: 1,
+  //           editDt: DateTime.now(),
+  //           creatBy: 1,
+  //           creatDt: DateTime.now())
+  //     ];
+  //   }
+  // }
+
+  getAttendanceData() async {
+
+    attendances = await getAttendanceDetails(
+        DateFormat('yyyy-MM').format(_pickedDate));
+    _attendanceList = attendances
+        .map((att) => AttendanceModel(
+            id: att.id,
+            empCode: att.employeeId,
+            attendance: att.totalAttendance,
+            offdays: att.totalOffAndSickDays,
+            lop: att.totalOffAndSickDays,
+            novt: att.totalNormalOvertimeHours,
+            sovt: att.totalSpecialOvertimeHours,
+            overseas: att.totalSpecialOvertimeHours,
+            anchorage: att.totalAnchorageDays,
+            date: DateFormat('yyyy-MM').format(DateTime.now()),
             editBy: 1,
             editDt: DateTime.now(),
             creatBy: 1,
-            creatDt: DateTime.now())
-      ];
-    }
-  }
-  getAttendanceData() async {
-    attendances = await getAttendanceDetails(DateFormat('yyyy-MM').format(DateTime.now()));
-    _attendanceList = attendances.map((att) => Attendance(id:att.id,empCode: att.employeeId, attendance: att.totalAttendance,
-    offdays:att.totalOffAndSickDays,lop:att.totalOffAndSickDays,novt:att.totalNormalOvertimeHours,
-    sovt:att.totalSpecialOvertimeHours,overseas:att.totalSpecialOvertimeHours,anchorage:att.totalAnchorageDays,
-    date:DateFormat('yyyy-MM').format(DateTime.now()),editBy:1,editDt:DateTime.now(),creatBy:1,creatDt:DateTime.now())).toList();
+            creatDt: DateTime.now()))
+        .toList();
   }
 
   getData() async {
     var empList = await getEmpDetails();
     for (int i = 0; i < empList.length; i++) {
       EmpMaster emp = empList[i];
-      var r = emp.empCode;
-      var n = emp.name;
       if (i == 0) {
         attendances = [
           AttendanceDto(
-              id:0,
+              id: 0,
               employeeId: emp.empCode,
               employeeName: emp.name,
               totalAttendance: 0.0,
@@ -152,7 +144,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
               molId: ''),
         ];
         _attendanceList = [
-          Attendance(
+          AttendanceModel(
               id: 0,
               empCode: emp.empCode,
               attendance: 0,
@@ -162,7 +154,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
               sovt: 0,
               overseas: 0,
               anchorage: 0,
-              date:'',
+              date: '',
               editBy: 1,
               editDt: DateTime.now(),
               creatBy: 1,
@@ -181,44 +173,34 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
             totalOverseasDays: 0.0,
             totalAnchorageDays: 0.0,
             molId: ''));
-    _attendanceList.add(Attendance(
-    id: 0,
-    empCode: emp.empCode,
-    attendance: 0,
-    offdays: 0,
-    lop: 0,
-    novt: 0,
-    sovt: 0,
-    overseas: 0,
-    anchorage: 0,
-    date:'',
-    editBy: 1,
-    editDt: DateTime.now(),
-    creatBy: 1,
-    creatDt: DateTime.now()));
+        _attendanceList.add(AttendanceModel(
+            id: 0,
+            empCode: emp.empCode,
+            attendance: 0,
+            offdays: 0,
+            lop: 0,
+            novt: 0,
+            sovt: 0,
+            overseas: 0,
+            anchorage: 0,
+            date: '',
+            editBy: 1,
+            editDt: DateTime.now(),
+            creatBy: 1,
+            creatDt: DateTime.now()));
+      }
     }
-      // Call complete() on the Completer to signal that the operation is complete.
-      // completer.complete();
-      //
-      // // Wait for the Completer's future to complete before continuing.
-      // await completer.future;
-    }
-    // setState(() { });
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getData();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
         future: getAttendanceData(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-    return attendances.isEmpty && !_enterAttendance ? _attendanceNotFoundContainer() : _attendanceTable();
-    });
+          return attendances.isEmpty && !_enterAttendance
+              ? _attendanceNotFoundContainer()
+              : _attendanceTable();
+        });
   }
 
   Widget _attendanceNotFoundContainer() {
@@ -267,7 +249,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     return DataCell(ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 77),
       child: TextFormField(
-        initialValue: field==0 ? "" : field.toString(),
+        initialValue: field == 0 ? "" : field.toString(),
         enabled: _editable,
         keyboardType: TextInputType.number,
         onChanged: (value) {
@@ -376,7 +358,8 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
                 ],
                 rows: attendances
                     .map((att) => DataRow(cells: [
-                          DataCell(Center(child: Text(att.employeeId.toString()))),
+                          DataCell(
+                              Center(child: Text(att.employeeId.toString()))),
                           DataCell(Center(child: Text(att.employeeName))),
                           // DataCell(Text(attendance.molId)),
                           _getCustomDataCell(
@@ -517,17 +500,28 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
                 ],
                 rows: attendances
                     .map((att) => DataRow(cells: [
-                  DataCell(Center(child: Text(att.employeeId.toString()))),
-                  DataCell(Center(child: Text(att.employeeName))),
-                  // DataCell(Text(attendance.molId)),
-                  DataCell(Center(child: Text(att.totalAttendance.toString()))),
-                  DataCell(Center(child: Text(att.totalOffAndSickDays.toString()))),
-                  DataCell(Center(child: Text(att.totalLossOfPaymentDays.toString()))),
-                  DataCell(Center(child: Text(att.totalNormalOvertimeHours.toString()))),
-                  DataCell(Center(child: Text(att.totalSpecialOvertimeHours.toString()))),
-                  DataCell(Center(child: Text(att.totalOverseasDays.toString()))),
-                  DataCell(Center(child: Text(att.totalAnchorageDays.toString()))),
-                ]))
+                          DataCell(
+                              Center(child: Text(att.employeeId.toString()))),
+                          DataCell(Center(child: Text(att.employeeName))),
+                          // DataCell(Text(attendance.molId)),
+                          DataCell(Center(
+                              child: Text(att.totalAttendance.toString()))),
+                          DataCell(Center(
+                              child: Text(att.totalOffAndSickDays.toString()))),
+                          DataCell(Center(
+                              child:
+                                  Text(att.totalLossOfPaymentDays.toString()))),
+                          DataCell(Center(
+                              child: Text(
+                                  att.totalNormalOvertimeHours.toString()))),
+                          DataCell(Center(
+                              child: Text(
+                                  att.totalSpecialOvertimeHours.toString()))),
+                          DataCell(Center(
+                              child: Text(att.totalOverseasDays.toString()))),
+                          DataCell(Center(
+                              child: Text(att.totalAnchorageDays.toString()))),
+                        ]))
                     .toList(),
               ),
             ),
@@ -538,7 +532,6 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
       ],
     );
   }
-
 
   Widget _enterAttendanceButton() {
     return CustomElevatedButton(
@@ -594,47 +587,46 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   }
 }
 
-class AttendanceDto {
-  int id = 0;
-  int employeeId = 0;
-  String employeeName = '';
-  String molId = '';
-  double totalAttendance = 0.0;
-  double totalOffAndSickDays = 0.0;
-  double totalLossOfPaymentDays = 0.0;
-  double totalNormalOvertimeHours = 0.0;
-  double totalSpecialOvertimeHours = 0.0;
-  double totalOverseasDays = 0.0;
-  double totalAnchorageDays = 0.0;
-
-  AttendanceDto(
-      {
-      required this.id,
-      required this.employeeId,
-      required this.employeeName,
-      required this.molId,
-      required this.totalAttendance,
-      required this.totalOffAndSickDays,
-      required this.totalLossOfPaymentDays,
-      required this.totalNormalOvertimeHours,
-      required this.totalSpecialOvertimeHours,
-      required this.totalOverseasDays,
-      required this.totalAnchorageDays});
-
-  AttendanceDto.fromJson(Map<String, dynamic> json) {
-    id = json['id']?? 0;
-    employeeId = json['empCode']?? 0;
-    employeeName = json['name']??'NULL';
-    molId = json['molId']??'NULL';
-    totalAttendance = json['attendance']?? 0.0;
-    totalOffAndSickDays = json['offDays'] ?? 0.0;
-    totalLossOfPaymentDays = json['lop'] ?? 0.0;
-    totalNormalOvertimeHours = json['novt'] ?? 0.0;
-    totalSpecialOvertimeHours = json['sovt'] ?? 0.0;
-    totalOverseasDays = json['overseas'] ?? 0.0;
-    totalAnchorageDays = json['anchorage'] ?? 0.0;
-  }
-}
+// class AttendanceDto {
+//   int id = 0;
+//   int employeeId = 0;
+//   String employeeName = '';
+//   String molId = '';
+//   double totalAttendance = 0.0;
+//   double totalOffAndSickDays = 0.0;
+//   double totalLossOfPaymentDays = 0.0;
+//   double totalNormalOvertimeHours = 0.0;
+//   double totalSpecialOvertimeHours = 0.0;
+//   double totalOverseasDays = 0.0;
+//   double totalAnchorageDays = 0.0;
+//
+//   AttendanceDto(
+//       {required this.id,
+//       required this.employeeId,
+//       required this.employeeName,
+//       required this.molId,
+//       required this.totalAttendance,
+//       required this.totalOffAndSickDays,
+//       required this.totalLossOfPaymentDays,
+//       required this.totalNormalOvertimeHours,
+//       required this.totalSpecialOvertimeHours,
+//       required this.totalOverseasDays,
+//       required this.totalAnchorageDays});
+//
+//   AttendanceDto.fromJson(Map<String, dynamic> json) {
+//     id = json['id'] ?? 0;
+//     employeeId = json['empCode'] ?? 0;
+//     employeeName = json['name'] ?? 'NULL';
+//     molId = json['molId'] ?? 'NULL';
+//     totalAttendance = json['attendance'] ?? 0.0;
+//     totalOffAndSickDays = json['offDays'] ?? 0.0;
+//     totalLossOfPaymentDays = json['lop'] ?? 0.0;
+//     totalNormalOvertimeHours = json['novt'] ?? 0.0;
+//     totalSpecialOvertimeHours = json['sovt'] ?? 0.0;
+//     totalOverseasDays = json['overseas'] ?? 0.0;
+//     totalAnchorageDays = json['anchorage'] ?? 0.0;
+//   }
+// }
 
 // class AttendanceDto {
 //   int empCode;

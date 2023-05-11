@@ -1,7 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import '../api.dart';
