@@ -86,35 +86,95 @@ Future<bool> userValidate(String userID, String password) async {
 
 }
 
-Future<List<DocDetails>> getDocumentDetails() async {
-  try {
-    final response = await http
-        .get(Uri.parse("http://$ip/Hrms/getDocDetails"));
-    if (response.statusCode == 200) {
-      List<DocDetails> userMap = DocDetails.toJson() as List<DocDetails>;
-      List jsonResponse = json.decode(response.body);
-      if (jsonResponse.isNotEmpty) {
-        userMap =
-            jsonResponse.map((job) => DocDetails.fromJson(job)).toList();
-      }
-      return userMap;
-    } else {
-      // globals.show = false;
-      // globals.showLoading = false;
-      throw Exception('Failed');
-    }
-  } catch (e) {
-    // Get.to(ErrorPage());
-    // globals.showLoading = false;
-    // globals.show = false;
-    throw Exception('Failed');
-  }
-}
-
 Future<List<Map<String, dynamic>>> getDocDetails() async {
   try {
     final response = await http.get(
         Uri.parse("http://$ip/Hrms/getDocDetails"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getDocType() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getDocType"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getQuotationType() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getQuotationType"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getPoStatus() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getpoStatus"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getInvoiceStatus() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getinvStatus"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getQuotationDetails() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getQuotationDetails"));
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
           .map((dynamic e) => e as Map<String, dynamic>)
@@ -165,7 +225,7 @@ Future<bool> saveDocDetails(DocDetails docDetails) async {
 Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
   try {
     var jsonData = jsonEncode(quotationDetails);
-    final response = await http.post(Uri.parse('http://$ip/Hrms/saveQuotationDetails'),
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveQuotation'),
         headers: {"Content-Type": "application/json"}, body: jsonData);
 
     if (response.statusCode == 200) {

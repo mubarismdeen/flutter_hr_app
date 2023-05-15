@@ -2,149 +2,18 @@ import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 
 class QuotationsPendingExpanded extends StatefulWidget {
+  List<Map<String, dynamic>> tableData;
+  QuotationsPendingExpanded(this.tableData);
+
   @override
-  _QuotationsPendingExpandedState createState() => _QuotationsPendingExpandedState();
+  _QuotationsPendingExpandedState createState() =>
+      _QuotationsPendingExpandedState();
 }
 
 class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
-  final List<Map<String, String>> tableData = [
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    },
-    {
-      "EmpCode": "EMP001",
-      "EmpName": "Mubaris",
-      "DocId": "DOC001",
-      "DocType": "Passport",
-      "DueDate": "01/02/2024",
-      "RenewedDate": "01/02/2022",
-      "EditBy": "Munna",
-      "EditDate": "01/02/2022",
-      "CreateBy": "Munna",
-      "CreateDate": "01/02/2022",
-    }
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 500,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -154,7 +23,7 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Emp Code',
+                    'Client Name',
                     style: tableHeaderStyle,
                   ),
                 ),
@@ -162,7 +31,7 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Emp Name',
+                    'Vessel',
                     style: tableHeaderStyle,
                   ),
                 ),
@@ -170,7 +39,7 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Doc ID',
+                    'Narration',
                     style: tableHeaderStyle,
                   ),
                 ),
@@ -178,7 +47,31 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Doc Type',
+                    'Type',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Date',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'PO Status',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Invoice Status',
                     style: tableHeaderStyle,
                   ),
                 ),
@@ -187,30 +80,6 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
                 label: Expanded(
                   child: Text(
                     'Due Date',
-                    style: tableHeaderStyle,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Renewed Date',
-                    style: tableHeaderStyle,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Edit By',
-                    style: tableHeaderStyle,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Edit Date',
                     style: tableHeaderStyle,
                   ),
                 ),
@@ -231,42 +100,64 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
                   ),
                 ),
               ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Edit By',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Edit Date',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
             ],
-            rows: tableData
+            rows: widget.tableData
                 .map(
                   (tableRow) => DataRow(cells: [
-                DataCell(
-                  Text(tableRow['EmpCode'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['EmpName'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['DocId'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['DocType'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['DueDate'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['RenewedDate'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['EditBy'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['EditDate'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['CreateBy'].toString()),
-                ),
-                DataCell(
-                  Text(tableRow['CreateDate'].toString()),
+                    DataCell(
+                      Text(tableRow['clientName'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['name'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['narration'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['type'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['date'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['poStatus'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['invStatus'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['dueDate'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['creatBy'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['creatDt'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['editBy'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['editDt'].toString()),
+                    ),
+                  ]),
                 )
-              ]),
-            )
                 .toList(),
           ),
         ),

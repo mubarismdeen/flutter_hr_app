@@ -20,6 +20,12 @@ class _DocExpiryState extends State<DocExpiry> {
     tableData = await getDocDetails();
   }
 
+  closeDialog() {
+    setState(() {
+      getData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
@@ -146,9 +152,9 @@ class _DocExpiryState extends State<DocExpiry> {
     int differenceInDays = docDate.difference(today).inDays;
     Color rowColor = Colors.transparent;
     if (differenceInDays < 0) {
-      rowColor = Colors.red.shade400;
+      rowColor = Colors.red.shade300;
     } else if (differenceInDays < 10) {
-      rowColor = Colors.orange.shade400;
+      rowColor = Colors.orange.shade200;
     }
     return rowColor;
   }
@@ -171,7 +177,7 @@ class _DocExpiryState extends State<DocExpiry> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Document Details',
-          const DocDetailsUpload(),
+          DocDetailsUpload(this.closeDialog),
         );
       },
     );
