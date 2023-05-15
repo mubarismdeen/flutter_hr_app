@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:admin/models/jobDetails.dart';
 import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/quotationDetails.dart';
 import 'package:admin/models/salaryPaid.dart';
@@ -20,8 +21,8 @@ var url = 'http://192.168.0.134:5001/api/Notes/';
 //  String ip = gip;
 // String ip = "192.168.1.200:81";
 //String ip = "192.168.1.127:5001";
-// String ip = "localhost:5001";
-String ip = "localhost:81";       // IIS
+String ip = "localhost:5001";
+// String ip = "localhost:81";       // IIS
 // String ip = "172.11.7.254:88"; //live
 //String ip = "172.11.7.254:98"; //test
 
@@ -395,5 +396,56 @@ Future<bool> saveSalaryPaid(SalaryPaid salaryPaid) async {
 
   } catch (e) {
     return false;
+  }
+}
+
+Future<List<Map<String, dynamic>>> getJobDetails() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getJobDetails"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<bool> saveJobDetails(JobDetails jobDetails) async {
+  try {
+    var jsonData = jsonEncode(jobDetails);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveJobDetail'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<List<Map<String, dynamic>>> getJobStatuses() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getjobStatus"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
   }
 }

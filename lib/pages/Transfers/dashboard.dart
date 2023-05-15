@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../constants/controllers.dart';
 import '../../helpers/responsiveness.dart';
+import '../../widget/job_details.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class Dashboard extends StatelessWidget {
                 )
               ],
             )),
-        Container(height: 450,
+        SizedBox(height: 450,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -38,6 +39,15 @@ class Dashboard extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 450,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: JobDetailsWidget()),
+              const Expanded(child: SizedBox(height: 1,),),
+            ],
+          ),
+        )
       ]),
     );
   }
