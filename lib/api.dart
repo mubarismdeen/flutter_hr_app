@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:admin/models/employeeDetails.dart';
 import 'package:admin/models/jobDetails.dart';
 import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/quotationDetails.dart';
 import 'package:admin/models/salaryPaid.dart';
+import 'package:admin/models/saveEmployeeDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -356,6 +358,25 @@ Future<List<SalaryMasterGet>> getSalaryMaster(String date) async {
   }
 }
 
+Future<List<EmployeeDetails>> getEmployeeDetails() async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getEmployeeDetails"));
+    if (response.statusCode == 200) {
+      List<EmployeeDetails>? userMap = List<EmployeeDetails>.empty();
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => EmployeeDetails.fromJson(job)).cast<EmployeeDetails>().toList();
+      }
+      return userMap;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
 
 Future<List<LeaveSalary>> getLeaveSalary(String year) async {
   try {
@@ -433,10 +454,77 @@ Future<bool> saveJobDetails(JobDetails jobDetails) async {
   }
 }
 
+Future<bool> saveEmployeeDetails(SaveEmployeeDetails employeeDetails) async {
+  try {
+    var jsonData = jsonEncode(employeeDetails);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveEmployeeDetails'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
 Future<List<Map<String, dynamic>>> getJobStatuses() async {
   try {
     final response = await http.get(
         Uri.parse("http://$ip/Hrms/getjobStatus"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getDeparments() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getDeparments"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getEmployeeStatuses() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getEmployeeStatuses"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getEmployeeNationalities() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getEmployeeNationalities"));
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
           .map((dynamic e) => e as Map<String, dynamic>)

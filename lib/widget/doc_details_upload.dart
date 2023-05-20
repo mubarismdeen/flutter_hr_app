@@ -40,9 +40,9 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
       docid: 0,
       dueDate: DateTime.now(),
       renewedDate: DateTime.now(),
-      creatBy: 0,
+      creatBy: 1,
       creatDt: DateTime.now(),
-      editBy: 0,
+      editBy: 1,
       editDt: DateTime.now()
   );
 

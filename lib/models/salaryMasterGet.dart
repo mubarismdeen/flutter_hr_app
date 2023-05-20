@@ -12,36 +12,6 @@ class SalaryMasterGet {
   String creatBy = '';
   DateTime creatDt = DateTime.now();
 
-  SalaryMasterGet({
-    required this.id,
-    required this.empCode,
-    required this.name,
-    required this.salary,
-    required this.nOtr,
-    required this.sOtr,
-    required this.overseas,
-    required this.anchorage,
-    required this.editBy,
-    required this.editDt,
-    required this.creatBy,
-    required this.creatDt,
-  });
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'empCode': empCode,
-    'name': name,
-    'salary': salary,
-    'nOtr': nOtr,
-    'sOtr': sOtr,
-    'overseas': overseas,
-    'anchorage': anchorage,
-    'editBy': editBy,
-    'editDt': editDt.toIso8601String(),
-    'creatBy': creatBy,
-    'creatDt': creatDt.toIso8601String(),
-  };
-
   SalaryMasterGet.fromJson(Map<String, dynamic> json) {
     id= json['id'] ?? 0;
     empCode = json['empCode']??0;

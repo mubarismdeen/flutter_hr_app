@@ -23,9 +23,9 @@ class CustomMenuController extends GetxController{
 
   Widget returnIconFor(String itemName){
     switch(itemName){
-      case OverViewPageRoute:
-        return _customIcon(Icons.trending_up, itemName);
       case AttendanceRoute:
+        return _customIcon(Icons.pending_actions, itemName);
+      case EmployeesRoute:
         return _customIcon(Icons.people_rounded, itemName);
       case DashboardRoute:
         return _customIcon(Icons.dashboard, itemName);
