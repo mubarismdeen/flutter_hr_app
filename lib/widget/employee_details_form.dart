@@ -10,8 +10,8 @@ import 'package:intl/intl.dart';
 import '../api.dart';
 
 class EmployeeDetailsForm extends StatefulWidget {
-  // dynamic closeDialog;
-  EmployeeDetailsForm({Key? key}) : super(key: key);
+  dynamic closeDialog;
+  EmployeeDetailsForm(this.closeDialog, {Key? key}) : super(key: key);
 
   @override
   State<EmployeeDetailsForm> createState() => _EmployeeDetailsFormState();
@@ -99,7 +99,7 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
       _dob.clear();
 
       Navigator.pop(context);
-      // widget.closeDialog();
+      widget.closeDialog();
 
       setState(() {});
     } else {
