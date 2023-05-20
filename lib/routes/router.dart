@@ -1,4 +1,5 @@
 
+import 'package:admin/pages/Clients/clients_screen.dart';
 import 'package:admin/pages/Employees/employees_screen.dart';
 import 'package:admin/pages/Salary/leave_salary.dart';
 import 'package:admin/pages/Salary/salary_payout.dart';
@@ -25,6 +26,8 @@ Route<dynamic> generateRoute(RouteSettings settings){
       return _getPageRoute(const SalaryPayout());
     case LeaveSalaryRoute:
       return _getPageRoute(const LeaveSalaryPage());
+    case ClientsRoute:
+      return _getPageRoute(const ClientsScreen());
     default:
       return _getPageRoute(const Attendance());
   }

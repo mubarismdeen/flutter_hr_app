@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:admin/models/clientDetails.dart';
 import 'package:admin/models/employeeDetails.dart';
 import 'package:admin/models/jobDetails.dart';
 import 'package:admin/models/leaveSalary.dart';
@@ -537,3 +538,40 @@ Future<List<Map<String, dynamic>>> getEmployeeNationalities() async {
     throw Exception('Failed');
   }
 }
+
+Future<List<ClientDetails>> getClientDetails() async {
+  try {
+    final response = await http
+        .get(Uri.parse("http://$ip/Hrms/getClientDetails"));
+    if (response.statusCode == 200) {
+      List<ClientDetails>? userMap = List<ClientDetails>.empty();
+      List jsonResponse = json.decode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        userMap =
+            jsonResponse.map((job) => ClientDetails.fromJson(job)).cast<ClientDetails>().toList();
+      }
+      return userMap;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<bool> saveClientDetails(ClientDetails clientDetails) async {
+  try {
+    var jsonData = jsonEncode(clientDetails);
+    final response = await http.post(Uri.parse('http://$ip/Hrms/saveClientDetails'),
+        headers: {"Content-Type": "application/json"}, body: jsonData);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+

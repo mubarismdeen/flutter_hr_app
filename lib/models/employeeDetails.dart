@@ -32,11 +32,11 @@ class EmployeeDetails {
   EmployeeDetails.fromJson(Map<String, dynamic> json) {
     empCode = json['empCode']??0;
     name = json['name']??'';
-    mobile1 = json['mobile1']??0.0;
-    mobile2 = json['mobile2']??0.0;
-    department = json['department']??0.0;
-    status = json['status']??0.0;
-    nationality = json['nationality']??0.0;
+    mobile1 = json['mobile1']??'';
+    mobile2 = json['mobile2']??'';
+    department = json['department']??'';
+    status = json['status']??'';
+    nationality = json['nationality']??'';
     birthDt = DateTime.parse(json['birthDt']);
     joinDt = DateTime.parse(json['joinDt']);
     editBy = json['editBy']??'';
