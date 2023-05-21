@@ -169,7 +169,7 @@ class _QuotationsPendingState extends State<QuotationsPending> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Quotation Details',
-          QuotationsUpload(this.closeDialog),
+          QuotationsUpload(closeDialog),
         );
       },
     );

@@ -1,6 +1,5 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/attendanceModel.dart';
-import 'package:admin/widget/attendance_history.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/employee_attendance_form.dart';
@@ -66,10 +65,10 @@ class _AttendanceState extends State<Attendance> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 35.0, top: 35.0),
-                  child: _viewButton(),
-                ),
+                // Container(
+                //   margin: const EdgeInsets.only(right: 35.0, top: 35.0),
+                //   child: _viewButton(),
+                // ),
                 Container(
                   margin: const EdgeInsets.only(right: 35.0, top: 35.0),
                   child: _uploadButton(),
@@ -620,15 +619,15 @@ class _AttendanceState extends State<Attendance> {
     );
   }
 
-  void _openViewDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomAlertDialog(
-            'Attendance History', AttendanceHistoryScreen());
-      },
-    );
-  }
+  // void _openViewDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return CustomAlertDialog(
+  //           'Attendance History', AttendanceHistoryScreen());
+  //     },
+  //   );
+  // }
 
   Widget _uploadButton() {
     return ElevatedButton(
@@ -642,15 +641,15 @@ class _AttendanceState extends State<Attendance> {
     );
   }
 
-  Widget _viewButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(16.0),
-        backgroundColor: themeColor,
-      ),
-      onPressed: _openViewDialog,
-      child: const Text('View Attendance',
-          style: TextStyle(fontWeight: FontWeight.bold)),
-    );
-  }
+  // Widget _viewButton() {
+  //   return ElevatedButton(
+  //     style: ElevatedButton.styleFrom(
+  //       padding: const EdgeInsets.all(16.0),
+  //       backgroundColor: themeColor,
+  //     ),
+  //     onPressed: _openViewDialog,
+  //     child: const Text('View Attendance',
+  //         style: TextStyle(fontWeight: FontWeight.bold)),
+  //   );
+  // }
 }

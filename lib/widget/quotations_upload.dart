@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
+import '../models/clientDetails.dart';
 
 class QuotationsUpload extends StatefulWidget {
   dynamic closeDialog;
@@ -19,7 +20,6 @@ class QuotationsUpload extends StatefulWidget {
 class _QuotationsUploadState extends State<QuotationsUpload> {
   final _formKey = GlobalKey<FormState>();
 
-  var _clientName = TextEditingController();
   var _name = TextEditingController();
   var _narration = TextEditingController();
   var _invocieNo = TextEditingController();
@@ -31,25 +31,27 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
   late Map<String, dynamic> _selectedInvStatus;
   late Map<String, dynamic> _selectedPoStatus;
   late Map<String, dynamic> _selectedType;
+  late ClientDetails _selectedClient;
 
   List<Map<String, dynamic>> invoiceStatuses = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> poStatuses = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> types = <Map<String, dynamic>>[];
+  List<ClientDetails> clients = <ClientDetails>[];
 
   getDropdownInputs() async {
     invoiceStatuses = await getInvoiceStatus();
     poStatuses = await getPoStatus();
     types = await getQuotationType();
+    clients = await getClientDetails();
   }
 
 
   QuotationDetails _quotationDetails = QuotationDetails(
       id: 0,
-      clientName: "",
+      clientId: 0,
       narration: "",
       name: "",
       date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      quotationNo: 0,
       invoiceNo: 0,
       invoiceAmt : 0,
       poNo : 0,
@@ -58,7 +60,6 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
       poStatus: 0,
       invStatus: 0,
       type: 0,
-      docId: 0,
       dueDate: "",
       creatBy: 1,
       creatDt: DateTime.now(),
@@ -70,16 +71,16 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
       _formKey.currentState?.save();
       // Submit the form data to a backend API or do something else with it
       print('Submitted form data:');
-      print('Client Name: $_clientName');
+      print('Client Name: ${_selectedClient.id}');
       print('Name: $_name');
       print('Narration: $_narration');
       print('Invoice No: $_invocieNo');
-      print('PO Status: $_selectedPoStatus');
-      print('Invoice Status: $_selectedInvStatus');
-      print('Type: $_selectedType');
+      print('PO Status: ${_selectedPoStatus['id']}');
+      print('Invoice Status: ${_selectedInvStatus['id']}');
+      print('Type: ${_selectedType['id']}');
       print('Due Date: $_dueDate');
     }
-    _quotationDetails.clientName = _clientName.text;
+    _quotationDetails.clientId = _selectedClient.id;
     _quotationDetails.name = _name.text;
     _quotationDetails.narration = _narration.text;
     _quotationDetails.invoiceNo = int.parse(_invocieNo.text);
@@ -135,17 +136,26 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Client Name'),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter client name';
-                      }
-                      return null;
-                    },
-                    controller: _clientName,
-                    onSaved: (value) {},
-                  ),
+                  DropdownButtonFormField(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select client';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(labelText: 'Client'),
+                      items: clients
+                          .map<DropdownMenuItem<String>>((ClientDetails client) {
+                        return DropdownMenuItem<String>(
+                          value: client.name,
+                          child: Text(client.name),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _selectedClient = clients.firstWhere((client) => client.name == value);
+                        });
+                      }),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'vessel'),
                     validator: (value) {

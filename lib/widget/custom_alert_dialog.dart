@@ -11,28 +11,31 @@ class CustomAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(titleText),
-          const SizedBox(
-            width: 35,
-          ),
-          TextButton(
-            style: const ButtonStyle(alignment: Alignment.topRight),
-            onPressed: () {
-              navigator?.pop(context);
-            },
-            child: const Icon(
-              Icons.clear,
-              color: themeColor,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      child: AlertDialog(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(titleText),
+            const SizedBox(
+              width: 35,
             ),
-          ),
-        ],
+            TextButton(
+              style: const ButtonStyle(alignment: Alignment.topRight),
+              onPressed: () {
+                navigator?.pop(context);
+              },
+              child: const Icon(
+                Icons.clear,
+                color: themeColor,
+              ),
+            ),
+          ],
+        ),
+        content: child,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 100),
       ),
-      content: child,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 100),
     );
   }
 }
