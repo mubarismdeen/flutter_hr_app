@@ -55,6 +55,14 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
               DataColumn(
                 label: Expanded(
                   child: Text(
+                    'Report No',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
                     'Date',
                     style: tableHeaderStyle,
                   ),
@@ -71,7 +79,39 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
               DataColumn(
                 label: Expanded(
                   child: Text(
+                    'PO No',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'PO Ref No',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
                     'Invoice Status',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Invoice No',
+                    style: tableHeaderStyle,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Invoice Amount',
                     style: tableHeaderStyle,
                   ),
                 ),
@@ -133,13 +173,28 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
                       Text(tableRow['type'].toString()),
                     ),
                     DataCell(
+                      Text(tableRow['reportNo'].toString()),
+                    ),
+                    DataCell(
                       Text(tableRow['date'].toString()),
                     ),
                     DataCell(
                       Text(tableRow['poStatus'].toString()),
                     ),
                     DataCell(
+                      Text(tableRow['poNo'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['poRefNo'].toString()),
+                    ),
+                    DataCell(
                       Text(tableRow['invStatus'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['invoiceNo'].toString()),
+                    ),
+                    DataCell(
+                      Text(tableRow['invoiceAmt'].toString()),
                     ),
                     DataCell(
                       Text(tableRow['dueDate'].toString()),

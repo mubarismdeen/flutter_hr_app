@@ -7,6 +7,10 @@ class QuotationDetails {
   String date = "";
   int quotationNo = 0;
   int invoiceNo = 0;
+  int poRefNo = 0;
+  int reportNo = 0;
+  double invoiceAmt = 0.0;
+  int poNo = 0;
   int poStatus = 0;
   int invStatus = 0;
   int type = 0;
@@ -25,6 +29,10 @@ class QuotationDetails {
     required this.date,
     required this.quotationNo,
     required this.invoiceNo,
+    required this.poNo,
+    required this.poRefNo,
+    required this.reportNo,
+    required this.invoiceAmt,
     required this.poStatus,
     required this.invStatus,
     required this.type,
@@ -46,7 +54,11 @@ class QuotationDetails {
         'name': name,
         'date': date,
         'quotationNo': quotationNo,
+        'poNo' : poNo,
+        'poRefNo' : poRefNo,
+        'reportNo' : reportNo,
         'invoiceNo': invoiceNo,
+        'invoiceAmt' : invoiceAmt,
         'poStatus': poStatus,
         'invStatus': invStatus,
         'type': type,

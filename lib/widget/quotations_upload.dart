@@ -23,6 +23,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
   var _name = TextEditingController();
   var _narration = TextEditingController();
   var _invocieNo = TextEditingController();
+  var _poNo = TextEditingController();
+  var _poRefNo = TextEditingController();
+  var _reportNo = TextEditingController();
+  var _invoiceAmt = TextEditingController();
   var _dueDate = TextEditingController();
   late Map<String, dynamic> _selectedInvStatus;
   late Map<String, dynamic> _selectedPoStatus;
@@ -47,6 +51,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
       date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
       quotationNo: 0,
       invoiceNo: 0,
+      invoiceAmt : 0,
+      poNo : 0,
+      poRefNo : 0,
+      reportNo : 0,
       poStatus: 0,
       invStatus: 0,
       type: 0,
@@ -75,6 +83,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
     _quotationDetails.name = _name.text;
     _quotationDetails.narration = _narration.text;
     _quotationDetails.invoiceNo = int.parse(_invocieNo.text);
+    _quotationDetails.poNo = int.parse(_poNo.text);
+    _quotationDetails.poRefNo = int.parse(_poRefNo.text);
+    _quotationDetails.reportNo = int.parse(_reportNo.text);
+    _quotationDetails.invoiceAmt = double.parse(_invoiceAmt.text);
     _quotationDetails.poStatus = _selectedPoStatus['id'];
     _quotationDetails.invStatus = _selectedInvStatus['id'];
     _quotationDetails.type = _selectedType['id'];
@@ -135,16 +147,36 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                     onSaved: (value) {},
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Quotation Name'),
+                    decoration: const InputDecoration(labelText: 'vessel'),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter quotation name';
+                        return 'Please enter vessel';
                       }
                       return null;
                     },
                     controller: _name,
                     onSaved: (value) {},
                   ),
+                  DropdownButtonFormField(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select quotation type';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(labelText: 'Quotation Type'),
+                      items: types
+                          .map<DropdownMenuItem<String>>((dynamic value) {
+                        return DropdownMenuItem<String>(
+                          value: value['description'].toString(),
+                          child: Text(value['description']),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _selectedType = types.firstWhere((type) => type['description'] == value);
+                        });
+                      }),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Narration'),
                     validator: (value) {
@@ -157,14 +189,14 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                     onSaved: (value) {},
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Invoice Number'),
+                    decoration: const InputDecoration(labelText: 'Report Number'),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter invoice number';
+                        return 'Please enter Report number';
                       }
                       return null;
                     },
-                    controller: _invocieNo,
+                    controller: _reportNo,
                     onSaved: (value) {},
                   ),
                   DropdownButtonFormField(
@@ -187,6 +219,28 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                           _selectedPoStatus = poStatuses.firstWhere((poStatus) => poStatus['description'] == value);
                         });
                       }),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'PO Number'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter invoice number';
+                      }
+                      return null;
+                    },
+                    controller: _poNo,
+                    onSaved: (value) {},
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'PO Ref Number'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter invoice number';
+                      }
+                      return null;
+                    },
+                    controller: _poRefNo,
+                    onSaved: (value) {},
+                  ),
                   DropdownButtonFormField(
                       validator: (value) {
                         if (value == null) {
@@ -207,26 +261,28 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                           _selectedInvStatus = invoiceStatuses.firstWhere((invStatus) => invStatus['description'] == value);
                         });
                       }),
-                  DropdownButtonFormField(
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select quotation type';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(labelText: 'Quotation Type'),
-                      items: types
-                          .map<DropdownMenuItem<String>>((dynamic value) {
-                        return DropdownMenuItem<String>(
-                          value: value['description'].toString(),
-                          child: Text(value['description']),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          _selectedType = types.firstWhere((type) => type['description'] == value);
-                        });
-                      }),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Invoice Number'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter invoice number';
+                      }
+                      return null;
+                    },
+                    controller: _invocieNo,
+                    onSaved: (value) {},
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Invoice Amount'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter invoice Amount';
+                      }
+                      return null;
+                    },
+                    controller: _invoiceAmt,
+                    onSaved: (value) {},
+                  ),
                   TextFormField(
                     controller: _dueDate,
                     decoration: const InputDecoration(labelText: 'Due Date'),
