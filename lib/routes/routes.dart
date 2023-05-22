@@ -5,6 +5,7 @@ const SalaryPayoutRoute = "Salary Payout";
 const LeaveSalaryRoute = "Leave Salary";
 const AttendanceRoute = "Attendance";
 const ClientsRoute = "Clients";
+const GratuityRoute = "Gratuity";
 const AuthenticationPageRoute = "Authentication";
 
 
@@ -16,5 +17,6 @@ List sideMenuItems =[
   SalaryPayoutRoute,
   LeaveSalaryRoute,
   ClientsRoute,
+  GratuityRoute,
   AuthenticationPageRoute,
 ];

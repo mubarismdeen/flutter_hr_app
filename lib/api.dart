@@ -243,6 +243,19 @@ Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
   }
 }
 
+Future<bool> saveGratuity(String empCode, String type,String editBy) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/SaveGratuity?empCode=$empCode&type=$type&editBy=$editBy'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
 Future<bool> saveAttendance(List<AttendanceModel> attendanceList) async {
   try {
     var jsonData = jsonEncode(attendanceList);
@@ -526,6 +539,23 @@ Future<List<Map<String, dynamic>>> getEmployeeNationalities() async {
   try {
     final response = await http.get(
         Uri.parse("http://$ip/Hrms/getEmployeeNationalities"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
+Future<List<Map<String, dynamic>>> getGratuityType() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getGratuityType"));
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
           .map((dynamic e) => e as Map<String, dynamic>)

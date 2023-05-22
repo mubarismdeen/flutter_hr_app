@@ -37,6 +37,8 @@ class CustomMenuController extends GetxController{
         return _customIcon(Icons.account_balance_wallet_outlined, itemName);
       case ClientsRoute:
         return _customIcon(Icons.handshake_outlined, itemName);
+      case GratuityRoute:
+        return _customIcon(Icons.savings_outlined, itemName);
       case AuthenticationPageRoute:
         return _customIcon(Icons.exit_to_app, itemName);
       default:
