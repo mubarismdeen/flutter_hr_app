@@ -23,14 +23,15 @@ class GratuityScreen extends StatefulWidget {
 }
 
 class _GratuityScreenState extends State<GratuityScreen> {
-  List<GratuityDetails> _gratuityDetails = List<GratuityDetails>.empty();
+  // List<GratuityDetails> _gratuityDetails = List<GratuityDetails>.empty();
+  List<Map<String, dynamic>> _gratuityDetails =  <Map<String, dynamic>>[];
   List<EmpMaster> _empDetails = List<EmpMaster>.empty();
   List<Map<String, dynamic>> _gratuityType = <Map<String, dynamic>>[];
 
   getTableData() async {
     _empDetails = await getEmpDetails();
     _gratuityType = await getGratuityType();
-    // _gratuityDetails = await getGratuityDetails();
+    _gratuityDetails = await getGratuityDetails();
   }
 
   closeDialog() {
@@ -44,43 +45,50 @@ class _GratuityScreenState extends State<GratuityScreen> {
     return FutureBuilder<dynamic>(
         future: getTableData(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-          return Card(
-              elevation: 8.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              child: SingleChildScrollView(
-            child: Column(children: [
-              Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context)
-                            ? 56
-                            : 6,
-                        left: 10),
-                    child: CustomText(
-                      text: menuController.activeItem.value,
-                      size: 24,
-                      weight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              )),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Container(
-              //       margin: const EdgeInsets.only(right: 35.0, top: 35.0),
-              //       child: _uploadButton(),
-              //     ),
-              //   ],
-              // ),
-              GratuityCalculateWidget(_empDetails,_gratuityType),
-              GratuityDetailsWidget(_gratuityDetails),
-            ]),
-          ));
+          if (_data.connectionState == ConnectionState.waiting) {
+            return const Center(child:SizedBox(width:25,height:25,child: CircularProgressIndicator()));
+          } else if (_data.hasError) {
+            return Text('Error: ${_data.error}');
+          } else {
+            return Card(
+                elevation: 8.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    Obx(() =>
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: ResponsiveWidget.isSmallScreen(context)
+                                      ? 56
+                                      : 26,
+                                  left: 23),
+                              child: CustomText(
+                                text: menuController.activeItem.value,
+                                size: 24,
+                                weight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            )
+                          ],
+                        )),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     Container(
+                    //       margin: const EdgeInsets.only(right: 35.0, top: 35.0),
+                    //       child: _uploadButton(),
+                    //     ),
+                    //   ],
+                    // ),
+                    GratuityCalculateWidget(_empDetails, _gratuityType,closeDialog),
+                    GratuityDetailsWidget(_gratuityDetails,closeDialog),
+                  ]),
+                ));
+          }
         });
   }
 

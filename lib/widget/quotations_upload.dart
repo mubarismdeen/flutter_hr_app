@@ -90,7 +90,7 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
     _quotationDetails.invoiceAmt = double.parse(_invoiceAmt.text);
     _quotationDetails.poStatus = _selectedPoStatus['id'];
     _quotationDetails.invStatus = _selectedInvStatus['id'];
-    _quotationDetails.type = _selectedType['id'];
+      _quotationDetails.type = _selectedType['id'];
     _quotationDetails.dueDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(_dueDate.text));
 
     bool status = await saveQuotationDetails(_quotationDetails);

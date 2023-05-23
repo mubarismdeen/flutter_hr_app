@@ -3,23 +3,41 @@ import 'package:admin/models/clientDetails.dart';
 import 'package:admin/models/gratuityDetails.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+
+import '../api.dart';
+import '../models/salaryPaid.dart';
+import '../models/salaryPay.dart';
 
 class GratuityDetailsWidget extends StatefulWidget {
-  List<GratuityDetails> gratuityDetails;
-  GratuityDetailsWidget(this.gratuityDetails, {Key? key}) : super(key: key);
+  dynamic closeDialog;
+  List<Map<String, dynamic>> gratuityDetails;
+  GratuityDetailsWidget(this.gratuityDetails,this.closeDialog, {Key? key}) : super(key: key);
 
   @override
   _GratuityDetailsWidgetState createState() => _GratuityDetailsWidgetState();
 }
 
 class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
+  double _paidAmount=0;
+  List<SalaryPay> _salaryPay = List<SalaryPay>.empty();
+
+  SalaryPaid _salaryPaid = SalaryPaid(id: 0, empCode: 0, type: 1, payable: 0, totalPaid: 0, due: 0, date: '', paidBy: 0, paid: false, paidDt: DateTime.now(), editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt: DateTime.now());
+
+
+  getData() async {
+    _salaryPay = await getSalaryPay(DateFormat('yyyy-MM').format(DateTime.now()));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 600),
+        constraints: const BoxConstraints(minHeight: 500),
         child: Card(
           elevation: 8.0,
           shape: RoundedRectangleBorder(
@@ -81,38 +99,6 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
                             ),
                           ),
                         ),
-                        // DataColumn(
-                        //   label: Expanded(
-                        //     child: Text(
-                        //       'Edited By',
-                        //       style: tableHeaderStyle,
-                        //     ),
-                        //   ),
-                        // ),
-                        // DataColumn(
-                        //   label: Expanded(
-                        //     child: Text(
-                        //       'Edited Date',
-                        //       style: tableHeaderStyle,
-                        //     ),
-                        //   ),
-                        // ),
-                        // DataColumn(
-                        //   label: Expanded(
-                        //     child: Text(
-                        //       'Created By',
-                        //       style: tableHeaderStyle,
-                        //     ),
-                        //   ),
-                        // ),
-                        // DataColumn(
-                        //   label: Expanded(
-                        //     child: Text(
-                        //       'Created Date',
-                        //       style: tableHeaderStyle,
-                        //     ),
-                        //   ),
-                        // ),
                         DataColumn(
                           label: Expanded(
                             child: Text(
@@ -124,16 +110,17 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
                       ],
                       rows: widget.gratuityDetails
                           .map((gratuity) => DataRow(cells: [
-                        DataCell(Text(gratuity.empCode)),
-                        DataCell(Text(gratuity.name)),
-                        DataCell(Text(gratuity.servedYears)),
-                        DataCell(Text(gratuity.type)),
-                        DataCell(Text(gratuity.gratuityAmount)),
+                        DataCell(Text(gratuity['empCode'].toString())),
+                        DataCell(Text(gratuity['name'])),
+                        DataCell(Text(gratuity['servedYears'].toString())),
+                        DataCell(Text(gratuity['type'])),
+                        DataCell(Text(gratuity['gratuityAmt'].toString())),
                         DataCell(
-                          gratuity.gratuityAmount == 0
-                              ? const Icon(Icons.check_circle_outline, color: Colors.green,)
+                          gratuity['paid'] ? const Icon(Icons.check_circle_outline, color: Colors.green,):
+                          gratuity['gratuityAmt'] == 0.0
+                              ? const Icon(Icons.check_circle_outline, color: Colors.grey,)
                               : TextButton(
-                            onPressed: () => null,
+                            onPressed: () => _showPaymentDialog(gratuity['empCode'],gratuity['gratuityAmt'],gratuity['name']),
                             child: const Text('Pay', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
                           ),
                         ),
@@ -152,5 +139,110 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
         ),
       ),
     );
+  }
+
+  void _showPaymentDialog(empCode,gratuityAmt,name) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        _paidAmount = gratuityAmt;
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Payment to ${name} (#${empCode})'),
+              const SizedBox(
+                width: 35,
+              ),
+              TextButton(
+                style: const ButtonStyle(alignment: Alignment.topRight),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Icon(
+                  Icons.clear,
+                  color: themeColor,
+                ),
+              ),
+            ],
+          ),
+          content: TextFormField(
+            initialValue: _paidAmount.toString(),
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              _paidAmount = double.tryParse(value) ?? _paidAmount;
+            },
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: themeColor,
+                    ),
+                    onPressed: () {
+                      _submitForm(empCode,gratuityAmt,name);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Submit'),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: themeColor,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> _submitForm(empCode,gratuityAmt,name) async {
+
+    _salaryPaid.type = 3;
+    _salaryPaid.empCode = empCode;
+    _salaryPaid.payable = gratuityAmt;
+    _salaryPaid.totalPaid = _paidAmount;
+    _salaryPaid.due = gratuityAmt - _paidAmount;
+    _salaryPaid.date = DateFormat('yyyy-MM').format(DateTime.now()).toString();
+    _salaryPaid.paidBy = 1;
+    _salaryPaid.paid = _salaryPaid.due == 0 ? true : false;
+    // _salaryPaid.paid = salary.due == _paidAmount ? 1 : 0;
+    _salaryPaid.creatBy = 1;
+    _salaryPaid.editBy = 1;
+
+    bool status = await saveSalaryPaid(_salaryPaid);
+    if( status){
+      Fluttertoast.showToast(
+        msg: "Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition :"center",
+        webShowClose :false,
+      );
+      widget.closeDialog();
+    }else{
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: "failed to save",
+          message: '',
+          icon: Icon(Icons.refresh),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 }

@@ -192,6 +192,23 @@ Future<List<Map<String, dynamic>>> getQuotationDetails() async {
   }
 }
 
+Future<List<Map<String, dynamic>>> getGratuityDetails() async {
+  try {
+    final response = await http.get(
+        Uri.parse("http://$ip/Hrms/getGratuityDetails"));
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+      return list;
+    } else {
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+}
+
 Future<bool> saveSalaryMaster(SalaryMaster salaryMaster) async {
   try {
     var jsonData = jsonEncode(salaryMaster);
