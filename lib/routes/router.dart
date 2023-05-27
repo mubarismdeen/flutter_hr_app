@@ -6,9 +6,9 @@ import 'package:admin/pages/Salary/salary_payout.dart';
 import 'package:admin/routes/routes.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/Attendance/attendance.dart';
 import '../pages/Gratuity/gratuity_screen.dart';
 import '../pages/Salary/salary_master.dart';
-import '../pages/Profile/attendance.dart';
 import '../pages/Transfers/dashboard.dart';
 
 

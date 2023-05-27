@@ -1,14 +1,8 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-import 'dart:ui';
-
 import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../api.dart';
 import '../../helpers/colors.dart';
@@ -42,7 +36,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(102, 102, 102, 2),
+      backgroundColor: themeColor,
       body: SafeArea(
         child: _MainView(
           usernameController: _usernameController.value,
@@ -76,6 +70,7 @@ class _MainView extends StatefulWidget {
 class _MainViewState extends State<_MainView> {
   BoxDecoration? borderDecoration;
   bool showError = false;
+  bool showLoading = false;
   void _login(BuildContext context) {
     Get.to(SiteLayout());
   }
@@ -85,11 +80,9 @@ class _MainViewState extends State<_MainView> {
     var screenw = MediaQuery.of(context).size.width;
     final isDesktop = screenw > 700 ? true : false;
     List<Widget> listViewChildren;
-    String logStatus = "0";
     bool logStatus1 = false;
 
     if (isDesktop) {
-      final desktopMaxWidth = screenw / 4;
       listViewChildren = [
         const _AppLogo(),
         _UsernameInput(
@@ -105,14 +98,22 @@ class _MainViewState extends State<_MainView> {
         _LoginButton(
           maxWidth: 400,
           onTap: () async {
+            setState(() {
+              showLoading = true;
+            });
             logStatus1 = await userValidate(widget.usernameController!.text,
                 widget.passwordController!.text);
             if (logStatus1) {
               showError = false;
+              setState(() {
+                showLoading = false;
+              });
               _login(context);
             } else {
               showError = true;
-              setState(() {});
+              setState(() {
+                showLoading = false;
+              });
             }
           },
           status: showError,
@@ -142,12 +143,17 @@ class _MainViewState extends State<_MainView> {
         Expanded(
           child: Align(
             alignment: isDesktop ? Alignment.center : Alignment.topCenter,
-            child: ListView(
-              restorationId: 'login_list_view',
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              children: listViewChildren,
-            ),
+            child: showLoading
+                ? const SpinKitWave(
+                    color: Colors.white,
+                    size: 30,
+                  )
+                : ListView(
+                    restorationId: 'login_list_view',
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    children: listViewChildren,
+                  ),
           ),
         ),
       ],
@@ -155,65 +161,6 @@ class _MainViewState extends State<_MainView> {
   }
 }
 
-class _TopBar extends StatelessWidget {
-  const _TopBar();
-
-  @override
-  Widget build(BuildContext context) {
-    const spacing = SizedBox(width: 30);
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // ExcludeSemantics(
-              //   child: SizedBox(
-              //     height: 80,
-              //     child: FadeInImagePlaceholder(
-              //       image:
-              //           const AssetImage('logo.png', package: 'rally_assets'),
-              //       placeholder: LayoutBuilder(builder: (context, constraints) {
-              //         return SizedBox(
-              //           width: constraints.maxHeight,
-              //           height: constraints.maxHeight,
-              //         );
-              //       }),
-              //     ),
-              //   ),
-              // ),
-              spacing,
-              Text(
-                "HRMS",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontSize: 35 / 2,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-            ],
-          ),
-          // Row(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     Text(
-          //       "",
-          //       style: Theme.of(context).textTheme.titleMedium,
-          //     ),
-          //     spacing,
-          //     const _BorderButton(
-          //       text: "",
-          //     ),
-          //   ],
-          // ),
-        ],
-      ),
-    );
-  }
-}
 
 class _AppLogo extends StatelessWidget {
   const _AppLogo();
@@ -221,15 +168,18 @@ class _AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 70),
+      padding: const EdgeInsets.symmetric(vertical: 70),
       child: Column(
-        children:  const [
-          SizedBox(
-            height: 160,
-            child: ExcludeSemantics(
-              child: FadeInImagePlaceholder(
-                image: AssetImage('images/app_icon.png'),
-                placeholder: SizedBox.shrink(),
+        children: const [
+          Hero(
+            tag: 'icon',
+            child: SizedBox(
+              height: 160,
+              child: ExcludeSemantics(
+                child: FadeInImagePlaceholder(
+                  image: AssetImage('images/app_icon.png'),
+                  placeholder: SizedBox.shrink(),
+                ),
               ),
             ),
           ),
@@ -241,7 +191,7 @@ class _AppLogo extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   fontSize: 30,
                   fontFamily: "LobsterFont",
-                  color: Colors.black54 ),
+                  color: Colors.white),
             ),
           ),
         ],
@@ -263,16 +213,52 @@ class _UsernameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
-        child: TextField(
-          autofillHints: const [AutofillHints.username],
-          textInputAction: TextInputAction.next,
-          controller: usernameController,
-          decoration: const InputDecoration(
-            labelText: "User Name",
-          ),
+      child: InputBox(
+          maxWidth: maxWidth,
+          displayText: "Username",
+          obscureText: false,
+          controller: usernameController),
+    );
+  }
+}
+
+class InputBox extends StatelessWidget {
+  OutlineInputBorder inputBoxStyle = const OutlineInputBorder(
+    borderSide: BorderSide(color: RallyColors.buttonColor),
+    borderRadius: BorderRadius.all(Radius.circular(20)),
+  );
+
+  late final double? maxWidth;
+  String? displayText;
+  final TextEditingController? controller;
+  bool obscureText;
+
+  InputBox(
+      {Key? key,
+      this.maxWidth,
+      required this.displayText,
+      required this.obscureText,
+      this.controller})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+      child: TextField(
+        style: const TextStyle(color: Colors.white),
+        autofillHints: const [AutofillHints.username],
+        textInputAction: TextInputAction.next,
+        obscureText: obscureText,
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: displayText,
+          labelStyle: const TextStyle(color: RallyColors.buttonColor),
+          focusColor: Colors.white,
+          enabledBorder: inputBoxStyle,
+          focusedBorder: inputBoxStyle,
         ),
+        cursorColor: RallyColors.buttonColor,
       ),
     );
   }
@@ -291,16 +277,11 @@ class _PasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
-        child: TextField(
-          controller: passwordController,
-          decoration: const InputDecoration(
-            labelText: "Password",
-          ),
+      child: InputBox(
+          maxWidth: maxWidth,
+          displayText: "Password",
           obscureText: true,
-        ),
-      ),
+          controller: passwordController),
     );
   }
 }
@@ -402,7 +383,10 @@ class _LoginButtonState extends State<_LoginButton> {
                 : Container(),
             widget.status ? const SizedBox(width: 12) : Container(),
             widget.status
-                ? const Text("user name or password is wrong")
+                ? const Text(
+                    "user name or password is wrong",
+                    style: TextStyle(color: Colors.white),
+                  )
                 : Container(),
             const Expanded(child: SizedBox.shrink()),
             _FilledButton(
@@ -416,29 +400,6 @@ class _LoginButtonState extends State<_LoginButton> {
   }
 }
 
-class _BorderButton extends StatelessWidget {
-  const _BorderButton({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white,
-        side: const BorderSide(color: RallyColors.buttonColor),
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      onPressed: () {
-        Get.to(SiteLayout());
-      },
-      child: Text(text),
-    );
-  }
-}
 
 class _FilledButton extends StatelessWidget {
   const _FilledButton({required this.text, required this.onTap});

@@ -19,47 +19,16 @@ import 'models/salaryMasterGet.dart';
 import 'models/salaryPay.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-var url = 'http://192.168.0.134:5001/api/Notes/';
-// String ip = "10.0.2.2:5001";
-//  String ip = gip;
-// String ip = "192.168.1.200:81";
-//String ip = "192.168.1.127:5001";
 String ip = "localhost:5001";
 // String ip = "localhost:81";       // IIS
 // String ip = "172.11.7.254:88"; //live
-//String ip = "172.11.7.254:98"; //test
+// String ip = "172.11.7.254:98"; //test
 
 
-Future<bool> userValidation(String userID, String password) async {
-  // globals.userID2 = userID;
-  // if(userID == '1' && password == '123'){
-  //   return '1';
-  // }else{
-  //   return '2';
-  // }
-  try {
-    final response = await http.get(
-        Uri.parse('${url}userValidat?userCd=$userID&password=$password'));
-    if (response.statusCode == 200) {
-      // globals.isLoggedIn = true;
-      // var data = json.decode(response.body);
-      bool data = response.body as bool;
-      // globals.userID = userID;
-      // globals.userName = data;
-      // final SharedPreferences prefs = await SharedPreferences.getInstance();
-      // prefs.setString('userID', userID);
-      // prefs.setString('password', password);
-      // if (data != '2') {
-      //   data = '1';
-      // }
-      return data;
-    } else {
-      // globals.isLoggedIn = false;
-      throw Exception('Failed');
-      // return 3;
-    }
-  } catch (e) {
-    //throw Exception('Failed');
+Future<bool> localUserValidation(String userID, String password) async {
+  if(userID == '1' && password == '123'){
+    return true;
+  }else{
     return false;
   }
 }
@@ -70,21 +39,11 @@ Future<bool> userValidate(String userID, String password) async {
         "http://$ip/Hrms/userValidat?userCd=$userID&password=$password"));
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
-      // var userMap =
-      // jsonResponse.map((job) => new UserDetails.fromJson(job)).toList();
-      // globals.showLoading = false;
-      // userAbbr = userMap[0].abbr;
-
-      // bool data = response.body as bool;
-      // if (jsonResponse) {
-      //   return false;
-      // }
       return jsonResponse;
     } else {
       throw Exception('Failed');
     }
   } catch (e) {
-    // Get.to(ErrorPage());
     throw Exception('Failed');
   }
 
@@ -175,10 +134,11 @@ Future<List<Map<String, dynamic>>> getInvoiceStatus() async {
   }
 }
 
-Future<List<Map<String, dynamic>>> getQuotationDetails() async {
+Future<List<Map<String, dynamic>>> getQuotationDetails(String clientName, String name, String poStatus, String invStatus, String type) async {
   try {
+    String apiUrl = "http://$ip/Hrms/getQuotationDetails?clientName=$clientName&name=$name&poStatus=$poStatus&invStatus=$invStatus&type=$type";
     final response = await http.get(
-        Uri.parse("http://$ip/Hrms/getQuotationDetails"));
+        Uri.parse(apiUrl));
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
           .map((dynamic e) => e as Map<String, dynamic>)
@@ -302,14 +262,9 @@ Future<List<EmpMaster>> getEmpDetails() async {
       }
       return userMap;
     } else {
-      // globals.show = false;
-      // globals.showLoading = false;
       throw Exception('Failed');
     }
   } catch (e) {
-    // Get.to(ErrorPage());
-    // globals.showLoading = false;
-    // globals.show = false;
     throw Exception('Failed');
   }
 }
@@ -327,14 +282,9 @@ Future<List<AttendanceDto>> getAttendanceDetails(String date) async {
       }
       return userMap;
     } else {
-      // globals.show = false;
-      // globals.showLoading = false;
       throw Exception('Failed');
     }
   } catch (e) {
-    // Get.to(ErrorPage());
-    // globals.showLoading = false;
-    // globals.show = false;
     throw Exception('Failed');
   }
 }
@@ -352,14 +302,9 @@ Future<List<SalaryPay>> getSalaryPay(String date) async {
       }
       return userMap;
     } else {
-      // globals.show = false;
-      // globals.showLoading = false;
       throw Exception('Failed');
     }
   } catch (e) {
-    // Get.to(ErrorPage());
-    // globals.showLoading = false;
-    // globals.show = false;
     throw Exception('Failed');
   }
 }
@@ -377,14 +322,9 @@ Future<List<SalaryMasterGet>> getSalaryMaster(String date) async {
       }
       return userMap;
     } else {
-      // globals.show = false;
-      // globals.showLoading = false;
       throw Exception('Failed');
     }
   } catch (e) {
-    // Get.to(ErrorPage());
-    // globals.showLoading = false;
-    // globals.show = false;
     throw Exception('Failed');
   }
 }
@@ -422,14 +362,9 @@ Future<List<LeaveSalary>> getLeaveSalary(String year) async {
       }
       return userMap;
     } else {
-      // globals.show = false;
-      // globals.showLoading = false;
       throw Exception('Failed');
     }
   } catch (e) {
-    // Get.to(ErrorPage());
-    // globals.showLoading = false;
-    // globals.show = false;
     throw Exception('Failed');
   }
 }
@@ -451,10 +386,11 @@ Future<bool> saveSalaryPaid(SalaryPaid salaryPaid) async {
   }
 }
 
-Future<List<Map<String, dynamic>>> getJobDetails() async {
+Future<List<Map<String, dynamic>>> getJobDetails(String jobStatus, String assignedTo, String dueDate) async {
   try {
+    String apiUrl = "http://$ip/Hrms/getJobDetails?JobStatus=$jobStatus&AssignedTo=$assignedTo&DueDate=$dueDate";
     final response = await http.get(
-        Uri.parse("http://$ip/Hrms/getJobDetails"));
+        Uri.parse(apiUrl));
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> list = (jsonDecode(response.body) as List)
           .map((dynamic e) => e as Map<String, dynamic>)

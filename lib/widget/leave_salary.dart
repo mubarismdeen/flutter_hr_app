@@ -1,6 +1,7 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/salaryPaid.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -15,12 +16,27 @@ class LeaveSalaryWidget extends StatefulWidget {
 
 class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
   List<LeaveSalary> _leaveSalaries = List<LeaveSalary>.empty();
-  double _paidAmount=0;
-  
-  SalaryPaid _salaryPaid = SalaryPaid(id: 0, empCode: 0, type: 2, payable: 0, totalPaid: 0, due: 0, date: '', paidBy: 0, paid: false, paidDt: DateTime.now(), editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt: DateTime.now());
+  double _paidAmount = 0;
+
+  SalaryPaid _salaryPaid = SalaryPaid(
+      id: 0,
+      empCode: 0,
+      type: 2,
+      payable: 0,
+      totalPaid: 0,
+      due: 0,
+      date: '',
+      paidBy: 0,
+      paid: false,
+      paidDt: DateTime.now(),
+      editBy: 0,
+      editDt: DateTime.now(),
+      creatBy: 0,
+      creatDt: DateTime.now());
 
   getData() async {
-    _leaveSalaries = await getLeaveSalary(DateFormat('yyyy').format(DateTime.now()));
+    _leaveSalaries =
+        await getLeaveSalary(DateFormat('yyyy').format(DateTime.now()));
   }
 
   void _showPaymentDialog(LeaveSalary salary) {
@@ -90,7 +106,6 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
   }
 
   Future<void> _submitForm(LeaveSalary salary) async {
-
     _salaryPaid.empCode = salary.empCode;
     _salaryPaid.payable = salary.pendingAmt;
     _salaryPaid.totalPaid = _paidAmount;
@@ -103,7 +118,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
     _salaryPaid.editBy = 1;
 
     bool status = await saveSalaryPaid(_salaryPaid);
-    if( status){
+    if (status) {
       Fluttertoast.showToast(
         msg: "Saved",
         toastLength: Toast.LENGTH_SHORT,
@@ -112,12 +127,12 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0,
-        webPosition :"center",
-        webShowClose :false,
+        webPosition: "center",
+        webShowClose: false,
       );
 
-      setState(() {  });
-    }else{
+      setState(() {});
+    } else {
       Get.showSnackbar(
         const GetSnackBar(
           title: "failed to save",
@@ -129,7 +144,6 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
@@ -137,122 +151,125 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
         builder: (context, AsyncSnapshot<dynamic> _data) {
           return ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 600),
-            child: Card(
-              shadowColor: shadowColor,
-              margin: const EdgeInsets.only(top: 20),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SingleChildScrollView(
-                        child: DataTable(
-                          columns: const <DataColumn>[
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Employee ID',
-                                  style: tableHeaderStyle,
-                                ),
+            child: getCustomCard(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SingleChildScrollView(
+                      child: DataTable(
+                        columns: const <DataColumn>[
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Employee ID',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Employee Name',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Employee Name',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Salary',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Salary',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Attendance',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Attendance',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Sick Leave',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Sick Leave',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Payable Amount',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Payable Amount',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Paid Amount',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Paid Amount',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Pending Amount',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Pending Amount',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Payment',
-                                  style: tableHeaderStyle,
-                                ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Payment',
+                                style: tableHeaderStyle,
                               ),
                             ),
-                          ],
-                          rows: _leaveSalaries
-                              .map((salary) =>
-                              DataRow(cells: [
-                                DataCell(Text(salary.empCode.toString())),
-                                DataCell(Text(salary.name)),
-                                DataCell(Text(salary.salary.toString())),
-                                DataCell(Text(salary.attendance.toString())),
-                                DataCell(Text(salary.sickLeave.toString())),
-                                DataCell(Text(salary.payAmt.toString())),
-                                DataCell(Text((salary.payAmt - salary.pendingAmt).toString())),
-                                DataCell(Text(salary.pendingAmt.toString())),
-                                DataCell(
-                                  salary.pendingAmt == 0
-                                      ? const Icon(Icons.check_circle_outline, color: Colors.green,)
-                                      : TextButton(
-                                    onPressed: () => _showPaymentDialog(salary),
-                                    child: const Text('Pay', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+                          ),
+                        ],
+                        rows: _leaveSalaries
+                            .map((salary) => DataRow(cells: [
+                                  DataCell(Text(salary.empCode.toString())),
+                                  DataCell(Text(salary.name)),
+                                  DataCell(Text(salary.salary.toString())),
+                                  DataCell(Text(salary.attendance.toString())),
+                                  DataCell(Text(salary.sickLeave.toString())),
+                                  DataCell(Text(salary.payAmt.toString())),
+                                  DataCell(Text(
+                                      (salary.payAmt - salary.pendingAmt)
+                                          .toString())),
+                                  DataCell(Text(salary.pendingAmt.toString())),
+                                  DataCell(
+                                    salary.pendingAmt == 0
+                                        ? const Icon(
+                                            Icons.check_circle_outline,
+                                            color: Colors.green,
+                                          )
+                                        : TextButton(
+                                            onPressed: () =>
+                                                _showPaymentDialog(salary),
+                                            child: const Text('Pay',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.blueAccent)),
+                                          ),
                                   ),
-                                ),
-                              ]))
-                              .toList(),
-                        ),
+                                ]))
+                            .toList(),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

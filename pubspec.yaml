@@ -45,6 +45,7 @@ dependencies:
   http: ^0.13.4
   intl: ^0.17.0
   animated_custom_dropdown: 1.2.1
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:

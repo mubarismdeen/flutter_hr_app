@@ -2,23 +2,25 @@ import 'package:admin/constants/style.dart';
 import 'package:admin/helpers/responsiveness.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/image_placeholder.dart';
 import 'custom_text.dart';
 
 AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
     AppBar(
       leading: !ResponsiveWidget.isSmallScreen(context)
-          ? Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: const Icon(
-                    Icons.cabin_outlined,
-                    size: 25,
-                    color: darke,
-                  ),
-                )
-              ],
-            )
+          ? Hero(
+            tag: 'icon',
+            child: Container(
+              height: 35,
+              padding: EdgeInsets.only(left: 10, top: 5),
+              child: ExcludeSemantics(
+                child: FadeInImagePlaceholder(
+                  image: AssetImage('images/app_icon.png'),
+                  placeholder: SizedBox.shrink(),
+                ),
+              ),
+            ),
+          )
           : IconButton(
               icon: const Icon(Icons.menu_outlined),
               onPressed: () {
@@ -87,8 +89,8 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
               child: Container(
-                padding: EdgeInsets.all(2),
-                margin: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
+                margin: const EdgeInsets.all(2),
                 child: const CircleAvatar(
                   backgroundColor: light,
                   child: Icon(

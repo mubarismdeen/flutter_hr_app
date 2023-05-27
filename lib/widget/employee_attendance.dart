@@ -1,6 +1,7 @@
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/empMaster.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:admin/widget/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,7 +15,8 @@ class EmployeeAttendance extends StatefulWidget {
   EmployeeAttendance(this.pickedDate);
 
   @override
-  _EmployeeAttendanceState createState() => _EmployeeAttendanceState(pickedDate);
+  _EmployeeAttendanceState createState() =>
+      _EmployeeAttendanceState(pickedDate);
 }
 
 class _EmployeeAttendanceState extends State<EmployeeAttendance> {
@@ -102,9 +104,8 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   // }
 
   getAttendanceData() async {
-
-    attendances = await getAttendanceDetails(
-        DateFormat('yyyy-MM').format(_pickedDate));
+    attendances =
+        await getAttendanceDetails(DateFormat('yyyy-MM').format(_pickedDate));
     _attendanceList = attendances
         .map((att) => AttendanceModel(
             id: att.id,
@@ -207,19 +208,14 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: 450,
-      child: Card(
-        shadowColor: shadowColor,
-        margin: const EdgeInsets.only(top: 20),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Attendance data not found for this month'),
-              const SizedBox(height: 20),
-              _enterAttendanceButton(),
-            ],
-          ),
+      child: getCustomCard(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Attendance data not found for this month'),
+            const SizedBox(height: 20),
+            _enterAttendanceButton(),
+          ],
         ),
       ),
     );
@@ -232,14 +228,8 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           // width: 500,
-          child: Card(
-            shadowColor: shadowColor,
-            margin: const EdgeInsets.only(top: 20),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _editable ? _getDataTable() : _getViewDataTable(),
-            ),
-          ),
+          child:
+              getCustomCard(_editable ? _getDataTable() : _getViewDataTable()),
         );
       },
     );

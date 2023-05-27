@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../constants/controllers.dart';
 import '../constants/style.dart';
+import '../helpers/image_placeholder.dart';
 import '../helpers/responsiveness.dart';
 import '../pages/login/login.dart';
 
@@ -32,8 +33,21 @@ class SideMenu extends StatelessWidget {
                     SizedBox(
                       width: _width/48
                     ),
-                    const Padding(padding: EdgeInsets.only(right:12),
-                    child: Icon(Icons.cabin_outlined, color: darke,),
+                    Padding(padding: EdgeInsets.only(right:12),
+                    child: Hero(
+                      tag: 'icon',
+                      child: Container(
+                        height: 35,
+                        padding: EdgeInsets.only(left: 10, top: 5),
+                        child: const ExcludeSemantics(
+                          child: FadeInImagePlaceholder(
+                            image: AssetImage('images/app_icon.png'),
+                            placeholder: SizedBox.shrink(),
+                          ),
+                        ),
+                      ),
+                    )
+                      ,
                     ),
                     const Flexible(child: CustomText(
                       text: "HRMS",
