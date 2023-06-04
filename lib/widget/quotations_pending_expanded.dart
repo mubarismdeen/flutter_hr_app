@@ -18,7 +18,12 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SingleChildScrollView(
-          child: DataTable(
+            child: GestureDetector(
+          onTap: () {
+        // Perform the action when the row is tapped
+        print('Row tapped');
+      },
+      child:DataTable(
             columns: const <DataColumn>[
               DataColumn(
                 label: Expanded(
@@ -217,6 +222,6 @@ class _QuotationsPendingExpandedState extends State<QuotationsPendingExpanded> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

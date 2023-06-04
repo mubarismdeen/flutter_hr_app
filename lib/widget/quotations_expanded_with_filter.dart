@@ -1,9 +1,11 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/widget/quotations_filter.dart';
+import 'package:admin/widget/quotations_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../api.dart';
+import 'custom_alert_dialog.dart';
 
 class QuotationsExpandedWithFilter extends StatefulWidget {
   @override
@@ -54,7 +56,7 @@ class _QuotationsExpandedWithFilterState
                       const Text('Quotations'),
                       const SizedBox(width: 15),
                       IconButton(
-                        onPressed: _openUploadDialog,
+                        onPressed: _openFilterDialog,
                         icon: const Icon(
                           Icons.filter_alt_sharp,
                           color: Colors.grey,
@@ -78,8 +80,12 @@ class _QuotationsExpandedWithFilterState
                 height: 500,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: SingleChildScrollView(
-                    child: DataTable(
+                      child: SingleChildScrollView(
+                child:Container(
+            padding: EdgeInsets.all(16.0),
+            // color: Colors.white,
+            child:DataTable(
+              showCheckboxColumn:false,
                       columns: const <DataColumn>[
                         DataColumn(
                           label: Expanded(
@@ -220,7 +226,7 @@ class _QuotationsExpandedWithFilterState
                       ],
                       rows: tableData
                           .map(
-                            (tableRow) => DataRow(cells: [
+                            (tableRow) =>DataRow(cells: [
                               DataCell(
                                 Text(tableRow['clientName'].toString()),
                               ),
@@ -272,10 +278,18 @@ class _QuotationsExpandedWithFilterState
                               DataCell(
                                 Text(tableRow['editDt'].toString()),
                               ),
-                            ]),
+                            ],
+                              onSelectChanged: (selected) {
+                              if (selected!= null && selected) {
+                              // Handle row selection logic here
+                                _openUploadDialog(tableRow);
+                              }
+                              },
+                            ),
+
                           )
                           .toList(),
-                    ),
+                    )),
                   ),
                 ),
               ),
@@ -285,12 +299,30 @@ class _QuotationsExpandedWithFilterState
         });
   }
 
-  void _openUploadDialog() {
+  void _openFilterDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(content: QuotationsFilter(applyFilter));
       },
     );
+  }
+
+  void _openUploadDialog(tableRow) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          'Upload Quotation Details',
+          QuotationsUpload(closeDialog,tableRow),
+        );
+      },
+    );
+  }
+
+  closeDialog() {
+    setState(() {
+      getTableData();
+    });
   }
 }

@@ -11,7 +11,9 @@ import '../models/clientDetails.dart';
 
 class QuotationsUpload extends StatefulWidget {
   dynamic closeDialog;
-  QuotationsUpload(this.closeDialog, {Key? key}) : super(key: key);
+  Map<String, dynamic>? tableRow;
+
+  QuotationsUpload(this.closeDialog, this.tableRow, {Key? key}) : super(key: key);
 
   @override
   State<QuotationsUpload> createState() => _QuotationsUploadState();
@@ -32,6 +34,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
   late Map<String, dynamic> _selectedPoStatus;
   late Map<String, dynamic> _selectedType;
   late ClientDetails _selectedClient;
+  String? _clientName ;
+  String? _type ;
+  String? _invStatus ;
+  String? _poStatus ;
 
   List<Map<String, dynamic>> invoiceStatuses = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> poStatuses = <Map<String, dynamic>>[];
@@ -43,6 +49,31 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
     poStatuses = await getPoStatus();
     types = await getQuotationType();
     clients = await getClientDetails();
+    if(widget.tableRow != null) {
+      var t = await setValue();
+    }
+    // await Future.delayed(Duration(seconds: 2));
+  }
+
+  setValue()async{
+    _quotationDetails.id = widget.tableRow!['id'];
+    _name.text = await widget.tableRow!['name'];
+    _narration.text = await widget.tableRow!['narration'];
+    _invocieNo.text =  await widget.tableRow!['invoiceNo'].toString();
+    _poNo.text =  await widget.tableRow!['poNo'].toString();
+    _poRefNo.text = await widget.tableRow!['poRefNo'].toString();
+    _reportNo.text = await widget.tableRow!['reportNo'].toString();
+    _invoiceAmt.text = await widget.tableRow!['invoiceAmt'].toString();
+    _dueDate.text = await widget.tableRow!['dueDate'];
+    _invStatus =  widget.tableRow!['invStatus'];
+    _poStatus =  widget.tableRow!['poStatus'];
+    _type =  widget.tableRow!['type'];
+    _clientName = await widget.tableRow!['clientName'];
+
+    _selectedInvStatus =  invoiceStatuses.firstWhere((invStatus) => invStatus['description'] == _invStatus);
+    _selectedPoStatus = poStatuses.firstWhere((poStatus) => poStatus['description'] == _poStatus);
+     _selectedType =  types.firstWhere((type) => type['description'] == _type);
+    _selectedClient = clients.firstWhere((client) => client.name == _clientName);
   }
 
 
@@ -114,13 +145,24 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
       setState(() {});
 
     } else {
-      Get.showSnackbar(
-        const GetSnackBar(
-          title: "failed to save",
-          message: '',
-          icon: Icon(Icons.refresh),
-          duration: Duration(seconds: 3),
-        ),
+      // Get.showSnackbar(
+      //   const GetSnackBar(
+      //     title: "failed to save",
+      //     message: '',
+      //     icon: Icon(Icons.refresh),
+      //     duration: Duration(seconds: 3),
+      //   ),
+      // );
+      Fluttertoast.showToast(
+        msg: "Failed",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.red,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
       );
     }
   }
@@ -130,6 +172,13 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
     return FutureBuilder<dynamic>(
         future: getDropdownInputs(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
+         if (_data.connectionState == ConnectionState.waiting) {
+          return const Center(
+          child: SizedBox(
+          width: 25, height: 25, child: CircularProgressIndicator()));
+          } else if (_data.hasError) {
+          return Text('Error: ${_data.error}');
+          } else {
           return Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -152,10 +201,12 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
                           _selectedClient = clients.firstWhere((client) => client.name == value);
-                        });
-                      }),
+                        //   setState(() {
+                        // });
+                      },
+                      value: _clientName,
+                      ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'vessel'),
                     validator: (value) {
@@ -182,11 +233,12 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                           child: Text(value['description']),
                         );
                       }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          _selectedType = types.firstWhere((type) => type['description'] == value);
-                        });
-                      }),
+                      onChanged: (String? t) {
+                          _selectedType = types.firstWhere((type) => type['description'] == t);
+                        //   setState(() {
+                        // });
+                      },value: _type,
+                  ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Narration'),
                     validator: (value) {
@@ -225,10 +277,9 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
                           _selectedPoStatus = poStatuses.firstWhere((poStatus) => poStatus['description'] == value);
-                        });
-                      }),
+                      },   value: _poStatus,
+                  ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'PO Number'),
                     validator: (value) {
@@ -267,10 +318,9 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
                           _selectedInvStatus = invoiceStatuses.firstWhere((invStatus) => invStatus['description'] == value);
-                        });
-                      }),
+                      },value: _invStatus,
+                  ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Invoice Number'),
                     validator: (value) {
@@ -341,6 +391,6 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
               ),
             ),
           );
-        });
+        }});
   }
 }
