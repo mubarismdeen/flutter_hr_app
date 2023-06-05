@@ -2,8 +2,6 @@ import 'package:admin/constants/style.dart';
 import 'package:admin/models/empMaster.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
@@ -11,7 +9,9 @@ import '../models/jobDetails.dart';
 
 class JobDetailsUpload extends StatefulWidget {
   dynamic closeDialog;
-  JobDetailsUpload(this.closeDialog, {Key? key}) : super(key: key);
+  Map<String, dynamic>? tableRow;
+
+  JobDetailsUpload(this.closeDialog, this.tableRow);
 
   @override
   State<JobDetailsUpload> createState() => _JobDetailsUploadState();
@@ -26,6 +26,8 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
   var _dueDate = TextEditingController();
   late EmpMaster _selectedAssignedTo;
   late Map<String, dynamic> _selectedJobStatus;
+  String? _assignedTo;
+  String? _status;
 
   List<Map<String, dynamic>> jobStatuses = <Map<String, dynamic>>[];
   List<EmpMaster> assignedToOptions = <EmpMaster>[];
@@ -33,6 +35,24 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
   getDropdownInputs() async {
     jobStatuses = await getJobStatuses();
     assignedToOptions = await getEmpDetails();
+    if (widget.tableRow != null) {
+      setValue();
+    }
+  }
+
+  setValue() {
+    _jobDetails.id = widget.tableRow!['id'];
+    _jobName.text = widget.tableRow!['job'].toString();
+    _narration.text = widget.tableRow!['narration'].toString();
+    _assignedDate.text = widget.tableRow!['assignedDate'].toString();
+    _assignedTo = widget.tableRow!['assignedTo'].toString();
+    _status = widget.tableRow!['jobStatus'].toString();
+    _dueDate.text = widget.tableRow!['dueDate'].toString();
+
+    _selectedAssignedTo = assignedToOptions
+        .firstWhere((assignedTo) => assignedTo.name == _assignedTo);
+    _selectedJobStatus = jobStatuses
+        .firstWhere((jobStatus) => jobStatus['description'] == _status);
   }
 
   JobDetails _jobDetails = JobDetails(
@@ -63,9 +83,11 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
     _jobDetails.job = _jobName.text;
     _jobDetails.narration = _narration.text;
     _jobDetails.assignedTo = _selectedAssignedTo.id;
-    _jobDetails.assignedDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(_assignedDate.text));
+    _jobDetails.assignedDate =
+        DateFormat('yyyy-MM-dd').format(DateTime.parse(_assignedDate.text));
     _jobDetails.jobStatus = _selectedJobStatus['id'];
-    _jobDetails.dueDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(_dueDate.text));
+    _jobDetails.dueDate =
+        DateFormat('yyyy-MM-dd').format(DateTime.parse(_dueDate.text));
 
     bool status = await saveJobDetails(_jobDetails);
     if (status) {
@@ -87,13 +109,16 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
 
       setState(() {});
     } else {
-      Get.showSnackbar(
-        const GetSnackBar(
-          title: "failed to save",
-          message: '',
-          icon: Icon(Icons.refresh),
-          duration: Duration(seconds: 3),
-        ),
+      Fluttertoast.showToast(
+        msg: "Failed",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.red,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
       );
     }
   }
@@ -103,42 +128,50 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
     return FutureBuilder<dynamic>(
         future: getDropdownInputs(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-          return Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Job'),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter client name';
-                      }
-                      return null;
-                    },
-                    controller: _jobName,
-                    onSaved: (value) {},
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Narration'),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter narration';
-                      }
-                      return null;
-                    },
-                    controller: _narration,
-                    onSaved: (value) {},
-                  ),
-                  DropdownButtonFormField(
+          if (_data.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: SizedBox(
+                    width: 25, height: 25, child: CircularProgressIndicator()));
+          } else if (_data.hasError) {
+            return Text('Error: ${_data.error}');
+          } else {
+            return Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Job'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter client name';
+                        }
+                        return null;
+                      },
+                      controller: _jobName,
+                      onSaved: (value) {},
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Narration'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter narration';
+                        }
+                        return null;
+                      },
+                      controller: _narration,
+                      onSaved: (value) {},
+                    ),
+                    DropdownButtonFormField(
                       validator: (value) {
                         if (value == null) {
                           return 'Please select assigned to';
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Assigned To'),
+                      decoration:
+                          const InputDecoration(labelText: 'Assigned To'),
                       items: assignedToOptions
                           .map<DropdownMenuItem<String>>((EmpMaster employee) {
                         return DropdownMenuItem<String>(
@@ -147,102 +180,108 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
-                          _selectedAssignedTo = assignedToOptions.firstWhere(
-                                  (employee) => employee.name == value);
-                        });
-                      }),
-                  TextFormField(
-                    controller: _assignedDate,
-                    decoration: const InputDecoration(labelText: 'Assigned Date'),
-                    onTap: () async {
-                      DateTime? date = DateTime(1900);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100));
-                      if (date != null) {
-                        _assignedDate.text = DateFormat('yyyy-MM-dd').format(date);
-                      }
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please select assigned date';
-                      }
-                      return null;
-                    },
-                  ),
-                  DropdownButtonFormField(
+                        // setState(() {
+                        _selectedAssignedTo = assignedToOptions
+                            .firstWhere((employee) => employee.name == value);
+                        // });
+                      },
+                      value: _assignedTo,
+                    ),
+                    TextFormField(
+                      controller: _assignedDate,
+                      decoration:
+                          const InputDecoration(labelText: 'Assigned Date'),
+                      onTap: () async {
+                        DateTime? date = DateTime(1900);
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100));
+                        if (date != null) {
+                          _assignedDate.text =
+                              DateFormat('yyyy-MM-dd').format(date);
+                        }
+                      },
                       validator: (value) {
-                        if (value == null) {
-                          return 'Please select job status';
+                        if (value!.isEmpty) {
+                          return 'Please select assigned date';
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Status'),
-                      items: jobStatuses
-                          .map<DropdownMenuItem<String>>((dynamic value) {
-                        return DropdownMenuItem<String>(
-                          value: value['description'].toString(),
-                          child: Text(value['description']),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          _selectedJobStatus = jobStatuses.firstWhere(
-                                  (jobStatus) => jobStatus['description'] == value);
-                        });
-                      }),
-                  TextFormField(
-                    controller: _dueDate,
-                    decoration: const InputDecoration(labelText: 'Due Date'),
-                    onTap: () async {
-                      DateTime? date = DateTime(1900);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100));
-                      if (date != null) {
-                        _dueDate.text = DateFormat('yyyy-MM-dd').format(date);
-                      }
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please select Due Date';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: themeColor,
-                        ),
-                        onPressed: _submitForm,
-                        child: const Text('Submit'),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: themeColor,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
+                    ),
+                    DropdownButtonFormField(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select job status';
+                          }
+                          return null;
                         },
-                        child: const Text('Cancel'),
-                      ),
-                    ],
-                  ),
-                ],
+                        decoration: const InputDecoration(labelText: 'Status'),
+                        items: jobStatuses
+                            .map<DropdownMenuItem<String>>((dynamic value) {
+                          return DropdownMenuItem<String>(
+                            value: value['description'].toString(),
+                            child: Text(value['description']),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          // setState(() {
+                          _selectedJobStatus = jobStatuses.firstWhere(
+                              (jobStatus) => jobStatus['description'] == value);
+                          // });
+                        },
+                        value: _status),
+                    TextFormField(
+                      controller: _dueDate,
+                      decoration: const InputDecoration(labelText: 'Due Date'),
+                      onTap: () async {
+                        DateTime? date = DateTime(1900);
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100));
+                        if (date != null) {
+                          _dueDate.text = DateFormat('yyyy-MM-dd').format(date);
+                        }
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please select Due Date';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: themeColor,
+                          ),
+                          onPressed: _submitForm,
+                          child: const Text('Submit'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: themeColor,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          }
         });
   }
 }

@@ -80,12 +80,9 @@ class _QuotationsExpandedWithFilterState
                 height: 500,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                      child: SingleChildScrollView(
-                child:Container(
-            padding: EdgeInsets.all(16.0),
-            // color: Colors.white,
-            child:DataTable(
-              showCheckboxColumn:false,
+                  child: SingleChildScrollView(
+                    child: DataTable(
+                      showCheckboxColumn: false,
                       columns: const <DataColumn>[
                         DataColumn(
                           label: Expanded(
@@ -226,70 +223,69 @@ class _QuotationsExpandedWithFilterState
                       ],
                       rows: tableData
                           .map(
-                            (tableRow) =>DataRow(cells: [
-                              DataCell(
-                                Text(tableRow['clientName'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['name'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['narration'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['type'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['reportNo'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['date'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['poStatus'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['poNo'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['poRefNo'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['invStatus'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['invoiceNo'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['invoiceAmt'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['dueDate'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['creatBy'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['creatDt'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['editBy'].toString()),
-                              ),
-                              DataCell(
-                                Text(tableRow['editDt'].toString()),
-                              ),
-                            ],
+                            (tableRow) => DataRow(
+                              cells: [
+                                DataCell(
+                                  Text(tableRow['clientName'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['name'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['narration'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['type'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['reportNo'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['date'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['poStatus'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['poNo'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['poRefNo'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['invStatus'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['invoiceNo'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['invoiceAmt'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['dueDate'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['creatBy'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['creatDt'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['editBy'].toString()),
+                                ),
+                                DataCell(
+                                  Text(tableRow['editDt'].toString()),
+                                ),
+                              ],
                               onSelectChanged: (selected) {
-                              if (selected!= null && selected) {
-                              // Handle row selection logic here
-                                _openUploadDialog(tableRow);
-                              }
+                                if (selected != null && selected) {
+                                  _openUploadDialog(tableRow);
+                                }
                               },
                             ),
-
                           )
                           .toList(),
-                    )),
+                    ),
                   ),
                 ),
               ),
@@ -314,7 +310,7 @@ class _QuotationsExpandedWithFilterState
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Quotation Details',
-          QuotationsUpload(closeDialog,tableRow),
+          QuotationsUpload(closeDialog, tableRow),
         );
       },
     );

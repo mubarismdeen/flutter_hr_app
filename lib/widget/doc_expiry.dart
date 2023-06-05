@@ -162,7 +162,7 @@ class _DocExpiryState extends State<DocExpiry> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Document Details',
-          DocExpiryExpanded(tableData: tableData),
+          DocExpiryExpanded(),
         );
       },
     );
@@ -174,7 +174,7 @@ class _DocExpiryState extends State<DocExpiry> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Document Details',
-          DocDetailsUpload(this.closeDialog),
+          DocDetailsUpload(this.closeDialog, null),
         );
       },
     );
