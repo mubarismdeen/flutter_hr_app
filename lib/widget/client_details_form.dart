@@ -9,7 +9,9 @@ import '../api.dart';
 
 class ClientDetailsForm extends StatefulWidget {
   dynamic closeDialog;
-  ClientDetailsForm(this.closeDialog, {Key? key}) : super(key: key);
+  ClientDetails? tableRow;
+
+  ClientDetailsForm(this.closeDialog, this.tableRow, {Key? key}) : super(key: key);
 
   @override
   State<ClientDetailsForm> createState() => _ClientDetailsFormState();
@@ -23,6 +25,15 @@ class _ClientDetailsFormState extends State<ClientDetailsForm> {
   var _mobile1 = TextEditingController();
   var _mobile2 = TextEditingController();
 
+  setValue() {
+    _clientDetails.id = widget.tableRow!.id;
+    _name.text = widget.tableRow!.name;
+    _address.text = widget.tableRow!.address;
+    _mobile1.text = widget.tableRow!.mobile1;
+    _mobile2.text = widget.tableRow!.mobile2;
+  }
+
+
   ClientDetails _clientDetails = ClientDetails(
       id: 0,
       name: '',
@@ -33,6 +44,7 @@ class _ClientDetailsFormState extends State<ClientDetailsForm> {
       editDt: DateTime.now(),
       creatBy: 1,
       creatDt: DateTime.now());
+
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -81,6 +93,9 @@ class _ClientDetailsFormState extends State<ClientDetailsForm> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.tableRow != null) {
+      setValue();
+    }
     return Form(
       key: _formKey,
       child: SingleChildScrollView(

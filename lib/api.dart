@@ -19,8 +19,8 @@ import 'models/salaryMasterGet.dart';
 import 'models/salaryPay.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-String ip = "localhost:5001";
-// String ip = "localhost:81";       // IIS
+// String ip = "localhost:5001";
+String ip = "localhost:81";       // IIS
 // String ip = "172.11.7.254:88"; //live
 // String ip = "172.11.7.254:98"; //test
 

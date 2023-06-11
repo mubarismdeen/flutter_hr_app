@@ -3,13 +3,13 @@ import 'package:admin/constants/style.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/employee_details_form.dart';
-import 'package:admin/widget/employees_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../constants/controllers.dart';
 import '../../helpers/responsiveness.dart';
 import '../../models/employeeDetails.dart';
+import '../../utils/common_utils.dart';
 
 class EmployeesScreen extends StatefulWidget {
   const EmployeesScreen({Key? key}) : super(key: key);
@@ -64,17 +64,154 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   ),
                 ],
               ),
-              EmployeeDetailsWidget(_employeeDetails),
+              // EmployeeDetailsWidget(_employeeDetails),
+              ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 600),
+                child: getCustomCard(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SingleChildScrollView(
+                          child: DataTable(
+                            showCheckboxColumn: false,
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Employee\nID',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Employee\nName',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Mobile 1',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Mobile 2',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Nationality',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Department',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Status',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'DOB',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Joined\nDate',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Created\nBy',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Created\nDate',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            rows: _employeeDetails
+                                .map((employee) => DataRow(cells: [
+                                      DataCell(
+                                          Text(employee.empCode.toString())),
+                                      DataCell(Text(employee.name)),
+                                      DataCell(Text(employee.mobile1)),
+                                      DataCell(Text(employee.mobile2)),
+                                      DataCell(Text(employee.nationality)),
+                                      DataCell(Text(employee.department)),
+                                      DataCell(Text(employee.status)),
+                                      DataCell(Text(getDateStringFromDateTime(
+                                          employee.birthDt))),
+                                      DataCell(Text(getDateStringFromDateTime(
+                                          employee.joinDt))),
+                                      DataCell(Text(employee.createBy)),
+                                      DataCell(Text(getDateStringFromDateTime(
+                                          employee.createDt))),
+                                    ],onSelectChanged: (selected) {
+                              if (selected != null && selected) {
+                                _openDialog(employee);
+                              }
+                            },
+                            ))
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ]),
           );
         });
   }
 
-  void _openDialog() {
+  void _openDialog(EmployeeDetails? tableRow) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlertDialog('Add New Employee', EmployeeDetailsForm(closeDialog));
+        return CustomAlertDialog(
+            'Add New Employee', EmployeeDetailsForm(closeDialog, tableRow));
       },
     );
   }
@@ -85,7 +222,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         padding: const EdgeInsets.all(16.0),
         backgroundColor: themeColor,
       ),
-      onPressed: _openDialog,
+      onPressed: () => _openDialog(null),
       child: const Text('Add Employee',
           style: TextStyle(fontWeight: FontWeight.bold)),
     );

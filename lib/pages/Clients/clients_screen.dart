@@ -9,7 +9,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../constants/controllers.dart';
 import '../../helpers/responsiveness.dart';
-import '../../widget/client_details.dart';
+import '../../utils/common_utils.dart';
 
 class ClientsScreen extends StatefulWidget {
   const ClientsScreen({Key? key}) : super(key: key);
@@ -39,22 +39,22 @@ class _ClientsScreenState extends State<ClientsScreen> {
           return SingleChildScrollView(
             child: Column(children: [
               Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context)
-                            ? 56
-                            : 6,
-                        left: 10),
-                    child: CustomText(
-                      text: menuController.activeItem.value,
-                      size: 24,
-                      weight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              )),
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            top: ResponsiveWidget.isSmallScreen(context)
+                                ? 56
+                                : 6,
+                            left: 10),
+                        child: CustomText(
+                          text: menuController.activeItem.value,
+                          size: 24,
+                          weight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  )),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -64,17 +64,109 @@ class _ClientsScreenState extends State<ClientsScreen> {
                   ),
                 ],
               ),
-              ClientDetailsWidget(_clientDetails),
+              // ClientDetailsWidget(_clientDetails),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 600),
+                  child: getCustomCard(
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              showCheckboxColumn: false,
+                              columns: const <DataColumn>[
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Client Name',
+                                      style: tableHeaderStyle,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Address',
+                                      style: tableHeaderStyle,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Mobile 1',
+                                      style: tableHeaderStyle,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Mobile 2',
+                                      style: tableHeaderStyle,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Created By',
+                                      style: tableHeaderStyle,
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Created Date',
+                                      style: tableHeaderStyle,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              rows: _clientDetails
+                                  .map((client) => DataRow(cells: [
+                                        DataCell(Text(client.name)),
+                                        DataCell(Text(client.address)),
+                                        DataCell(Text(client.mobile1)),
+                                        DataCell(Text(client.mobile2)),
+                                        DataCell(
+                                            Text(client.creatBy.toString())),
+                                        DataCell(Text(getDateStringFromDateTime(
+                                            client.creatDt))),
+                                      ],onSelectChanged: (selected) {
+                                if (selected != null && selected) {
+                                  _openDialog(client);
+                                }
+                              }))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ]),
           );
         });
   }
 
-  void _openDialog() {
+  void _openDialog(ClientDetails? tableRow) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlertDialog('Add New Client', ClientDetailsForm(closeDialog));
+        return CustomAlertDialog(
+            'Add New Client', ClientDetailsForm(closeDialog, tableRow));
       },
     );
   }
@@ -85,7 +177,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
         padding: const EdgeInsets.all(16.0),
         backgroundColor: themeColor,
       ),
-      onPressed: _openDialog,
+      onPressed: () => _openDialog(null),
       child: const Text('Add Client',
           style: TextStyle(fontWeight: FontWeight.bold)),
     );

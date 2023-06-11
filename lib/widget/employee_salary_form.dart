@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/salaryMasterGet.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,8 @@ import '../api.dart';
 import '../models/salaryMaster.dart';
 
 class EmployeeSalaryForm extends StatefulWidget {
-  const EmployeeSalaryForm({Key? key}) : super(key: key);
+  SalaryMasterGet? tableRow;
+  EmployeeSalaryForm(this.tableRow, {Key? key}) : super(key: key);
 
   @override
   State<EmployeeSalaryForm> createState() => _EmployeeSalaryFormState();
@@ -26,8 +28,18 @@ class EmployeeSalaryForm extends StatefulWidget {
   var _overSeasRate = TextEditingController();
   var _anchorageRate = TextEditingController();
 
+  setValue() {
+    _salaryMaster.id = widget.tableRow!.id;
+    _employeeId.text = widget.tableRow!.empCode.toString();
+    _preFixedMonthlySalary.text = widget.tableRow!.salary.toString();
+    _normalOvertimeRate.text = widget.tableRow!.nOtr.toString();
+    _specialOvertimeRate.text = widget.tableRow!.sOtr.toString();
+    _overSeasRate.text = widget.tableRow!.overseas.toString();
+    _anchorageRate.text = widget.tableRow!.anchorage.toString();
+  }
 
-   SalaryMaster _salaryMaster = SalaryMaster( id: 0, empCode: 0, salary: 0, nOtr: 0, sOtr: 0, overseas: 0, anchorage: 0, editBy: 0, editDt: DateTime.now(), creatBy: 0, creatDt:  DateTime.now());
+
+   SalaryMaster _salaryMaster = SalaryMaster( id: 0, empCode: 0, salary: 0, nOtr: 0, sOtr: 0, overseas: 0, anchorage: 0, editBy: 1, editDt: DateTime.now(), creatBy: 1, creatDt:  DateTime.now());
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -92,6 +104,9 @@ class EmployeeSalaryForm extends StatefulWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.tableRow != null) {
+      setValue();
+    }
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -112,18 +127,6 @@ class EmployeeSalaryForm extends StatefulWidget {
                 // _employeeId = int.parse(value!);
               },
             ),
-            // TextFormField(
-            //   decoration: InputDecoration(labelText: 'MOL ID No'),
-            //   validator: (value) {
-            //     if (value!.isEmpty) {
-            //       return 'Please enter MOL ID No';
-            //     }
-            //     return null;
-            //   },
-            //   onSaved: (value) {
-            //     _molIdNo = value!;
-            //   },
-            // ),
             TextFormField(
               decoration: InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
               keyboardType: TextInputType.number,

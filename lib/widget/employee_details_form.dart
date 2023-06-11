@@ -1,5 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/empMaster.dart';
+import 'package:admin/models/employeeDetails.dart';
 import 'package:admin/models/saveEmployeeDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,7 +12,8 @@ import '../api.dart';
 
 class EmployeeDetailsForm extends StatefulWidget {
   dynamic closeDialog;
-  EmployeeDetailsForm(this.closeDialog, {Key? key}) : super(key: key);
+  EmployeeDetails? tableRow;
+  EmployeeDetailsForm(this.closeDialog, this.tableRow, {Key? key}) : super(key: key);
 
   @override
   State<EmployeeDetailsForm> createState() => _EmployeeDetailsFormState();
@@ -29,6 +31,10 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
   late Map<String, dynamic> _selectedDepartment;
   late Map<String, dynamic> _selectedNationality;
   late Map<String, dynamic> _selectedStatus;
+  String? _department;
+  String? _nationality;
+  String? _status;
+
 
   List<Map<String, dynamic>> departments = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> nationalities = <Map<String, dynamic>>[];
@@ -40,7 +46,29 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
     nationalities = await getEmployeeNationalities();
     statuses = await getEmployeeStatuses();
     assignedToOptions = await getEmpDetails();
+    if (widget.tableRow != null) {
+      setValue();
+    }
   }
+
+  setValue() {
+    _employeeDetails.id = widget.tableRow!.id;
+    _empCode.text = widget.tableRow!.empCode.toString();
+    _name.text = widget.tableRow!.name;
+    _mobile1.text = widget.tableRow!.mobile1;
+    _mobile2.text = widget.tableRow!.mobile2;
+    _dob.text = DateFormat('yyyy-MM-dd').format(widget.tableRow!.birthDt);
+    _joiningDate.text = DateFormat('yyyy-MM-dd').format(widget.tableRow!.joinDt);
+    _department = widget.tableRow!.department;
+    _nationality = widget.tableRow!.nationality;
+    _status = widget.tableRow!.status;
+
+    _selectedDepartment = departments.firstWhere((department) => department['description'] == _department);
+    _selectedNationality = nationalities.firstWhere((nationality) => nationality['description'] == _nationality);
+    _selectedStatus = statuses.firstWhere((status) => status['description'] == _status);
+  }
+
+
 
   SaveEmployeeDetails _employeeDetails = SaveEmployeeDetails(
       id: 0,
@@ -188,12 +216,12 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
+                        // setState(() {
                           _selectedDepartment = departments.firstWhere(
                               (department) =>
                                   department['description'] == value);
-                        });
-                      }),
+                        // });
+                      }, value: _department),
                   DropdownButtonFormField(
                       validator: (value) {
                         if (value == null) {
@@ -211,12 +239,12 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
                             );
                           }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
+                        // setState(() {
                           _selectedStatus = statuses.firstWhere(
                                   (status) =>
                               status['description'] == value);
-                        });
-                      }),
+                        // });
+                      }, value: _status,),
                   DropdownButtonFormField(
                       validator: (value) {
                         if (value == null) {
@@ -234,12 +262,12 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
                             );
                           }).toList(),
                       onChanged: (String? value) {
-                        setState(() {
+                        // setState(() {
                           _selectedNationality = nationalities.firstWhere(
                                   (nationality) =>
                               nationality['description'] == value);
-                        });
-                      }),
+                        // });
+                      }, value: _nationality,),
                   TextFormField(
                     controller: _dob,
                     decoration:
