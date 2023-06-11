@@ -31,9 +31,16 @@ class _AttendanceState extends State<Attendance> {
   List<AttendanceModel> _attendanceList = List<AttendanceModel>.empty();
   bool _editable = false;
   bool _enterAttendance = false;
+  // bool _enableUpload = false;
   void onDateChange(DateTime newDate) {
     setState(() {
       _pickedDate = newDate;
+    });
+  }
+
+  closeDialog() {
+    setState(() {
+      getAttendanceData();
     });
   }
 
@@ -592,21 +599,11 @@ class _AttendanceState extends State<Attendance> {
         return CustomAlertDialog(
           'Upload Attendance Details',
           // EmployeeAttendanceForm(),
-          AttendanceExcelUpload(),
+          AttendanceExcelUpload(closeDialog, _pickedDate),
         );
       },
     );
   }
-
-  // void _openViewDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return CustomAlertDialog(
-  //           'Attendance History', AttendanceHistoryScreen());
-  //     },
-  //   );
-  // }
 
   Widget _uploadButton() {
     return ElevatedButton(
@@ -620,15 +617,4 @@ class _AttendanceState extends State<Attendance> {
     );
   }
 
-  // Widget _viewButton() {
-  //   return ElevatedButton(
-  //     style: ElevatedButton.styleFrom(
-  //       padding: const EdgeInsets.all(16.0),
-  //       backgroundColor: themeColor,
-  //     ),
-  //     onPressed: _openViewDialog,
-  //     child: const Text('View Attendance',
-  //         style: TextStyle(fontWeight: FontWeight.bold)),
-  //   );
-  // }
 }

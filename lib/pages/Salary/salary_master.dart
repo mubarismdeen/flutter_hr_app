@@ -22,9 +22,15 @@ class SalaryMaster extends StatefulWidget {
 class _SalaryMasterState extends State<SalaryMaster> {
   List<SalaryMasterGet> _salaryPay = List<SalaryMasterGet>.empty();
 
-  getData() async {
+  getTableData() async {
     _salaryPay =
         await getSalaryMaster(DateFormat('yyyy-MM').format(DateTime.now()));
+  }
+
+  closeDialog() {
+    setState(() {
+      getTableData();
+    });
   }
 
   @override
@@ -57,7 +63,7 @@ class _SalaryMasterState extends State<SalaryMaster> {
         ),
         // EmployeeSalaryMaster(),
         FutureBuilder<dynamic>(
-            future: getData(),
+            future: getTableData(),
             builder: (context, AsyncSnapshot<dynamic> _data) {
               return ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 600),
@@ -167,7 +173,7 @@ class _SalaryMasterState extends State<SalaryMaster> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Salary Details',
-          EmployeeSalaryForm(tableRow),
+          EmployeeSalaryForm(closeDialog, tableRow),
         );
       },
     );

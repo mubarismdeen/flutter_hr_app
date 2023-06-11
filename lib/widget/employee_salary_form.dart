@@ -9,8 +9,9 @@ import '../api.dart';
 import '../models/salaryMaster.dart';
 
 class EmployeeSalaryForm extends StatefulWidget {
+  Function closeDialog;
   SalaryMasterGet? tableRow;
-  EmployeeSalaryForm(this.tableRow, {Key? key}) : super(key: key);
+  EmployeeSalaryForm(this.closeDialog, this.tableRow, {Key? key}) : super(key: key);
 
   @override
   State<EmployeeSalaryForm> createState() => _EmployeeSalaryFormState();
@@ -90,6 +91,8 @@ class EmployeeSalaryForm extends StatefulWidget {
 
       setState(() {  });
        // _salaryMaster = SalaryMaster as SalaryMaster;
+      widget.closeDialog();
+      Navigator.pop(context);
     }else{
       Get.showSnackbar(
         const GetSnackBar(
@@ -134,7 +137,7 @@ class EmployeeSalaryForm extends StatefulWidget {
                 if (value!.isEmpty) {
                   return 'Please enter pre-fixed monthly salary';
                 }
-                if (int.tryParse(value) == null) {
+                if (double.tryParse(value) == null) {
                   return 'Please enter a valid number';
                 }
                 return null;
@@ -151,7 +154,7 @@ class EmployeeSalaryForm extends StatefulWidget {
                 if (value!.isEmpty) {
                   return 'Please enter Normal Overtime Rate';
                 }
-                if (int.tryParse(value) == null) {
+                if (double.tryParse(value) == null) {
                   return 'Please enter a valid number';
                 }
                 return null;
@@ -168,7 +171,7 @@ class EmployeeSalaryForm extends StatefulWidget {
                 if (value!.isEmpty) {
                   return 'Please enter Special Overtime Rate';
                 }
-                if (int.tryParse(value) == null) {
+                if (double.tryParse(value) == null) {
                   return 'Please enter a valid number';
                 }
                 return null;
