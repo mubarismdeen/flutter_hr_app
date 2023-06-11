@@ -1,9 +1,9 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/attendanceModel.dart';
 import 'package:admin/utils/common_utils.dart';
+import 'package:admin/widget/attendance_excel_upload.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
-import 'package:admin/widget/employee_attendance_form.dart';
 import 'package:admin/widget/month_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -591,7 +591,8 @@ class _AttendanceState extends State<Attendance> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Attendance Details',
-          EmployeeAttendanceForm(),
+          // EmployeeAttendanceForm(),
+          AttendanceExcelUpload(),
         );
       },
     );
