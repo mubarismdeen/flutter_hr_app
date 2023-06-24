@@ -12,8 +12,8 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
             tag: 'icon',
             child: Container(
               height: 35,
-              padding: EdgeInsets.only(left: 10, top: 5),
-              child: ExcludeSemantics(
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: const ExcludeSemantics(
                 child: FadeInImagePlaceholder(
                   image: AssetImage('images/app_icon.png'),
                   placeholder: SizedBox.shrink(),

@@ -61,6 +61,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
       narration: "",
       assignedDate: "",
       jobStatus: 0,
+      status: 0,
       assignedTo: 0,
       dueDate: "",
       creatBy: 1,
@@ -121,6 +122,74 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
         webShowClose: false,
       );
     }
+  }
+
+  Future<void> _onDelete() async {
+    bool status = await deleteJobDetails(_jobDetails.id);
+    if (status) {
+      Fluttertoast.showToast(
+        msg: "Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
+      );
+      _assignedDate.clear();
+
+      Navigator.pop(context);
+      widget.closeDialog();
+
+      setState(() {});
+    } else {
+      Fluttertoast.showToast(
+        msg: "Failed",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.red,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
+      );
+    }
+  }
+
+  List<Widget> _getActionButtons() {
+    List<Widget> widgetList = [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: _submitForm,
+        child: const Text('Submit'),
+      ),
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Cancel'),
+      ),
+    ];
+    if (widget.tableRow != null) {
+      widgetList.add(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: themeColor,
+          ),
+          onPressed: _onDelete,
+          child: const Text('Delete'),
+        ),
+      );
+    }
+    return widgetList;
   }
 
   @override
@@ -259,22 +328,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: themeColor,
-                          ),
-                          onPressed: _submitForm,
-                          child: const Text('Submit'),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: themeColor,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
-                        ),
+                        ..._getActionButtons(),
                       ],
                     ),
                   ],

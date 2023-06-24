@@ -9,7 +9,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{D604D3E7-382A-4D98-9E56-7D700BD29285}
+AppId={{4920246C-8DDC-45CF-8CB6-429225CA5214}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -19,7 +19,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\mubar\OneDrive\Desktop\flutter project\flutter_hr_app\installers
-OutputBaseFilename=hr_mate_iis_jun_17
+OutputBaseFilename=hrmate_iis_setup_jun_24
 SetupIconFile=C:\Users\mubar\Downloads\app_icon (2).ico
 Compression=lzma
 SolidCompression=yes
