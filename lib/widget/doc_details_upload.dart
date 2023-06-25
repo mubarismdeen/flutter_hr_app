@@ -150,11 +150,10 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
                       );
                     }).toList(),
                     onChanged: (String? value) {
-                      setState(() {
                         // _selectedDocType = value!;
                         _selectedDocType = docTypes.firstWhere(
                             (docType) => docType['description'] == value);
-                      });
+                        // setState(() { });
                     },
                     value: _docType,
                   ),
