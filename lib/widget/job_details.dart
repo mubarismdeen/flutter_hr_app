@@ -171,11 +171,7 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return CustomAlertDialog(
-        //   'Job Details',
-        //   JobDetailsExpanded(tableData: tableData),
-        // );
-        return JobDetailsExpandedWithFilter();
+        return JobDetailsExpandedWithFilter(closeDialog);
       },
     );
   }

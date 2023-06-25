@@ -8,6 +8,9 @@ import '../api.dart';
 import 'custom_alert_dialog.dart';
 
 class JobDetailsExpandedWithFilter extends StatefulWidget {
+  Function() closeDialog;
+  JobDetailsExpandedWithFilter(this.closeDialog);
+
   @override
   State<JobDetailsExpandedWithFilter> createState() =>
       _JobDetailsExpandedWithFilterState();
@@ -237,6 +240,7 @@ class _JobDetailsExpandedWithFilterState
   closeDialog() {
     setState(() {
       getTableData();
+      widget.closeDialog();
     });
   }
 }

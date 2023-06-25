@@ -421,6 +421,22 @@ Future<bool> saveJobDetails(JobDetails jobDetails) async {
   }
 }
 
+Future<bool> deleteJobDetails(int jobId) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/DeleteJobDetails?id=$jobId'),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
 Future<bool> saveEmployeeDetails(SaveEmployeeDetails employeeDetails) async {
   try {
     var jsonData = jsonEncode(employeeDetails);
