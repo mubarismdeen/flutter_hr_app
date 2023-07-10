@@ -105,6 +105,73 @@ class EmployeeSalaryForm extends StatefulWidget {
     }
   }
 
+  Future<void> _onDelete() async {
+    bool status = await deleteSalaryMaster(_salaryMaster.id);
+    if (status) {
+      Fluttertoast.showToast(
+        msg: "Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
+      );
+
+      Navigator.pop(context);
+      widget.closeDialog();
+
+      setState(() {});
+    } else {
+      Fluttertoast.showToast(
+        msg: "Failed",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.red,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
+      );
+    }
+  }
+
+  List<Widget> _getActionButtons() {
+    List<Widget> widgetList = [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: _submitForm,
+        child: const Text('Submit'),
+      ),
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Cancel'),
+      ),
+    ];
+    if (widget.tableRow != null) {
+      widgetList.add(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: themeColor,
+          ),
+          onPressed: _onDelete,
+          child: const Text('Delete'),
+        ),
+      );
+    }
+    return widgetList;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.tableRow != null) {
@@ -219,22 +286,7 @@ class EmployeeSalaryForm extends StatefulWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: themeColor,
-                  ),
-                  onPressed: _submitForm,
-                  child: Text('Submit'),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: themeColor,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancel'),
-                ),
+                ..._getActionButtons(),
               ],
             ),
           ],

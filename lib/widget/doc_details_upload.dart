@@ -112,6 +112,74 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
     }
   }
 
+  Future<void> _onDelete() async {
+    bool status = await deleteDocDetails(_docDetails.id);
+    if (status) {
+      Fluttertoast.showToast(
+        msg: "Saved",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
+      );
+
+      Navigator.pop(context);
+      widget.closeDialog();
+
+      setState(() {});
+    } else {
+      Fluttertoast.showToast(
+        msg: "Failed",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.red,
+        fontSize: 16.0,
+        webPosition: "center",
+        webShowClose: false,
+      );
+    }
+  }
+
+  List<Widget> _getActionButtons() {
+    List<Widget> widgetList = [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: _submitForm,
+        child: const Text('Submit'),
+      ),
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Cancel'),
+      ),
+    ];
+    if (widget.tableRow != null) {
+      widgetList.add(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: themeColor,
+          ),
+          onPressed: _onDelete,
+          child: const Text('Delete'),
+        ),
+      );
+    }
+    return widgetList;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
@@ -207,22 +275,7 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: themeColor,
-                        ),
-                        onPressed: _submitForm,
-                        child: const Text('Submit'),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: themeColor,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel'),
-                      ),
+                      ..._getActionButtons(),
                     ],
                   ),
                 ],

@@ -152,6 +152,22 @@ Future<List<Map<String, dynamic>>> getQuotationDetails(String clientName, String
   }
 }
 
+Future<bool> deleteQuotationDetails(int quotationId) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/DeleteQuotationDetails?id=$quotationId'),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
 Future<List<Map<String, dynamic>>> getGratuityDetails() async {
   try {
     final response = await http.get(
@@ -186,6 +202,23 @@ Future<bool> saveSalaryMaster(SalaryMaster salaryMaster) async {
   }
 }
 
+Future<bool> deleteSalaryMaster(int salaryMasterId) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/DeleteSalaryMaster?id=$salaryMasterId'),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
+
 Future<bool> saveDocDetails(DocDetails docDetails) async {
   try {
     var jsonData = jsonEncode(docDetails);
@@ -202,6 +235,23 @@ Future<bool> saveDocDetails(DocDetails docDetails) async {
     return false;
   }
 }
+
+Future<bool> deleteDocDetails(int docId) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/DeleteDocDetails?id=$docId'),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
 
 Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
   try {
@@ -453,6 +503,23 @@ Future<bool> saveEmployeeDetails(SaveEmployeeDetails employeeDetails) async {
   }
 }
 
+Future<bool> deleteEmployeeDetails(int employeeId) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/DeleteEmployeeDetails?id=$employeeId'),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
+
 Future<List<Map<String, dynamic>>> getJobStatuses() async {
   try {
     final response = await http.get(
@@ -573,4 +640,21 @@ Future<bool> saveClientDetails(ClientDetails clientDetails) async {
     return false;
   }
 }
+
+Future<bool> deleteClientDetails(int clientId) async {
+  try {
+    final response = await http.get(Uri.parse('http://$ip/Hrms/DeleteClientDetails?id=$clientId'),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed');
+    }
+
+  } catch (e) {
+    return false;
+  }
+}
+
 
