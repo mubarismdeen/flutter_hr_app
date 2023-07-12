@@ -83,7 +83,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
     }
     _jobDetails.job = _jobName.text;
     _jobDetails.narration = _narration.text;
-    _jobDetails.assignedTo = _selectedAssignedTo.id;
+    _jobDetails.assignedTo = _selectedAssignedTo.empCode;
     _jobDetails.assignedDate =
         DateFormat('yyyy-MM-dd').format(DateTime.parse(_assignedDate.text));
     _jobDetails.jobStatus = _selectedJobStatus['id'];

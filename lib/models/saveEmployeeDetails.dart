@@ -8,6 +8,7 @@ class SaveEmployeeDetails {
   int statusId = 0;
   int natianalityId = 0;
   DateTime joinDt = DateTime.now();
+  DateTime? resignDt;
   DateTime birthDt = DateTime.now();
   int editBy = 0;
   DateTime editDate = DateTime.now();
@@ -24,6 +25,7 @@ class SaveEmployeeDetails {
     required this.statusId,
     required this.natianalityId,
     required this.joinDt,
+    required this.resignDt,
     required this.birthDt,
     required this.editBy,
     required this.editDate,
@@ -41,6 +43,7 @@ class SaveEmployeeDetails {
     'statusId': statusId,
     'natianalityId': natianalityId,
     'joinDt': joinDt.toIso8601String(),
+    'resignDt': resignDt?.toIso8601String(),
     'birthDt': birthDt.toIso8601String(),
     'editBy': editBy,
     'editDt': editDate.toIso8601String(),

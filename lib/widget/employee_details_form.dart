@@ -9,6 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
+import 'custom_alert_dialog.dart';
 
 class EmployeeDetailsForm extends StatefulWidget {
   dynamic closeDialog;
@@ -27,6 +28,7 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
   var _mobile1 = TextEditingController();
   var _mobile2 = TextEditingController();
   var _dob = TextEditingController();
+  var _resignDate = TextEditingController();
   var _joiningDate = TextEditingController();
   late Map<String, dynamic> _selectedDepartment;
   late Map<String, dynamic> _selectedNationality;
@@ -80,6 +82,7 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
       statusId: 0,
       natianalityId: 0,
       joinDt: DateTime.now(),
+      resignDt: null,
       birthDt: DateTime.now(),
       editBy: 1,
       editDate: DateTime.now(),
@@ -174,6 +177,66 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
         webShowClose: false,
       );
     }
+  }
+
+  void _resignPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(     'Resign Date' ,
+            Column(
+                mainAxisSize: MainAxisSize.min,
+                children:[TextFormField(
+          controller: _resignDate,
+          decoration:
+          const InputDecoration(labelText: ''),
+          onTap: () async {
+            DateTime? date = DateTime(1900);
+            FocusScope.of(context).requestFocus(FocusNode());
+            date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            if (date != null) {
+              _resignDate.text =
+                  DateFormat('yyyy-MM-dd').format(date);
+            }
+          },
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please select date of birth';
+            }
+            return null;
+          },
+        ),
+          const SizedBox(height: 16.0),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children:[ ElevatedButton(
+          style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: (){
+          _employeeDetails.resignDt = DateTime.parse(_resignDate.text);
+          Navigator.of(context).pop();
+        },
+        child: const Text('Ok'),
+        ),
+        ElevatedButton(
+        style: ElevatedButton.styleFrom(
+        backgroundColor: themeColor,
+        ),
+        onPressed: () {
+          _employeeDetails.resignDt = null;
+              Navigator.of(context).pop();
+        },
+        child: const Text('Cancel'),
+        ),])
+                ])
+        );
+      },
+    );
   }
 
   List<Widget> _getActionButtons() {
@@ -311,6 +374,9 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
                                   (status) =>
                               status['description'] == value);
                         // });
+                          if( value == 'Resigned') {
+                            _resignPopup();
+                          }
                       }, value: _status,),
                   DropdownButtonFormField(
                       validator: (value) {
