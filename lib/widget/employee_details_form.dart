@@ -44,7 +44,7 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
   List<EmpMaster> assignedToOptions = <EmpMaster>[];
 
   getDropdownInputs() async {
-    departments = await getDeparments();
+    departments = await getDepartments();
     nationalities = await getEmployeeNationalities();
     statuses = await getEmployeeStatuses();
     assignedToOptions = await getEmpDetails();
