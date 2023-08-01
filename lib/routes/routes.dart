@@ -7,16 +7,3 @@ const AttendanceRoute = "Attendance";
 const ClientsRoute = "Clients";
 const GratuityRoute = "Gratuity";
 const AuthenticationPageRoute = "Authentication";
-
-
-List sideMenuItems =[
-  DashboardRoute,
-  EmployeesRoute,
-  AttendanceRoute,
-  SalaryMasterRoute,
-  SalaryPayoutRoute,
-  LeaveSalaryRoute,
-  ClientsRoute,
-  GratuityRoute,
-  AuthenticationPageRoute,
-];

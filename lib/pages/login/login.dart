@@ -1,4 +1,6 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
+import 'package:admin/models/userScreens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -101,8 +103,16 @@ class _MainViewState extends State<_MainView> {
             setState(() {
               showLoading = true;
             });
-            logStatus1 = await userValidate(widget.usernameController!.text,
-                widget.passwordController!.text);
+
+            List<UserScreens> screensForUser = await authorizeUser(
+              widget.usernameController!.text,
+              widget.passwordController!.text,
+            );
+            if (screensForUser.isNotEmpty) {
+              logStatus1 = true;
+              GlobalState.setScreensForUser(widget.usernameController!.text, screensForUser.first);
+            }
+
             if (logStatus1) {
               showError = false;
               setState(() {
@@ -160,7 +170,6 @@ class _MainViewState extends State<_MainView> {
     );
   }
 }
-
 
 class _AppLogo extends StatelessWidget {
   const _AppLogo();
@@ -399,7 +408,6 @@ class _LoginButtonState extends State<_LoginButton> {
     );
   }
 }
-
 
 class _FilledButton extends StatelessWidget {
   const _FilledButton({required this.text, required this.onTap});

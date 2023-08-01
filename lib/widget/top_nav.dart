@@ -2,6 +2,7 @@ import 'package:admin/constants/style.dart';
 import 'package:admin/helpers/responsiveness.dart';
 import 'package:flutter/material.dart';
 
+import '../globalState.dart';
 import '../helpers/image_placeholder.dart';
 import 'custom_text.dart';
 
@@ -77,8 +78,8 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
             const SizedBox(
               width: 5,
             ),
-            const CustomText(
-                text: "Master User",
+            CustomText(
+                text: GlobalState.username,
                 size: 16,
                 color: lightGrey,
                 weight: FontWeight.bold),

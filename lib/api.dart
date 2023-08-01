@@ -7,8 +7,8 @@ import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/quotationDetails.dart';
 import 'package:admin/models/salaryPaid.dart';
 import 'package:admin/models/saveEmployeeDetails.dart';
+import 'package:admin/models/userScreens.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'models/attedanceDto.dart';
@@ -66,6 +66,13 @@ Future<dynamic> httpConnect(String urlWithParams, HttpMethod method, [dynamic js
 Future<bool> userValidate(String userID, String password) async {
   String urlWithParams = "http://$ip/Hrms/userValidat?userCd=$userID&password=$password";
   return await httpConnect(urlWithParams, HttpMethod.GET) as bool;
+}
+
+Future<List<UserScreens>> authorizeUser(String userName, String password) async {
+  String urlWithParams = "http://$ip/Hrms/authorizeUser?userName=$userName&password=$password";
+  List<UserScreens> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => UserScreens.fromJson(job)).toList();
+  return list;
 }
 
 Future<List<Map<String, dynamic>>> getDocDetails() async {

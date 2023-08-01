@@ -7,9 +7,10 @@ import '../constants/style.dart';
 class CustomMenuController extends GetxController{
   static CustomMenuController instance = Get.find();
   var activeItem = DashboardRoute.obs;
+  // var activeItem = GlobalState.sideMenuItems.isNotEmpty ? GlobalState.sideMenuItems.first.obs : DashboardRoute.obs;
   var hoverItem = "".obs;
 
-  changeActiveitemTo(String itemName) {
+  changeActiveItemTo(String itemName) {
     activeItem.value = itemName;
   }
 
