@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/widget/quotations_filter.dart';
 import 'package:admin/widget/quotations_upload.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,10 @@ import '../api.dart';
 import 'custom_alert_dialog.dart';
 
 class QuotationsExpandedWithFilter extends StatefulWidget {
+  UserPrivileges privileges;
+
+  QuotationsExpandedWithFilter(this.privileges);
+
   @override
   State<QuotationsExpandedWithFilter> createState() =>
       _QuotationsExpandedWithFilterState();
@@ -53,7 +58,7 @@ class _QuotationsExpandedWithFilterState
                 children: [
                   Row(
                     children: [
-                      const Text('Quotations'),
+                      const Text('Quotation Details'),
                       const SizedBox(width: 15),
                       IconButton(
                         onPressed: _openFilterDialog,
@@ -278,7 +283,10 @@ class _QuotationsExpandedWithFilterState
                                 ),
                               ],
                               onSelectChanged: (selected) {
-                                if (selected != null && selected) {
+                                if (selected != null &&
+                                    selected &&
+                                    (widget.privileges.editPrivilege ||
+                                        widget.privileges.deletePrivilege)) {
                                   _openUploadDialog(tableRow);
                                 }
                               },
@@ -310,7 +318,7 @@ class _QuotationsExpandedWithFilterState
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Quotation Details',
-          QuotationsUpload(closeDialog, tableRow),
+          QuotationsUpload(closeDialog, tableRow, widget.privileges),
         );
       },
     );

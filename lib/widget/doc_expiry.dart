@@ -8,8 +8,15 @@ import 'package:flutter/material.dart';
 
 import '../api.dart';
 import 'package:intl/intl.dart';
+import '../models/userPrivileges.dart';
+import 'custom_add_new_button.dart';
+import 'custom_view_details_button.dart';
 
 class DocExpiry extends StatefulWidget {
+  UserPrivileges privileges;
+
+  DocExpiry(this.privileges, {Key? key}) : super(key: key);
+
   @override
   _DocExpiryState createState() => _DocExpiryState();
 }
@@ -49,22 +56,8 @@ class _DocExpiryState extends State<DocExpiry> {
                       color: Colors.black,
                       weight: FontWeight.bold,
                     ),
-                    TextButton(
-                      onPressed: _openUploadDialog,
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add, size: 16, weight: 900),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          CustomText(
-                              text: "Add New",
-                              size: 14,
-                              color: themeColor,
-                              weight: FontWeight.bold),
-                        ],
-                      ),
-                    ),
+                    if (widget.privileges.addPrivilege)
+                      CustomAddNewButton(openUploadDialog: _openUploadDialog),
                   ],
                 ),
                 const SizedBox(
@@ -124,19 +117,9 @@ class _DocExpiryState extends State<DocExpiry> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(16.0),
-                      ),
-                      onPressed: _openViewDialog,
-                      child: const Text('View Details',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: themeColor)),
-                    ),
-                  ],
+                Center(
+                  child:
+                      CustomViewDetailsButton(openViewDialog: _openViewDialog),
                 ),
               ],
             ),
@@ -162,7 +145,7 @@ class _DocExpiryState extends State<DocExpiry> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Document Details',
-          DocExpiryExpanded(),
+          DocExpiryExpanded(widget.privileges),
         );
       },
     );
@@ -174,7 +157,7 @@ class _DocExpiryState extends State<DocExpiry> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Document Details',
-          DocDetailsUpload(this.closeDialog, null),
+          DocDetailsUpload(closeDialog, null, widget.privileges),
         );
       },
     );

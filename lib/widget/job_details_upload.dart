@@ -1,17 +1,19 @@
-import 'package:admin/constants/style.dart';
 import 'package:admin/models/empMaster.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
 import '../models/jobDetails.dart';
+import '../utils/common_utils.dart';
 
 class JobDetailsUpload extends StatefulWidget {
   dynamic closeDialog;
   Map<String, dynamic>? tableRow;
+  UserPrivileges privileges;
 
-  JobDetailsUpload(this.closeDialog, this.tableRow);
+  JobDetailsUpload(this.closeDialog, this.tableRow, this.privileges);
 
   @override
   State<JobDetailsUpload> createState() => _JobDetailsUploadState();
@@ -61,7 +63,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
       narration: "",
       assignedDate: "",
       jobStatus: 0,
-      status: 0,
+      status: 1,
       assignedTo: 0,
       dueDate: "",
       creatBy: 1,
@@ -69,7 +71,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
       editBy: 1,
       editDt: DateTime.now());
 
-  Future<void> _submitForm() async {
+  Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
       // Submit the form data to a backend API or do something else with it
@@ -159,38 +161,6 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
     }
   }
 
-  List<Widget> _getActionButtons() {
-    List<Widget> widgetList = [
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: themeColor,
-        ),
-        onPressed: _submitForm,
-        child: const Text('Submit'),
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: themeColor,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('Cancel'),
-      ),
-    ];
-    if (widget.tableRow != null) {
-      widgetList.add(
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: themeColor,
-          ),
-          onPressed: _onDelete,
-          child: const Text('Delete'),
-        ),
-      );
-    }
-    return widgetList;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -328,7 +298,12 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ..._getActionButtons(),
+                        ...getActionButtonsForExpandedView(
+                            context: context,
+                            privileges: widget.privileges,
+                            hasData: widget.tableRow != null,
+                            onSubmit: _onSubmit,
+                            onDelete: _onDelete),
                       ],
                     ),
                   ],

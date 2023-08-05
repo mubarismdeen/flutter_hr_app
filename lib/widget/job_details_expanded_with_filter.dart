@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/widget/job_details_filter.dart';
 import 'package:admin/widget/job_details_upload.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,9 @@ import '../api.dart';
 import 'custom_alert_dialog.dart';
 
 class JobDetailsExpandedWithFilter extends StatefulWidget {
+  UserPrivileges privileges;
   Function() closeDialog;
-  JobDetailsExpandedWithFilter(this.closeDialog);
+  JobDetailsExpandedWithFilter(this.closeDialog, this.privileges);
 
   @override
   State<JobDetailsExpandedWithFilter> createState() =>
@@ -199,7 +201,10 @@ class _JobDetailsExpandedWithFilterState
                                 ),
                               ],
                               onSelectChanged: (selected) {
-                                if (selected != null && selected) {
+                                if (selected != null &&
+                                    selected &&
+                                    (widget.privileges.editPrivilege ||
+                                        widget.privileges.deletePrivilege)) {
                                   _openUploadDialog(tableRow);
                                 }
                               },
@@ -231,7 +236,7 @@ class _JobDetailsExpandedWithFilterState
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Job Details',
-          JobDetailsUpload(closeDialog, tableRow),
+          JobDetailsUpload(closeDialog, tableRow, widget.privileges),
         );
       },
     );

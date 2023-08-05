@@ -20,7 +20,7 @@ Route<dynamic> generateRoute(RouteSettings settings){
     case AttendanceRoute:
       return _getPageRoute(const Attendance());
     case DashboardRoute:
-      return _getPageRoute(const Dashboard());
+      return _getPageRoute(Dashboard());
     case SalaryMasterRoute:
       return _getPageRoute(const SalaryMaster());
     case SalaryPayoutRoute:

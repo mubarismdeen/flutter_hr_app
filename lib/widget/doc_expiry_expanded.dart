@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/widget/doc_details_upload.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,10 @@ import '../api.dart';
 import 'custom_alert_dialog.dart';
 
 class DocExpiryExpanded extends StatefulWidget {
+  UserPrivileges privileges;
+
+  DocExpiryExpanded(this.privileges, {Key? key}) : super(key: key);
+
   @override
   _DocExpiryExpandedState createState() => _DocExpiryExpandedState();
 }
@@ -125,7 +130,10 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
                             )
                           ],
                           onSelectChanged: (selected) {
-                            if (selected != null && selected) {
+                            if (selected != null &&
+                                selected &&
+                                (widget.privileges.editPrivilege ||
+                                    widget.privileges.deletePrivilege)) {
                               _openUploadDialog(tableRow);
                             }
                           },
@@ -145,7 +153,7 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Job Details',
-          DocDetailsUpload(closeDialog, tableRow),
+          DocDetailsUpload(closeDialog, tableRow, widget.privileges),
         );
       },
     );

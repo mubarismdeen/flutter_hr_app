@@ -18,6 +18,7 @@ class QuotationDetails {
   DateTime creatDt = DateTime.now();
   int editBy = 0;
   DateTime editDt = DateTime.now();
+  int status = 1;
 
   QuotationDetails({
     required this.id,
@@ -62,5 +63,6 @@ class QuotationDetails {
         'creatDt':creatDt.toIso8601String(),
         'editBy':editBy,
         'editDt':editDt.toIso8601String(),
+        'status': status,
       };
 }

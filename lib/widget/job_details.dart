@@ -1,4 +1,5 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
@@ -9,7 +10,14 @@ import 'package:flutter/material.dart';
 import '../api.dart';
 import 'package:intl/intl.dart';
 
+import 'custom_add_new_button.dart';
+import 'custom_view_details_button.dart';
+
 class JobDetailsWidget extends StatefulWidget {
+  UserPrivileges privileges;
+
+  JobDetailsWidget(this.privileges, {Key? key}) : super(key: key);
+
   @override
   _JobDetailsWidgetState createState() => _JobDetailsWidgetState();
 }
@@ -49,22 +57,8 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
                       color: Colors.black,
                       weight: FontWeight.bold,
                     ),
-                    TextButton(
-                      onPressed: _openUploadDialog,
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add, size: 16, weight: 900),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          CustomText(
-                              text: "Add New",
-                              size: 14,
-                              color: themeColor,
-                              weight: FontWeight.bold),
-                        ],
-                      ),
-                    ),
+                    if (widget.privileges.addPrivilege)
+                      CustomAddNewButton(openUploadDialog: _openUploadDialog),
                   ],
                 ),
                 const SizedBox(
@@ -135,19 +129,9 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(16.0),
-                      ),
-                      onPressed: _openViewDialog,
-                      child: const Text('View Details',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: themeColor)),
-                    ),
-                  ],
+                Center(
+                  child:
+                      CustomViewDetailsButton(openViewDialog: _openViewDialog),
                 ),
               ],
             ),
@@ -171,7 +155,7 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return JobDetailsExpandedWithFilter(closeDialog);
+        return JobDetailsExpandedWithFilter(closeDialog, widget.privileges);
       },
     );
   }
@@ -182,7 +166,7 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Job Details',
-          JobDetailsUpload(closeDialog, null),
+          JobDetailsUpload(closeDialog, null, widget.privileges),
         );
       },
     );

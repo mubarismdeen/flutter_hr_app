@@ -8,6 +8,7 @@ class ClientDetails {
   DateTime editDt = DateTime.now();
   int creatBy = 0;
   DateTime creatDt = DateTime.now();
+  int status = 1;
 
   ClientDetails({
     required this.id,
@@ -31,6 +32,7 @@ class ClientDetails {
     editDt = DateTime.parse(json['editDt']);
     creatBy = json['creatBy']??0;
     creatDt = DateTime.parse(json['creatDt']);
+    status = json['status']??0;
   }
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +45,6 @@ class ClientDetails {
     'editDt': editDt.toIso8601String(),
     'creatBy': creatBy,
     'creatDt': creatDt.toIso8601String(),
+    'status': status,
   };
 }

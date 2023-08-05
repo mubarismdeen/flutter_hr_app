@@ -6,7 +6,7 @@ class JobDetails {
   String assignedDate = "";
   String dueDate = "";
   int jobStatus = 0;
-  int status = 0;
+  int status = 1;
   int assignedTo = 0;
   int creatBy = 0;
   DateTime creatDt = DateTime.now();

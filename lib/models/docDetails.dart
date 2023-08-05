@@ -10,6 +10,7 @@ class DocDetails {
   DateTime creatDt = DateTime.now();
   int editBy = 0;
   DateTime editDt = DateTime.now();
+  int status = 1;
 
   DocDetails({
     required this.id,
@@ -38,6 +39,7 @@ class DocDetails {
         'creatDt':creatDt.toIso8601String(),
         'editBy':editBy,
         'editDt':editDt.toIso8601String(),
+        'status': status,
       };
 
   DocDetails.fromJson(Map<String, dynamic> json) {
@@ -51,6 +53,7 @@ class DocDetails {
     creatDt = json['creatDt'] ?? DateTime.now();
     editBy = json['editBy'] ?? 0;
     editDt = json['editDt'] ?? DateTime.now();
+    status = json['status'] ?? 1;
     // docDate = json['h_DocDt'] == null ?  DateTime.now() : DateTime.tryParse(json['h_DocDt'])??DateTime.now();
   }
 }

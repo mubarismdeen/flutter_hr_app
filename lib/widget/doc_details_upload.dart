@@ -1,5 +1,6 @@
-import 'package:admin/constants/style.dart';
 import 'package:admin/models/docDetails.dart';
+import 'package:admin/models/userPrivileges.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +10,9 @@ import '../api.dart';
 class DocDetailsUpload extends StatefulWidget {
   dynamic closeDialog;
   Map<String, dynamic>? tableRow;
+  UserPrivileges privileges;
 
-  DocDetailsUpload(this.closeDialog, this.tableRow);
+  DocDetailsUpload(this.closeDialog, this.tableRow, this.privileges);
 
   @override
   State<DocDetailsUpload> createState() => _DocDetailsUploadState();
@@ -59,7 +61,7 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
       editBy: 1,
       editDt: DateTime.now());
 
-  Future<void> _submitForm() async {
+  Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
       // Submit the form data to a backend API or do something else with it
@@ -146,39 +148,6 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
     }
   }
 
-  List<Widget> _getActionButtons() {
-    List<Widget> widgetList = [
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: themeColor,
-        ),
-        onPressed: _submitForm,
-        child: const Text('Submit'),
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: themeColor,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('Cancel'),
-      ),
-    ];
-    if (widget.tableRow != null) {
-      widgetList.add(
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: themeColor,
-          ),
-          onPressed: _onDelete,
-          child: const Text('Delete'),
-        ),
-      );
-    }
-    return widgetList;
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -218,10 +187,8 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
                       );
                     }).toList(),
                     onChanged: (String? value) {
-                        // _selectedDocType = value!;
-                        _selectedDocType = docTypes.firstWhere(
-                            (docType) => docType['description'] == value);
-                        // setState(() { });
+                      _selectedDocType = docTypes.firstWhere(
+                          (docType) => docType['description'] == value);
                     },
                     value: _docType,
                   ),
@@ -275,7 +242,12 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ..._getActionButtons(),
+                      ...getActionButtonsForExpandedView(
+                          context: context,
+                          privileges: widget.privileges,
+                          hasData: widget.tableRow != null,
+                          onSubmit: _onSubmit,
+                          onDelete: _onDelete)
                     ],
                   ),
                 ],

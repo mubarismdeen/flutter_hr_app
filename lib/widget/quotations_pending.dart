@@ -1,13 +1,20 @@
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/quotations_expanded_with_filter.dart';
 import 'package:admin/widget/quotations_upload.dart';
 import 'package:flutter/material.dart';
+import 'custom_add_new_button.dart';
+import 'custom_view_details_button.dart';
 
 class QuotationsPending extends StatefulWidget {
+  UserPrivileges privileges;
+  QuotationsPending(this.privileges, {Key? key})
+      : super(key: key);
+
   @override
   _QuotationsPendingState createState() => _QuotationsPendingState();
 }
@@ -60,27 +67,13 @@ class _QuotationsPendingState extends State<QuotationsPending> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const CustomText(
-                      text: "Quotations",
+                      text: "Quotation Details",
                       size: 18,
                       color: Colors.black,
                       weight: FontWeight.bold,
                     ),
-                    TextButton(
-                      onPressed: _openUploadDialog,
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add, size: 16, weight: 900),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          CustomText(
-                              text: "Add New",
-                              size: 14,
-                              color: themeColor,
-                              weight: FontWeight.bold),
-                        ],
-                      ),
-                    ),
+                    if (widget.privileges.addPrivilege)
+                      CustomAddNewButton(openUploadDialog: _openUploadDialog),
                   ],
                 ),
                 const SizedBox(
@@ -144,19 +137,8 @@ class _QuotationsPendingState extends State<QuotationsPending> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(16.0),
-                      ),
-                      onPressed: _openDialog,
-                      child: const Text('View Details',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: themeColor)),
-                    ),
-                  ],
+                Center(
+                  child: CustomViewDetailsButton(openViewDialog: _openDialog),
                 ),
               ],
             ),
@@ -168,12 +150,7 @@ class _QuotationsPendingState extends State<QuotationsPending> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return CustomAlertDialogWithFilter(
-        //   'Quotations',
-        //   QuotationsPendingExpanded(tableData),
-        //   QuotationsFilter(applyFilter),
-        // );
-        return QuotationsExpandedWithFilter();
+        return QuotationsExpandedWithFilter(widget.privileges);
       },
     );
   }
@@ -184,7 +161,7 @@ class _QuotationsPendingState extends State<QuotationsPending> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           'Upload Quotation Details',
-          QuotationsUpload(closeDialog,null),
+          QuotationsUpload(closeDialog, null, widget.privileges),
         );
       },
     );

@@ -7,8 +7,11 @@ import 'package:admin/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
+import '../../constants/constants.dart';
 import '../../constants/controllers.dart';
+import '../../globalState.dart';
 import '../../helpers/responsiveness.dart';
+import '../../models/userPrivileges.dart';
 import '../../utils/common_utils.dart';
 
 class ClientsScreen extends StatefulWidget {
@@ -20,9 +23,15 @@ class ClientsScreen extends StatefulWidget {
 
 class _ClientsScreenState extends State<ClientsScreen> {
   List<ClientDetails> _clientDetails = List<ClientDetails>.empty();
+  UserPrivileges privileges = UserPrivileges();
 
   getTableData() async {
     _clientDetails = await getClientDetails();
+    List<UserPrivileges> clientScreenPrivileges = await getPrivilegesForUser(
+        GlobalState.username, clientDetailsScreenPrivilege);
+    if (clientScreenPrivileges.isNotEmpty) {
+      privileges = clientScreenPrivileges.first;
+    }
   }
 
   closeDialog() {
@@ -55,15 +64,16 @@ class _ClientsScreenState extends State<ClientsScreen> {
                       )
                     ],
                   )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 35.0, top: 35.0),
-                    child: _uploadButton(),
-                  ),
-                ],
-              ),
+              if (privileges.addPrivilege)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 35.0, top: 35.0),
+                      child: _uploadButton(privileges),
+                    ),
+                  ],
+                ),
               // ClientDetailsWidget(_clientDetails),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -133,20 +143,27 @@ class _ClientsScreenState extends State<ClientsScreen> {
                                 ),
                               ],
                               rows: _clientDetails
-                                  .map((client) => DataRow(cells: [
-                                        DataCell(Text(client.name)),
-                                        DataCell(Text(client.address)),
-                                        DataCell(Text(client.mobile1)),
-                                        DataCell(Text(client.mobile2)),
-                                        DataCell(
-                                            Text(client.creatBy.toString())),
-                                        DataCell(Text(getDateStringFromDateTime(
-                                            client.creatDt))),
-                                      ],onSelectChanged: (selected) {
-                                if (selected != null && selected) {
-                                  _openDialog(client);
-                                }
-                              }))
+                                  .map((client) => DataRow(
+                                          cells: [
+                                            DataCell(Text(client.name)),
+                                            DataCell(Text(client.address)),
+                                            DataCell(Text(client.mobile1)),
+                                            DataCell(Text(client.mobile2)),
+                                            DataCell(Text(
+                                                client.creatBy.toString())),
+                                            DataCell(Text(
+                                                getDateStringFromDateTime(
+                                                    client.creatDt))),
+                                          ],
+                                          onSelectChanged: (selected) {
+                                            if (selected != null &&
+                                                selected &&
+                                                (privileges.editPrivilege ||
+                                                    privileges
+                                                        .deletePrivilege)) {
+                                              _openDialog(client, privileges);
+                                            }
+                                          }))
                                   .toList(),
                             ),
                           ),
@@ -161,23 +178,23 @@ class _ClientsScreenState extends State<ClientsScreen> {
         });
   }
 
-  void _openDialog(ClientDetails? tableRow) {
+  void _openDialog(ClientDetails? tableRow, UserPrivileges privileges) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-            'Add New Client', ClientDetailsForm(closeDialog, tableRow));
+            'Add New Client', ClientDetailsForm(closeDialog, tableRow, privileges));
       },
     );
   }
 
-  Widget _uploadButton() {
+  Widget _uploadButton(UserPrivileges privileges) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.all(16.0),
         backgroundColor: themeColor,
       ),
-      onPressed: () => _openDialog(null),
+      onPressed: () => _openDialog(null, privileges),
       child: const Text('Add Client',
           style: TextStyle(fontWeight: FontWeight.bold)),
     );

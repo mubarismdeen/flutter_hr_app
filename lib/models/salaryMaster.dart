@@ -10,6 +10,7 @@ class SalaryMaster {
   DateTime editDt;
   int creatBy;
   DateTime creatDt;
+  int status = 1;
 
   SalaryMaster({
     required this.id,
@@ -25,10 +26,6 @@ class SalaryMaster {
     required this.creatDt,
   });
 
-
-   // SalaryMaster.toJson();
-
-
   Map<String, dynamic> toJson() => {
     'id': id,
     'empCode': empCode,
@@ -41,19 +38,6 @@ class SalaryMaster {
     'editDt': editDt.toIso8601String(),
     'creatBy': creatBy,
     'creatDt': creatDt.toIso8601String(),
+    'status': status,
   };
-
-  // SalaryMaster.fromJson(Map<String, dynamic> json) {
-  //   id= json['id'] ?? 0;
-  //   empCode = json['empCode']??0;
-  //   salary = json['salary']??0.0;
-  //   nOtr = json['nOtr']??0.0;
-  //   sOtr = json['sOtr']??0.0;
-  //   overseas = json['overseas']??0.0;
-  //   anchorage = json['anchorage']??0.0;
-  //   editBy = json['editBy']??0;
-  //   editDt = DateTime.parse(json['editDt'])??DateTime.now();
-  //   creatBy = json['creatBy']??0;
-  //   creatDt = DateTime.parse(json['creatDt'])??DateTime.now();
-  // }
 }

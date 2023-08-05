@@ -14,6 +14,7 @@ class SaveEmployeeDetails {
   DateTime editDate = DateTime.now();
   int creatBy = 0;
   DateTime creatDate = DateTime.now();
+  int status = 1;
 
   SaveEmployeeDetails({
     required this.id,
@@ -49,6 +50,7 @@ class SaveEmployeeDetails {
     'editDt': editDate.toIso8601String(),
     'creatBy': creatBy,
     'creatDt': creatDate.toIso8601String(),
+    'status': status,
   };
 
 }
