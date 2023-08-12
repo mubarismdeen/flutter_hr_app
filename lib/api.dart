@@ -168,7 +168,7 @@ Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
 }
 
 Future<bool> saveGratuity(String empCode, String type,String editBy) async {
-  String urlWithParams = "http://$ip/Hrms/SaveGratuity?empCode=$empCode&type=$type&editBy=$editBy";
+  String urlWithParams = "http://$ip/Hrms/SaveGratuityByDate?empCode=$empCode&type=$type&editBy=$editBy";
   return await httpConnect(urlWithParams, HttpMethod.GET) as bool;
 }
 
@@ -186,6 +186,12 @@ Future<List<EmpMaster>> getEmpDetails() async {
   return list;
 }
 
+Future<List<EmpMaster>> getGratuityEmp() async {
+  String urlWithParams = "http://$ip/Hrms/getGratuityEmp";
+  List<EmpMaster> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => EmpMaster.fromJson(job)).toList();
+  return list;
+}
 Future<List<AttendanceDto>> getAttendanceDetails(String date) async {
   String urlWithParams = "http://$ip/Hrms/getAttendance?date=$date";
   List<AttendanceDto> list = (await httpConnect(urlWithParams, HttpMethod.GET))

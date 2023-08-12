@@ -22,7 +22,7 @@ class _GratuityScreenState extends State<GratuityScreen> {
   List<Map<String, dynamic>> _gratuityType = <Map<String, dynamic>>[];
 
   getTableData() async {
-    _empDetails = await getEmpDetails();
+    _empDetails = await getGratuityEmp();
     _gratuityType = await getGratuityType();
     _gratuityDetails = await getGratuityDetails();
   }
