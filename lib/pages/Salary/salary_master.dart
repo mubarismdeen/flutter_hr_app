@@ -140,7 +140,7 @@ class _SalaryMasterState extends State<SalaryMaster> {
                             ],
                             rows: _salaryPay
                                 .map((salary) => DataRow(cells: [
-                                      DataCell(Text(salary.empCode.toString())),
+                                      DataCell(Text(salary.empCode)),
                                       DataCell(Text(salary.name)),
                                       DataCell(Text(salary.salary.toString())),
                                       DataCell(Text(salary.nOtr.toString())),

@@ -1,6 +1,6 @@
 class AttendanceDto {
   int id = 0;
-  int employeeId = 0;
+  String employeeId = '';
   String employeeName = '';
   String molId = '';
   double totalAttendance = 0.0;
@@ -26,7 +26,7 @@ class AttendanceDto {
 
   AttendanceDto.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? 0;
-    employeeId = json['empCode'] ?? 0;
+    employeeId = json['empCode'] ?? 'NULL';
     employeeName = json['name'] ?? 'NULL';
     molId = json['molId'] ?? 'NULL';
     totalAttendance = json['attendance'] ?? 0.0;

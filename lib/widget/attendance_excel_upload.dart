@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
 import 'package:admin/models/attendanceModel.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class AttendanceExcelUpload extends StatefulWidget {
   Function closeDialog;
@@ -58,7 +59,7 @@ class _AttendanceExcelUploadState extends State<AttendanceExcelUpload> {
             _attendanceList = [
               AttendanceModel(
                   id: 0,
-                  empCode: rowData[0].toInt(),
+                  empCode: rowData[0].toString(),
                   attendance: double.parse(rowData[2].toString()),
                   offdays: double.parse(rowData[3].toString()),
                   lop: double.parse(rowData[4].toString()),
@@ -67,15 +68,15 @@ class _AttendanceExcelUploadState extends State<AttendanceExcelUpload> {
                   overseas: double.parse(rowData[7].toString()),
                   anchorage: double.parse(rowData[8].toString()),
                   date: DateFormat('yyyy-MM').format(widget.pickedDate),
-                  editBy: 1,
+                  editBy: GlobalState.userEmpCode,
                   editDt: DateTime.now(),
-                  creatBy: 1,
+                  creatBy: GlobalState.userEmpCode,
                   creatDt: DateTime.now())
             ];
           } else {
             _attendanceList.add(AttendanceModel(
                 id: 0,
-                empCode: rowData[0].toInt(),
+                empCode: rowData[0].toString(),
                 attendance: double.parse(rowData[2].toString()),
                 offdays: double.parse(rowData[3].toString()),
                 lop: double.parse(rowData[4].toString()),
@@ -84,28 +85,19 @@ class _AttendanceExcelUploadState extends State<AttendanceExcelUpload> {
                 overseas: double.parse(rowData[7].toString()),
                 anchorage: double.parse(rowData[8].toString()),
                 date: DateFormat('yyyy-MM').format(widget.pickedDate),
-                editBy: 1,
+                editBy: GlobalState.userEmpCode,
                 editDt: DateTime.now(),
-                creatBy: 1,
+                creatBy: GlobalState.userEmpCode,
                 creatDt: DateTime.now()));
           }
         }
       }
       bool status = await saveAttendance(_attendanceList);
       if (status) {
-        Fluttertoast.showToast(
-          msg: "Saved",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-          webPosition: "center",
-          webShowClose: false,
-        );
+        showSaveSuccessfulMessage(context);
+      } else {
+        showSaveFailedMessage(context);
       }
-
       Navigator.pop(context);
       widget.closeDialog();
     } catch (e) {

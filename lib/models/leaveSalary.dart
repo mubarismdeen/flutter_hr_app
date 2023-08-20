@@ -1,6 +1,6 @@
 class LeaveSalary{
   int id = 0;
-  int empCode = 0;
+  String empCode = '';
   String name = '';
   double salary = 0;
   double payAmt = 0;
@@ -11,7 +11,7 @@ class LeaveSalary{
   bool paid = false;
   String editBy = '';
   DateTime editDate = DateTime.now();
-  int creatBy = 0;
+  String creatBy = '';
   DateTime creatDate = DateTime.now();
 
   LeaveSalary({
@@ -31,10 +31,6 @@ class LeaveSalary{
     required this.paid,
   });
 
-
-  // SalaryMaster.toJson();
-
-
   Map<String, dynamic> toJson() => {
     'id': id,
     'empCode': empCode,
@@ -46,12 +42,12 @@ class LeaveSalary{
 
   LeaveSalary.fromJson(Map<String, dynamic> json) {
     id= json['id'] ?? 0;
-    empCode = json['empCode']??0;
+    empCode = json['empCode']??'';
     name = json['name']??'';
     editBy = json['editBy']??'';
-    editDate = DateTime.parse(json['editDate'])??DateTime.now();
-    creatBy = json['creatBy']??0;
-    creatDate = DateTime.parse(json['creatDate'])??DateTime.now();
+    editDate = DateTime.parse(json['editDate']);
+    creatBy = json['creatBy']??'';
+    creatDate = DateTime.parse(json['creatDate']);
     salary = json['salary']??0.0;
     payAmt = json['payAmt']??0.0;
     pendingAmt = json['pendingAmt']??0.0;

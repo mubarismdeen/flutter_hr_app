@@ -1,23 +1,23 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
 import 'package:admin/models/salaryMasterGet.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../api.dart';
 import '../models/salaryMaster.dart';
+import '../utils/common_utils.dart';
 
 class EmployeeSalaryForm extends StatefulWidget {
   Function closeDialog;
   SalaryMasterGet? tableRow;
-  EmployeeSalaryForm(this.closeDialog, this.tableRow, {Key? key}) : super(key: key);
+  EmployeeSalaryForm(this.closeDialog, this.tableRow, {Key? key})
+      : super(key: key);
 
   @override
   State<EmployeeSalaryForm> createState() => _EmployeeSalaryFormState();
 }
-  class _EmployeeSalaryFormState extends State<EmployeeSalaryForm> {
 
+class _EmployeeSalaryFormState extends State<EmployeeSalaryForm> {
   final _formKey = GlobalKey<FormState>();
 
   String _molIdNo = '';
@@ -39,8 +39,18 @@ class EmployeeSalaryForm extends StatefulWidget {
     _anchorageRate.text = widget.tableRow!.anchorage.toString();
   }
 
-
-   SalaryMaster _salaryMaster = SalaryMaster( id: 0, empCode: 0, salary: 0, nOtr: 0, sOtr: 0, overseas: 0, anchorage: 0, editBy: 1, editDt: DateTime.now(), creatBy: 1, creatDt:  DateTime.now());
+  SalaryMaster _salaryMaster = SalaryMaster(
+      id: 0,
+      empCode: '',
+      salary: 0,
+      nOtr: 0,
+      sOtr: 0,
+      overseas: 0,
+      anchorage: 0,
+      editBy: GlobalState.userEmpCode,
+      editDt: DateTime.now(),
+      creatBy: GlobalState.userEmpCode,
+      creatDt: DateTime.now());
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -55,27 +65,17 @@ class EmployeeSalaryForm extends StatefulWidget {
       print('OverSeas Rate: $_overSeasRate');
       print('OverSeas Rate: $_anchorageRate');
     }
-    _salaryMaster.empCode = int.parse(_employeeId.text);
+    _salaryMaster.empCode = _employeeId.text;
     _salaryMaster.salary = double.parse(_preFixedMonthlySalary.text);
-    _salaryMaster.nOtr = double.parse(_normalOvertimeRate.text) ;
+    _salaryMaster.nOtr = double.parse(_normalOvertimeRate.text);
     _salaryMaster.sOtr = double.parse(_specialOvertimeRate.text);
     _salaryMaster.overseas = double.parse(_overSeasRate.text);
     _salaryMaster.anchorage = double.parse(_anchorageRate.text);
 
     bool status = await saveSalaryMaster(_salaryMaster);
-    if( status){
-      Fluttertoast.showToast(
-          msg: "Saved",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-          webPosition :"center",
-          webShowClose :false,
-      );
-    _employeeId.clear();
+    if (status) {
+      showSaveSuccessfulMessage(context);
+      _employeeId.clear();
 
       _molIdNo = '';
 
@@ -89,53 +89,23 @@ class EmployeeSalaryForm extends StatefulWidget {
 
       _anchorageRate.clear();
 
-      setState(() {  });
-       // _salaryMaster = SalaryMaster as SalaryMaster;
+      setState(() {});
       widget.closeDialog();
       Navigator.pop(context);
-    }else{
-      Get.showSnackbar(
-        const GetSnackBar(
-          title: "failed to save",
-          message: '',
-          icon: Icon(Icons.refresh),
-          duration: Duration(seconds: 3),
-        ),
-      );
+    } else {
+      showSaveFailedMessage(context);
     }
   }
 
   Future<void> _onDelete() async {
     bool status = await deleteSalaryMaster(_salaryMaster.id);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
-
+      showSaveSuccessfulMessage(context);
       Navigator.pop(context);
       widget.closeDialog();
-
       setState(() {});
     } else {
-      Fluttertoast.showToast(
-        msg: "Failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.red,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveFailedMessage(context);
     }
   }
 
@@ -181,7 +151,6 @@ class EmployeeSalaryForm extends StatefulWidget {
       key: _formKey,
       child: SingleChildScrollView(
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
@@ -198,7 +167,8 @@ class EmployeeSalaryForm extends StatefulWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
+              decoration:
+                  InputDecoration(labelText: 'Pre-Fixed Monthly Salary'),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -209,7 +179,7 @@ class EmployeeSalaryForm extends StatefulWidget {
                 }
                 return null;
               },
-                controller:_preFixedMonthlySalary,
+              controller: _preFixedMonthlySalary,
               onSaved: (value) {
                 // _preFixedMonthlySalary = double.parse(value!);
               },
@@ -226,7 +196,7 @@ class EmployeeSalaryForm extends StatefulWidget {
                 }
                 return null;
               },
-              controller:_normalOvertimeRate ,
+              controller: _normalOvertimeRate,
               onSaved: (value) {
                 // _normalOvertimeRate = double.parse(value!);
               },
@@ -243,7 +213,7 @@ class EmployeeSalaryForm extends StatefulWidget {
                 }
                 return null;
               },
-              controller:_specialOvertimeRate ,
+              controller: _specialOvertimeRate,
               onSaved: (value) {
                 // _specialOvertimeRate = double.parse(value!);
               },

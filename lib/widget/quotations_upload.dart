@@ -1,7 +1,7 @@
+import 'package:admin/globalState.dart';
 import 'package:admin/models/quotationDetails.dart';
 import 'package:admin/models/userPrivileges.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
@@ -93,9 +93,9 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
       invStatus: 0,
       type: 0,
       dueDate: "",
-      creatBy: 1,
+      creatBy: GlobalState.userEmpCode,
       creatDt: DateTime.now(),
-      editBy: 1,
+      editBy: GlobalState.userEmpCode,
       editDt: DateTime.now());
 
   Future<void> _onSubmit() async {
@@ -128,69 +128,25 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
 
     bool status = await saveQuotationDetails(_quotationDetails);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveSuccessfulMessage(context);
       _name.clear();
-
       Navigator.pop(context);
       widget.closeDialog();
-
       setState(() {});
     } else {
-      Fluttertoast.showToast(
-        msg: "Failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.red,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveFailedMessage(context);
     }
   }
 
   Future<void> _onDelete() async {
     bool status = await deleteQuotationDetails(_quotationDetails.id);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
-
+      showSaveSuccessfulMessage(context);
       Navigator.pop(context);
       widget.closeDialog();
-
       setState(() {});
     } else {
-      Fluttertoast.showToast(
-        msg: "Failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.red,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveFailedMessage(context);
     }
   }
 

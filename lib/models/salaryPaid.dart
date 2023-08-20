@@ -1,6 +1,6 @@
 class SalaryPaid {
   int id;
-  int empCode;
+  String empCode;
   int type;
   double payable;
   double totalPaid;
@@ -9,9 +9,9 @@ class SalaryPaid {
   int paidBy;
   bool paid;
   DateTime paidDt;
-  int editBy;
+  String editBy;
   DateTime editDt;
-  int creatBy;
+  String creatBy;
   DateTime creatDt;
 
   SalaryPaid(

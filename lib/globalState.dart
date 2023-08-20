@@ -1,9 +1,13 @@
 import 'package:admin/models/userScreens.dart';
 import 'package:admin/routes/routes.dart';
 
+import 'api.dart';
+import 'models/employeeDetails.dart';
+
 class GlobalState {
 
   static String username = "User";
+  static String userEmpCode = "1";
   static bool dashboardScreenPrivilege = false;
   static bool employeeScreenPrivilege = false;
   static bool attendanceScreenPrivilege = false;
@@ -17,6 +21,7 @@ class GlobalState {
 
   static void setScreensForUser(String givenUsername, UserScreens screensForUser) {
     username = givenUsername;
+    setEmployeeCodeForSession(givenUsername);
     sideMenuItems = [];
     if(screensForUser.dashboard) {
       dashboardScreenPrivilege = true;
@@ -51,6 +56,12 @@ class GlobalState {
       sideMenuItems.add(GratuityRoute);
     }
     sideMenuItems.add(AuthenticationPageRoute);
+  }
+
+  static Future<void> setEmployeeCodeForSession(String givenUsername) async {
+    List<EmployeeDetails> employeesList = await getEmployeeDetails();
+    EmployeeDetails currentEmployee = employeesList.firstWhere((emp) => emp.name == givenUsername);
+    userEmpCode = currentEmployee.empCode;
   }
 
 }

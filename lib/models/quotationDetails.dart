@@ -14,9 +14,9 @@ class QuotationDetails {
   int invStatus = 0;
   int type = 0;
   String dueDate = "";
-  int creatBy = 0;
+  String creatBy = "";
   DateTime creatDt = DateTime.now();
-  int editBy = 0;
+  String editBy = "";
   DateTime editDt = DateTime.now();
   int status = 1;
 

@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 class AttendanceModel {
   int id;
-  int empCode;
+  String empCode;
   double attendance;
   double offdays;
   double lop;
@@ -11,9 +11,9 @@ class AttendanceModel {
   double overseas;
   double anchorage;
   String date;
-  int editBy;
+  String editBy;
   DateTime editDt;
-  int creatBy;
+  String creatBy;
   DateTime creatDt;
 
   AttendanceModel({
@@ -32,22 +32,6 @@ class AttendanceModel {
     required this.creatBy,
     required this.creatDt,
   });
-
-  // Attendance.fromJson(Map<String, dynamic> json) {
-  //   id = json['id'];
-  //   empCode = json['empCode'];
-  //   attendance = json['attendance'];
-  //   offdays = json['offdays'];
-  //   lop = json['lop'];
-  //   novt = json['novt'];
-  //   sovt = json['sovt'];
-  //   overseas = json['overseas'];
-  //   anchorage = json['anchorage'];
-  //   editBy = json['editBy'];
-  //   editDt = DateTime.parse(json['editDt']);
-  //   creatBy = json['creatBy'];
-  //   creatDt = DateTime.parse(json['creatDt']);
-  // }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -68,5 +52,3 @@ class AttendanceModel {
     return data;
   }
 }
-
-// data['creatDt'] = creatDt.toIso8601String();

@@ -1,12 +1,10 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
 import 'package:admin/models/leaveSalary.dart';
 import 'package:admin/models/salaryPaid.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../api.dart';
 
 class LeaveSalaryWidget extends StatefulWidget {
@@ -20,7 +18,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
 
   SalaryPaid _salaryPaid = SalaryPaid(
       id: 0,
-      empCode: 0,
+      empCode: '',
       type: 2,
       payable: 0,
       totalPaid: 0,
@@ -29,9 +27,9 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
       paidBy: 0,
       paid: false,
       paidDt: DateTime.now(),
-      editBy: 0,
+      editBy: GlobalState.userEmpCode,
       editDt: DateTime.now(),
-      creatBy: 0,
+      creatBy: GlobalState.userEmpCode,
       creatDt: DateTime.now());
 
   getData() async {
@@ -114,33 +112,15 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
     _salaryPaid.paidBy = 1;
     // _salaryPaid.paid = salary.pendingAmt == _paidAmount ? 1 : 0;
     _salaryPaid.paid = salary.pendingAmt == _paidAmount ? true : false;
-    _salaryPaid.creatBy = 1;
-    _salaryPaid.editBy = 1;
+    _salaryPaid.creatBy = GlobalState.userEmpCode;
+    _salaryPaid.editBy = GlobalState.userEmpCode;
 
     bool status = await saveSalaryPaid(_salaryPaid);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
-
+      showSaveSuccessfulMessage(context);
       setState(() {});
     } else {
-      Get.showSnackbar(
-        const GetSnackBar(
-          title: "failed to save",
-          message: '',
-          icon: Icon(Icons.refresh),
-          duration: Duration(seconds: 3),
-        ),
-      );
+      showSaveFailedMessage(context);
     }
   }
 
@@ -239,7 +219,7 @@ class _LeaveSalaryWidgetState extends State<LeaveSalaryWidget> {
                         ],
                         rows: _leaveSalaries
                             .map((salary) => DataRow(cells: [
-                                  DataCell(Text(salary.empCode.toString())),
+                                  DataCell(Text(salary.empCode)),
                                   DataCell(Text(salary.name)),
                                   DataCell(Text(salary.salary.toString())),
                                   DataCell(Text(salary.attendance.toString())),

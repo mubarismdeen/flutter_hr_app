@@ -86,7 +86,7 @@ class _ClientDetailsWidgetState extends State<ClientDetailsWidget> {
                               DataCell(Text(client.address)),
                               DataCell(Text(client.mobile1)),
                               DataCell(Text(client.mobile2)),
-                              DataCell(Text(client.creatBy.toString())),
+                              DataCell(Text(client.creatBy)),
                               DataCell(Text(
                                   getDateStringFromDateTime(client.creatDt))),
                             ]))

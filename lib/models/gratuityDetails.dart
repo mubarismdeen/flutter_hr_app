@@ -5,9 +5,9 @@ class GratuityDetails {
   String servedYears = '';
   String type = '';
   String gratuityAmount = '';
-  int editBy = 0;
+  String editBy = '';
   DateTime editDt = DateTime.now();
-  int creatBy = 0;
+  String creatBy = '';
   DateTime creatDt = DateTime.now();
 
   GratuityDetails({
@@ -30,9 +30,9 @@ class GratuityDetails {
     servedYears = json['servedYears']??'';
     type = json['type']??'';
     gratuityAmount = json['gratuityAmount']??'';
-    editBy = json['editBy']??0;
+    editBy = json['editBy']??'';
     editDt = DateTime.parse(json['editDt']);
-    creatBy = json['creatBy']??0;
+    creatBy = json['creatBy']??'';
     creatDt = DateTime.parse(json['creatDt']);
   }
 

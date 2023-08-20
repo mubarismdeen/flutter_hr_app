@@ -1,9 +1,7 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
@@ -24,7 +22,7 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
 
   SalaryPaid _salaryPaid = SalaryPaid(
       id: 0,
-      empCode: 0,
+      empCode: '',
       type: 1,
       payable: 0,
       totalPaid: 0,
@@ -33,11 +31,10 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
       paidBy: 0,
       paid: false,
       paidDt: DateTime.now(),
-      editBy: 0,
+      editBy: GlobalState.userEmpCode,
       editDt: DateTime.now(),
-      creatBy: 0,
+      creatBy: GlobalState.userEmpCode,
       creatDt: DateTime.now());
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +106,7 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
                     ],
                     rows: widget.gratuityDetails
                         .map((gratuity) => DataRow(cells: [
-                              DataCell(Text(gratuity['empCode'].toString())),
+                              DataCell(Text(gratuity['empCode'])),
                               DataCell(Text(gratuity['name'])),
                               DataCell(
                                   Text(gratuity['servedYears'].toString())),
@@ -230,32 +227,15 @@ class _GratuityDetailsWidgetState extends State<GratuityDetailsWidget> {
     _salaryPaid.paidBy = 1;
     _salaryPaid.paid = _salaryPaid.due == 0 ? true : false;
     // _salaryPaid.paid = salary.due == _paidAmount ? 1 : 0;
-    _salaryPaid.creatBy = 1;
-    _salaryPaid.editBy = 1;
+    _salaryPaid.creatBy = GlobalState.userEmpCode;
+    _salaryPaid.editBy = GlobalState.userEmpCode;
 
     bool status = await saveSalaryPaid(_salaryPaid);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveSuccessfulMessage(context);
       widget.closeDialog();
     } else {
-      Get.showSnackbar(
-        const GetSnackBar(
-          title: "failed to save",
-          message: '',
-          icon: Icon(Icons.refresh),
-          duration: Duration(seconds: 3),
-        ),
-      );
+      showSaveFailedMessage(context);
     }
   }
 }

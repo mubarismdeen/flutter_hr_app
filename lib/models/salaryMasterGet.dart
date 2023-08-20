@@ -1,6 +1,6 @@
 class SalaryMasterGet {
   int id = 0;
-  int empCode = 0;
+  String empCode = '';
   String name = '';
   double salary = 0;
   double nOtr = 0;
@@ -14,7 +14,7 @@ class SalaryMasterGet {
 
   SalaryMasterGet.fromJson(Map<String, dynamic> json) {
     id= json['id'] ?? 0;
-    empCode = json['empCode']??0;
+    empCode = json['empCode']??'';
     name = json['name']??'';
     salary = json['salary']??0.0;
     nOtr = json['novt']??0.0;

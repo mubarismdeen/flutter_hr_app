@@ -1,6 +1,8 @@
 import 'package:admin/models/userPrivileges.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 import '../constants/style.dart';
 
@@ -24,8 +26,8 @@ bool getViewPrivilege(UserPrivileges privileges) {
   return privileges.viewPrivilege == true ? true : false;
 }
 
-List<Widget> getActionButtonsForExpandedView({
-    required BuildContext context,
+List<Widget> getActionButtonsForExpandedView(
+    {required BuildContext context,
     required UserPrivileges privileges,
     required bool hasData,
     required void Function() onSubmit,
@@ -61,4 +63,53 @@ List<Widget> getActionButtonsForExpandedView({
     );
   }
   return widgetList;
+}
+
+void showSaveSuccessfulMessage(BuildContext context, [String message = "Save Successful"]) {
+  if (Platform.isWindows) {
+    final snackBar = SnackBar(
+      content: Container(width: 200,child: Text(message, textAlign: TextAlign.center,)),
+      backgroundColor: Colors.green,
+      duration: const Duration(seconds: 3),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  } else {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+      webPosition: "center",
+      webShowClose: false,
+    );
+  }
+}
+
+void showSaveFailedMessage(BuildContext context, [String message = "Unable to save"]) {
+  if (Platform.isWindows) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.redAccent,
+      duration: const Duration(seconds: 3),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  } else {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+      webPosition: "center",
+      webShowClose: false,
+    );
+  }
 }

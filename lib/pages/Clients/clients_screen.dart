@@ -150,7 +150,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                                             DataCell(Text(client.mobile1)),
                                             DataCell(Text(client.mobile2)),
                                             DataCell(Text(
-                                                client.creatBy.toString())),
+                                                client.creatBy)),
                                             DataCell(Text(
                                                 getDateStringFromDateTime(
                                                     client.creatDt))),

@@ -1,6 +1,6 @@
 class SaveEmployeeDetails {
   int id = 0;
-  int empCode = 0;
+  String empCode = '';
   String name = '';
   String mobile1 = '';
   String mobile2 = '';
@@ -10,9 +10,9 @@ class SaveEmployeeDetails {
   DateTime joinDt = DateTime.now();
   DateTime? resignDt;
   DateTime birthDt = DateTime.now();
-  int editBy = 0;
+  String editBy = '';
   DateTime editDate = DateTime.now();
-  int creatBy = 0;
+  String creatBy = '';
   DateTime creatDate = DateTime.now();
   int status = 1;
 

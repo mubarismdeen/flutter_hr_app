@@ -1,6 +1,6 @@
 class EmpMaster {
   int id = 0;
-  int empCode = 0;
+  String empCode = "";
   String name = "";
   String mobile1 = "";
   String mobile2 = "";
@@ -9,9 +9,9 @@ class EmpMaster {
   int nationalityId = 0;
   DateTime joinDt = DateTime.now();
   DateTime birthDt = DateTime.now();
-  int editBy = 1;
+  String editBy = '';
   DateTime editDate = DateTime.now();
-  int creatBy = 1;
+  String creatBy = '';
   DateTime creatDate = DateTime.now();
 
   EmpMaster({
@@ -51,7 +51,7 @@ class EmpMaster {
 
      EmpMaster.fromJson(Map<String, dynamic> json) {
         id =  json['id']??"0";
-        empCode =  json['empCode']??"Null";
+        empCode =  json['empCode']??"";
         name =  json['name']??"";
         mobile1 =  json['mobile1']??"";
         mobile2 =  json['mobile2']??"";

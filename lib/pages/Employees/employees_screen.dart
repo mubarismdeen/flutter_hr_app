@@ -20,6 +20,8 @@ class EmployeesScreen extends StatefulWidget {
 
 class _EmployeesScreenState extends State<EmployeesScreen> {
   List<EmployeeDetails> _employeeDetails = List<EmployeeDetails>.empty();
+  List<String> _selectedScreens = List<String>.empty();
+  String _selectedPrivilege = '';
 
   getTableData() async {
     _employeeDetails = await getEmployeeDetails();
@@ -169,30 +171,47 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                   ),
                                 ),
                               ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Action',
+                                    style: tableHeaderStyle,
+                                  ),
+                                ),
+                              ),
                             ],
                             rows: _employeeDetails
-                                .map((employee) => DataRow(cells: [
-                                      DataCell(
-                                          Text(employee.empCode.toString())),
-                                      DataCell(Text(employee.name)),
-                                      DataCell(Text(employee.mobile1)),
-                                      DataCell(Text(employee.mobile2)),
-                                      DataCell(Text(employee.nationality)),
-                                      DataCell(Text(employee.department)),
-                                      DataCell(Text(employee.status)),
-                                      DataCell(Text(getDateStringFromDateTime(
-                                          employee.birthDt))),
-                                      DataCell(Text(getDateStringFromDateTime(
-                                          employee.joinDt))),
-                                      DataCell(Text(employee.createBy)),
-                                      DataCell(Text(getDateStringFromDateTime(
-                                          employee.createDt))),
-                                    ],onSelectChanged: (selected) {
-                              if (selected != null && selected) {
-                                _openDialog(employee);
-                              }
-                            },
-                            ))
+                                .map((employee) => DataRow(
+                                      cells: [
+                                        DataCell(
+                                            Text(employee.empCode)),
+                                        DataCell(Text(employee.name)),
+                                        DataCell(Text(employee.mobile1)),
+                                        DataCell(Text(employee.mobile2)),
+                                        DataCell(Text(employee.nationality)),
+                                        DataCell(Text(employee.department)),
+                                        DataCell(Text(employee.status)),
+                                        DataCell(Text(getDateStringFromDateTime(
+                                            employee.birthDt))),
+                                        DataCell(Text(getDateStringFromDateTime(
+                                            employee.joinDt))),
+                                        DataCell(Text(employee.createBy)),
+                                        DataCell(Text(getDateStringFromDateTime(
+                                            employee.createDt))),
+                                        DataCell(TextButton(
+                                          onPressed: () => _openPrivilegesDialog(employee),
+                                          child: const Text("Set Privilege",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blueAccent)),
+                                        ))
+                                      ],
+                                      onSelectChanged: (selected) {
+                                        if (selected != null && selected) {
+                                          _openDialog(employee);
+                                        }
+                                      },
+                                    ))
                                 .toList(),
                           ),
                         ),
@@ -211,7 +230,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-            'Add New Employee', EmployeeDetailsForm(closeDialog, tableRow));
+            'Add New Employee', EmployeeDetailsForm(closeDialog, tableRow, context));
       },
     );
   }
@@ -227,4 +246,145 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
           style: TextStyle(fontWeight: FontWeight.bold)),
     );
   }
+
+  void _openPrivilegesDialog(EmployeeDetails employee) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Set Privileges for ${employee.name}"),
+          content: DefaultTabController(
+            length: 2,
+            child: Column(
+              children: [
+                const TabBar(
+                  tabs: [
+                    Tab(text: "Screens"),
+                    Tab(text: "Privileges"),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _buildScreensTab(),
+                      _buildPrivilegesTab(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Implement submission logic here
+                Navigator.pop(context);
+              },
+              child: const Text("Submit"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildScreensTab() {
+    // Create a list of screen names
+    List<String> screens = [
+      "Dashboard",
+      "Employees",
+      "Attendance",
+      "Salary Master",
+      "Salary Payout",
+      "Leave Salary",
+      "Clients",
+      "Gratuity",
+    ];
+
+    // Create checkboxes for each screen
+    List<Widget> checkboxes = screens.map((screen) {
+      return CheckboxListTile(
+        title: Text(screen),
+        value: _selectedScreens.contains(screen),
+        onChanged: (value) {
+          setState(() {
+            if (value == true) {
+              _selectedScreens.add(screen);
+            } else {
+              _selectedScreens.remove(screen);
+            }
+          });
+        },
+      );
+    }).toList();
+
+    return SingleChildScrollView(
+      child: Column(children: checkboxes),
+    );
+  }
+
+  Widget _buildPrivilegesTab() {
+    List<String> privilegeOptions = [
+      "",
+      "Document Details",
+      "Job Details",
+      "Quotation Details",
+      "Client Details",
+    ];
+
+    return Column(
+      children: [
+        DropdownButton<String>(
+          items: privilegeOptions.map((String option) {
+            return DropdownMenuItem<String>(
+              value: option,
+              child: Text(option),
+            );
+          }).toList(),
+
+          onChanged: (value) => setState(() => _selectedPrivilege = value.toString()),
+          // onChanged: (String selectedOption) {
+          //   setState(() {
+          //     _selectedPrivilege = selectedOption;
+          //   });
+          // },
+          value: _selectedPrivilege,
+        ),
+        DataTable(
+          columns: [
+            DataColumn(label: Text("Privilege")),
+            DataColumn(label: Text("View")),
+            DataColumn(label: Text("Add")),
+            DataColumn(label: Text("Edit")),
+            DataColumn(label: Text("Delete")),
+          ],
+          rows: _buildPrivilegeRows(),
+        ),
+      ],
+    );
+  }
+
+  List<DataRow> _buildPrivilegeRows() {
+    // Create privilege rows based on selected option
+    if (_selectedPrivilege == null) {
+      return [];
+    }
+
+    List<String> privileges = ["View", "Add", "Edit", "Delete"];
+
+    return privileges.map((privilege) {
+      return DataRow(
+        cells: [
+          DataCell(Text(_selectedPrivilege)),
+          DataCell(Text(privilege == "View" ? "true" : "false")),
+          DataCell(Text("false")),
+          DataCell(Text("false")),
+          DataCell(Text("false")),
+        ],
+      );
+    }).toList();
+  }
+
+
+
 }

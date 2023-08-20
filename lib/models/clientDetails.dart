@@ -4,9 +4,9 @@ class ClientDetails {
   String address = '';
   String mobile1 = '';
   String mobile2 = '';
-  int editBy = 0;
+  String editBy = '';
   DateTime editDt = DateTime.now();
-  int creatBy = 0;
+  String creatBy = '';
   DateTime creatDt = DateTime.now();
   int status = 1;
 
@@ -28,9 +28,9 @@ class ClientDetails {
     address = json['address']??'';
     mobile1 = json['mobile1']??'';
     mobile2 = json['mobile2']??'';
-    editBy = json['editBy']??0;
+    editBy = json['editBy']??'';
     editDt = DateTime.parse(json['editDt']);
-    creatBy = json['creatBy']??0;
+    creatBy = json['creatBy']??'';
     creatDt = DateTime.parse(json['creatDt']);
     status = json['status']??0;
   }

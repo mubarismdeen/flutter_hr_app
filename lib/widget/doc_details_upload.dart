@@ -1,8 +1,8 @@
+import 'package:admin/globalState.dart';
 import 'package:admin/models/docDetails.dart';
 import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
@@ -52,13 +52,13 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
   DocDetails _docDetails = DocDetails(
       id: 0,
       narration: "",
-      empCode: 1,
+      empCode: GlobalState.userEmpCode,
       docid: 0,
       dueDate: DateTime.now(),
       renewedDate: DateTime.now(),
-      creatBy: 1,
+      creatBy: GlobalState.userEmpCode,
       creatDt: DateTime.now(),
-      editBy: 1,
+      editBy: GlobalState.userEmpCode,
       editDt: DateTime.now());
 
   Future<void> _onSubmit() async {
@@ -77,77 +77,32 @@ class _DocDetailsUploadState extends State<DocDetailsUpload> {
 
     bool status = await saveDocDetails(_docDetails);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
       _narration.clear();
-
       _dueDate.clear();
-
       _renewedDate.clear();
 
+      showSaveSuccessfulMessage(context);
       Navigator.pop(context);
       widget.closeDialog();
 
       setState(() {});
       // _salaryMaster = SalaryMaster as SalaryMaster;
     } else {
-      Fluttertoast.showToast(
-        msg: "Failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.red,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveFailedMessage(context);
     }
   }
 
   Future<void> _onDelete() async {
     bool status = await deleteDocDetails(_docDetails.id);
     if (status) {
-      Fluttertoast.showToast(
-        msg: "Saved",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
-
+      showSaveSuccessfulMessage(context);
       Navigator.pop(context);
       widget.closeDialog();
-
       setState(() {});
     } else {
-      Fluttertoast.showToast(
-        msg: "Failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.red,
-        fontSize: 16.0,
-        webPosition: "center",
-        webShowClose: false,
-      );
+      showSaveFailedMessage(context);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -1,14 +1,14 @@
 class SalaryMaster {
   int id;
-  int empCode;
+  String empCode;
   double salary;
   double nOtr;
   double sOtr;
   double overseas;
   double anchorage;
-  int editBy;
+  String editBy;
   DateTime editDt;
-  int creatBy;
+  String creatBy;
   DateTime creatDt;
   int status = 1;
 

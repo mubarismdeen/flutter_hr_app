@@ -1,6 +1,6 @@
 class EmployeeDetails {
   int id = 0;
-  int empCode = 0;
+  String empCode = '';
   String name = '';
   String mobile1 = '';
   String mobile2 = '';
@@ -33,7 +33,7 @@ class EmployeeDetails {
 
   EmployeeDetails.fromJson(Map<String, dynamic> json) {
     id = json['id']>>0;
-    empCode = json['empCode']??0;
+    empCode = json['empCode']??'';
     name = json['name']??'';
     mobile1 = json['mobile1']??'';
     mobile2 = json['mobile2']??'';

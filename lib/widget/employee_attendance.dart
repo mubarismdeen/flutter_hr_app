@@ -1,10 +1,10 @@
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
 import 'package:admin/models/empMaster.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:admin/widget/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../models/attedanceDto.dart';
@@ -63,7 +63,7 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     } else {
       _attendanceList.add(AttendanceModel(
           id: 0,
-          empCode: 0,
+          empCode: "",
           attendance: 0,
           offdays: 0,
           lop: 0,
@@ -72,36 +72,12 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
           overseas: 0,
           anchorage: 0,
           date: DateFormat('yyyy-MM').format(DateTime.now()).toString(),
-          editBy: 1,
+          editBy: GlobalState.userEmpCode,
           editDt: DateTime.now(),
-          creatBy: 1,
+          creatBy: GlobalState.userEmpCode,
           creatDt: DateTime.now()));
     }
   }
-
-  // _loadData() async {
-  //   for (int i = 0; i < 1; i++) {
-  //     AttendanceDto obj = attendances[i];
-  //     // _attendanceList.add(Attendance(id: 0, empCode: obj.employeeId, attendance: obj.totalAttendance, offdays: obj.totalOffAndSickDays, lop: obj.totalLossOfPaymentDays, novt: obj.totalNormalOvertimeHours, sovt: obj.totalSpecialOvertimeHours, overseas: obj.totalOverseasDays, anchorage: obj.totalAnchorageDays, editBy: 1, editDt: DateTime.now(), creatBy: 1, creatDt:  DateTime.now()));
-  //     _attendanceList = [
-  //       Attendance(
-  //           id: 0,
-  //           empCode: obj.employeeId,
-  //           attendance: obj.totalAttendance,
-  //           offdays: obj.totalOffAndSickDays,
-  //           lop: obj.totalLossOfPaymentDays,
-  //           novt: obj.totalNormalOvertimeHours,
-  //           sovt: obj.totalSpecialOvertimeHours,
-  //           overseas: obj.totalOverseasDays,
-  //           anchorage: obj.totalAnchorageDays,
-  //           date: '',
-  //           editBy: 1,
-  //           editDt: DateTime.now(),
-  //           creatBy: 1,
-  //           creatDt: DateTime.now())
-  //     ];
-  //   }
-  // }
 
   getAttendanceData() async {
     attendances =
@@ -118,9 +94,9 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
             overseas: att.totalSpecialOvertimeHours,
             anchorage: att.totalAnchorageDays,
             date: DateFormat('yyyy-MM').format(DateTime.now()),
-            editBy: 1,
+            editBy: GlobalState.userEmpCode,
             editDt: DateTime.now(),
-            creatBy: 1,
+            creatBy: GlobalState.userEmpCode,
             creatDt: DateTime.now()))
         .toList();
   }
@@ -156,9 +132,9 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
               overseas: 0,
               anchorage: 0,
               date: '',
-              editBy: 1,
+              editBy: GlobalState.userEmpCode,
               editDt: DateTime.now(),
-              creatBy: 1,
+              creatBy: GlobalState.userEmpCode,
               creatDt: DateTime.now())
         ];
       } else {
@@ -185,9 +161,9 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
             overseas: 0,
             anchorage: 0,
             date: '',
-            editBy: 1,
+            editBy: GlobalState.userEmpCode,
             editDt: DateTime.now(),
-            creatBy: 1,
+            creatBy: GlobalState.userEmpCode,
             creatDt: DateTime.now()));
       }
     }
@@ -553,20 +529,11 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   Widget _saveButton() {
     return CustomElevatedButton(
       handleOnPress: () async {
-        // await _loadData();
         bool status = await saveAttendance(_attendanceList);
         if (status) {
-          Fluttertoast.showToast(
-            msg: "Saved",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0,
-            webPosition: "center",
-            webShowClose: false,
-          );
+          showSaveSuccessfulMessage(context);
+        } else {
+          showSaveFailedMessage(context);
         }
         setState(() {
           _editable = false;
@@ -576,72 +543,3 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
     );
   }
 }
-
-// class AttendanceDto {
-//   int id = 0;
-//   int employeeId = 0;
-//   String employeeName = '';
-//   String molId = '';
-//   double totalAttendance = 0.0;
-//   double totalOffAndSickDays = 0.0;
-//   double totalLossOfPaymentDays = 0.0;
-//   double totalNormalOvertimeHours = 0.0;
-//   double totalSpecialOvertimeHours = 0.0;
-//   double totalOverseasDays = 0.0;
-//   double totalAnchorageDays = 0.0;
-//
-//   AttendanceDto(
-//       {required this.id,
-//       required this.employeeId,
-//       required this.employeeName,
-//       required this.molId,
-//       required this.totalAttendance,
-//       required this.totalOffAndSickDays,
-//       required this.totalLossOfPaymentDays,
-//       required this.totalNormalOvertimeHours,
-//       required this.totalSpecialOvertimeHours,
-//       required this.totalOverseasDays,
-//       required this.totalAnchorageDays});
-//
-//   AttendanceDto.fromJson(Map<String, dynamic> json) {
-//     id = json['id'] ?? 0;
-//     employeeId = json['empCode'] ?? 0;
-//     employeeName = json['name'] ?? 'NULL';
-//     molId = json['molId'] ?? 'NULL';
-//     totalAttendance = json['attendance'] ?? 0.0;
-//     totalOffAndSickDays = json['offDays'] ?? 0.0;
-//     totalLossOfPaymentDays = json['lop'] ?? 0.0;
-//     totalNormalOvertimeHours = json['novt'] ?? 0.0;
-//     totalSpecialOvertimeHours = json['sovt'] ?? 0.0;
-//     totalOverseasDays = json['overseas'] ?? 0.0;
-//     totalAnchorageDays = json['anchorage'] ?? 0.0;
-//   }
-// }
-
-// class AttendanceDto {
-//   int empCode;
-//   int attendance;
-//   int offdays;
-//   int lop;
-//   String novt;
-//   String sovt;
-//   int overseas;
-//   int anchorage;
-//   int editBy;
-//   DateTime editDt;
-//   int creatBy;
-//   DateTime creatDt;
-//
-//   AttendanceDto(this.empCode,
-//       this.attendance,
-//       this.offdays,
-//       this.lop,
-//       this.novt,
-//       this.sovt,
-//       this.overseas,
-//       this.anchorage,
-//       this.editBy,
-//       this.editDt,
-//       this.creatBy,
-//       this.creatDt,);
-// }
