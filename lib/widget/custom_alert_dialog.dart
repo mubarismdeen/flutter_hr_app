@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomAlertDialog extends StatelessWidget {
-
-  final String titleText;
+  final String title;
   final Widget child;
+  TextStyle? titleStyle;
+  List<Widget>? dialogActions = [];
 
-  CustomAlertDialog(this.titleText, this.child);
+  CustomAlertDialog({
+    required this.title,
+    required this.child,
+    this.dialogActions,
+    this.titleStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class CustomAlertDialog extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(titleText),
+            Text(title, style: titleStyle,),
             const SizedBox(
               width: 35,
             ),
@@ -35,6 +41,7 @@ class CustomAlertDialog extends StatelessWidget {
         ),
         content: child,
         insetPadding: const EdgeInsets.symmetric(horizontal: 100),
+        actions: dialogActions,
       ),
     );
   }

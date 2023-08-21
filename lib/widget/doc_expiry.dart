@@ -144,8 +144,8 @@ class _DocExpiryState extends State<DocExpiry> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Document Details',
-          DocExpiryExpanded(widget.privileges),
+          title: 'Document Details',
+          child: DocExpiryExpanded(widget.privileges),
         );
       },
     );
@@ -156,8 +156,8 @@ class _DocExpiryState extends State<DocExpiry> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Document Details',
-          DocDetailsUpload(closeDialog, null, widget.privileges),
+          title: 'Upload Document Details',
+          child: DocDetailsUpload(closeDialog, null, widget.privileges),
         );
       },
     );

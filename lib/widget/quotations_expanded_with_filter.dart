@@ -317,8 +317,8 @@ class _QuotationsExpandedWithFilterState
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Quotation Details',
-          QuotationsUpload(closeDialog, tableRow, widget.privileges),
+          title: 'Upload Quotation Details',
+          child: QuotationsUpload(closeDialog, tableRow, widget.privileges),
         );
       },
     );

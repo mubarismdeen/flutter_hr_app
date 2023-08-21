@@ -165,8 +165,8 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Job Details',
-          JobDetailsUpload(closeDialog, null, widget.privileges),
+          title: 'Upload Job Details',
+          child: JobDetailsUpload(closeDialog, null, widget.privileges),
         );
       },
     );

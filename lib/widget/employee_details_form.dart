@@ -145,8 +145,8 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-            'Resign Date',
-            Column(mainAxisSize: MainAxisSize.min, children: [
+            title: 'Resign Date',
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
               TextFormField(
                 controller: _resignDate,
                 decoration: const InputDecoration(labelText: ''),

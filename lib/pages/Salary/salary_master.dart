@@ -172,8 +172,8 @@ class _SalaryMasterState extends State<SalaryMaster> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Salary Details',
-          EmployeeSalaryForm(closeDialog, tableRow),
+          title: 'Upload Salary Details',
+          child: EmployeeSalaryForm(closeDialog, tableRow),
         );
       },
     );

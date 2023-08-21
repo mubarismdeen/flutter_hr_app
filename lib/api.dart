@@ -76,6 +76,13 @@ Future<List<UserScreens>> authorizeUser(String username, String password) async 
   return list;
 }
 
+Future<List<UserScreens>> getScreensForEmployee (String empCode) async {
+  String urlWithParams = "http://$ip/Hrms/getScreensForEmployee?empCode=$empCode";
+  List<UserScreens> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => UserScreens.fromJson(job)).toList();
+  return list;
+}
+
 Future<List<UserPrivileges>> getPrivilegesForUser(String username, String privilegeName) async {
   String urlWithParams = "http://$ip/Hrms/getPrivilegesForUser?userName=$username&privilege=$privilegeName";
   List<UserPrivileges> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)

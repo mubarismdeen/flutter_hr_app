@@ -10,6 +10,8 @@ class UserScreens {
   bool clients = false;
   bool gratuity = false;
 
+  UserScreens();
+
   UserScreens.fromJson(Map<String, dynamic> json) {
     id =  json['id']??"0";
     userId =  json['userId']??"0";

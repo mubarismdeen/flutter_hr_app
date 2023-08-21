@@ -152,8 +152,8 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Job Details',
-          DocDetailsUpload(closeDialog, tableRow, widget.privileges),
+          title: 'Upload Job Details',
+          child: DocDetailsUpload(closeDialog, tableRow, widget.privileges),
         );
       },
     );

@@ -160,8 +160,8 @@ class _QuotationsPendingState extends State<QuotationsPending> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Quotation Details',
-          QuotationsUpload(closeDialog, null, widget.privileges),
+          title: 'Upload Quotation Details',
+          child: QuotationsUpload(closeDialog, null, widget.privileges),
         );
       },
     );

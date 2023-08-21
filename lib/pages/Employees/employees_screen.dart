@@ -1,5 +1,7 @@
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
+import 'package:admin/models/userScreens.dart';
+import 'package:admin/pages/Employees/employee_accesses_dialog.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
 import 'package:admin/widget/employee_details_form.dart';
@@ -19,9 +21,13 @@ class EmployeesScreen extends StatefulWidget {
 }
 
 class _EmployeesScreenState extends State<EmployeesScreen> {
-  List<EmployeeDetails> _employeeDetails = List<EmployeeDetails>.empty();
-  List<String> _selectedScreens = List<String>.empty();
-  String _selectedPrivilege = '';
+  late List<EmployeeDetails> _employeeDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    _employeeDetails = [];
+  }
 
   getTableData() async {
     _employeeDetails = await getEmployeeDetails();
@@ -80,140 +86,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SingleChildScrollView(
-                          child: DataTable(
-                            showCheckboxColumn: false,
-                            columns: const <DataColumn>[
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Employee\nID',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Employee\nName',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Mobile 1',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Mobile 2',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Nationality',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Department',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Status',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'DOB',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Joined\nDate',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Created\nBy',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Created\nDate',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Action',
-                                    style: tableHeaderStyle,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            rows: _employeeDetails
-                                .map((employee) => DataRow(
-                                      cells: [
-                                        DataCell(
-                                            Text(employee.empCode)),
-                                        DataCell(Text(employee.name)),
-                                        DataCell(Text(employee.mobile1)),
-                                        DataCell(Text(employee.mobile2)),
-                                        DataCell(Text(employee.nationality)),
-                                        DataCell(Text(employee.department)),
-                                        DataCell(Text(employee.status)),
-                                        DataCell(Text(getDateStringFromDateTime(
-                                            employee.birthDt))),
-                                        DataCell(Text(getDateStringFromDateTime(
-                                            employee.joinDt))),
-                                        DataCell(Text(employee.createBy)),
-                                        DataCell(Text(getDateStringFromDateTime(
-                                            employee.createDt))),
-                                        DataCell(TextButton(
-                                          onPressed: () => _openPrivilegesDialog(employee),
-                                          child: const Text("Set Privilege",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blueAccent)),
-                                        ))
-                                      ],
-                                      onSelectChanged: (selected) {
-                                        if (selected != null && selected) {
-                                          _openDialog(employee);
-                                        }
-                                      },
-                                    ))
-                                .toList(),
-                          ),
+                          child: _getDataTable(),
                         ),
                       ),
                     ],
@@ -230,7 +103,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-            'Add New Employee', EmployeeDetailsForm(closeDialog, tableRow, context));
+          title: 'Add New Employee',
+          child: EmployeeDetailsForm(closeDialog, tableRow, context),
+        );
       },
     );
   }
@@ -247,144 +122,128 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
     );
   }
 
-  void _openPrivilegesDialog(EmployeeDetails employee) {
+  void _openPrivilegesDialog(EmployeeDetails employee) async {
+    var screensData = await getScreensForEmployee(employee.empCode);
+    UserScreens empScreens = screensData.isNotEmpty ? screensData.first : UserScreens();
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Set Privileges for ${employee.name}"),
-          content: DefaultTabController(
-            length: 2,
-            child: Column(
-              children: [
-                const TabBar(
-                  tabs: [
-                    Tab(text: "Screens"),
-                    Tab(text: "Privileges"),
-                  ],
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      _buildScreensTab(),
-                      _buildPrivilegesTab(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Implement submission logic here
-                Navigator.pop(context);
-              },
-              child: const Text("Submit"),
-            ),
-          ],
-        );
+        return EmployeeAccessesDialog(empScreens, employee.name);
       },
     );
   }
 
-  Widget _buildScreensTab() {
-    // Create a list of screen names
-    List<String> screens = [
-      "Dashboard",
-      "Employees",
-      "Attendance",
-      "Salary Master",
-      "Salary Payout",
-      "Leave Salary",
-      "Clients",
-      "Gratuity",
-    ];
+  //   CustomAlertDialog(
+  //     // [
+  //     //   TextButton(
+  //     //     onPressed: () {
+  //     //       // Implement submission logic here
+  //     //       Navigator.pop(context);
+  //     //     },
+  //     //     child: const Text("Submit"),
+  //     //   ),
+  //     // ],
+  // );
 
-    // Create checkboxes for each screen
-    List<Widget> checkboxes = screens.map((screen) {
-      return CheckboxListTile(
-        title: Text(screen),
-        value: _selectedScreens.contains(screen),
-        onChanged: (value) {
-          setState(() {
-            if (value == true) {
-              _selectedScreens.add(screen);
-            } else {
-              _selectedScreens.remove(screen);
-            }
-          });
-        },
-      );
-    }).toList();
 
-    return SingleChildScrollView(
-      child: Column(children: checkboxes),
-    );
-  }
 
-  Widget _buildPrivilegesTab() {
-    List<String> privilegeOptions = [
-      "",
-      "Document Details",
-      "Job Details",
-      "Quotation Details",
-      "Client Details",
-    ];
 
-    return Column(
-      children: [
-        DropdownButton<String>(
-          items: privilegeOptions.map((String option) {
-            return DropdownMenuItem<String>(
-              value: option,
-              child: Text(option),
-            );
-          }).toList(),
-
-          onChanged: (value) => setState(() => _selectedPrivilege = value.toString()),
-          // onChanged: (String selectedOption) {
-          //   setState(() {
-          //     _selectedPrivilege = selectedOption;
-          //   });
-          // },
-          value: _selectedPrivilege,
+  Widget _getDataTable() {
+    return DataTable(
+      showCheckboxColumn: false,
+      columns: const <DataColumn>[
+        DataColumn(
+          label: Expanded(
+            child: Text('Employee\nID', style: tableHeaderStyle),
+          ),
         ),
-        DataTable(
-          columns: [
-            DataColumn(label: Text("Privilege")),
-            DataColumn(label: Text("View")),
-            DataColumn(label: Text("Add")),
-            DataColumn(label: Text("Edit")),
-            DataColumn(label: Text("Delete")),
-          ],
-          rows: _buildPrivilegeRows(),
+        DataColumn(
+          label: Expanded(
+            child: Text('Employee\nName', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Mobile 1', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Mobile 2', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Nationality', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Department', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Status', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('DOB', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Joined\nDate', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Created\nBy', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Created\nDate', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text('Action', style: tableHeaderStyle),
+          ),
         ),
       ],
+      rows: _employeeDetails
+          .map((employee) => DataRow(
+                cells: [
+                  DataCell(Text(employee.empCode)),
+                  DataCell(Text(employee.name)),
+                  DataCell(Text(employee.mobile1)),
+                  DataCell(Text(employee.mobile2)),
+                  DataCell(Text(employee.nationality)),
+                  DataCell(Text(employee.department)),
+                  DataCell(Text(employee.status)),
+                  DataCell(Text(getDateStringFromDateTime(employee.birthDt))),
+                  DataCell(Text(getDateStringFromDateTime(employee.joinDt))),
+                  DataCell(Text(employee.createBy)),
+                  DataCell(Text(getDateStringFromDateTime(employee.createDt))),
+                  DataCell(TextButton(
+                    onPressed: () => _openPrivilegesDialog(employee),
+                    child: const Text(
+                      "Manage Accesses",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent),
+                    ),
+                  )),
+                ],
+                onSelectChanged: (selected) {
+                  if (selected != null && selected) {
+                    _openDialog(employee);
+                  }
+                },
+              ))
+          .toList(),
     );
   }
-
-  List<DataRow> _buildPrivilegeRows() {
-    // Create privilege rows based on selected option
-    if (_selectedPrivilege == null) {
-      return [];
-    }
-
-    List<String> privileges = ["View", "Add", "Edit", "Delete"];
-
-    return privileges.map((privilege) {
-      return DataRow(
-        cells: [
-          DataCell(Text(_selectedPrivilege)),
-          DataCell(Text(privilege == "View" ? "true" : "false")),
-          DataCell(Text("false")),
-          DataCell(Text("false")),
-          DataCell(Text("false")),
-        ],
-      );
-    }).toList();
-  }
-
-
-
 }

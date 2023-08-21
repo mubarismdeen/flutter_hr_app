@@ -183,7 +183,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-            'Add New Client', ClientDetailsForm(closeDialog, tableRow, privileges));
+            title: 'Add New Client',
+            child: ClientDetailsForm(closeDialog, tableRow, privileges),
+        );
       },
     );
   }

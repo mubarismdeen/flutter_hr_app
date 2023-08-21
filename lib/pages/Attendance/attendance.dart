@@ -589,9 +589,8 @@ class _AttendanceState extends State<Attendance> {
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Attendance Details',
-          // EmployeeAttendanceForm(),
-          AttendanceExcelUpload(closeDialog, _pickedDate),
+          title: 'Upload Attendance Details',
+          child: AttendanceExcelUpload(closeDialog, _pickedDate),
         );
       },
     );

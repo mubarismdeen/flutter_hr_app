@@ -235,8 +235,8 @@ class _JobDetailsExpandedWithFilterState
       context: context,
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          'Upload Job Details',
-          JobDetailsUpload(closeDialog, tableRow, widget.privileges),
+          title: 'Upload Job Details',
+          child: JobDetailsUpload(closeDialog, tableRow, widget.privileges),
         );
       },
     );
