@@ -91,7 +91,7 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
       creatBy: GlobalState.userEmpCode,
       creatDate: DateTime.now());
 
-  Future<void> _submitForm() async {
+  Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
       // Submit the form data to a backend API or do something else with it
@@ -124,7 +124,7 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
       widget.closeDialog();
       setState(() {});
     } else {
-     showSaveFailedMessage(context);
+      showSaveFailedMessage(context);
     }
   }
 
@@ -196,39 +196,6 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
             ]));
       },
     );
-  }
-
-  List<Widget> _getActionButtons() {
-    List<Widget> widgetList = [
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: themeColor,
-        ),
-        onPressed: _submitForm,
-        child: const Text('Submit'),
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: themeColor,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('Cancel'),
-      ),
-    ];
-    if (widget.tableRow != null) {
-      widgetList.add(
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: themeColor,
-          ),
-          onPressed: _onDelete,
-          child: const Text('Delete'),
-        ),
-      );
-    }
-    return widgetList;
   }
 
   @override
@@ -411,7 +378,12 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ..._getActionButtons(),
+                      ...getActionButtonsWithoutPrivilege(
+                        context: context,
+                        onSubmit: _onSubmit,
+                        hasDeleteOption: widget.tableRow != null,
+                        onDelete: _onDelete,
+                      ),
                     ],
                   ),
                 ],

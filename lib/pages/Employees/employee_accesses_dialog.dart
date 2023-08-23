@@ -1,6 +1,10 @@
+import 'package:admin/api.dart';
+import 'package:admin/globalState.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/constants.dart';
 import '../../constants/style.dart';
 import '../../models/userScreens.dart';
 import '../../widget/custom_alert_dialog.dart';
@@ -15,21 +19,23 @@ class EmployeeAccessesDialog extends StatefulWidget {
 }
 
 class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
-  late List<String> _selectedScreens;
+  late UserScreens _screensForEmployee;
+  late List<Screen> _selectedScreens;
   late String _selectedPrivilege;
 
   @override
   void initState() {
     super.initState();
     _selectedScreens = [];
-    if (widget.employeeScreens.dashboard) _selectedScreens.add("Dashboard");
-    if (widget.employeeScreens.employees) _selectedScreens.add("Employees");
-    if (widget.employeeScreens.attendance) _selectedScreens.add("Attendance");
-    if (widget.employeeScreens.salaryMaster) _selectedScreens.add("Salary Master");
-    if (widget.employeeScreens.salaryPayout) _selectedScreens.add("Salary Payout");
-    if (widget.employeeScreens.leaveSalary) _selectedScreens.add("Leave Salary");
-    if (widget.employeeScreens.clients) _selectedScreens.add("Clients");
-    if (widget.employeeScreens.gratuity) _selectedScreens.add("Gratuity");
+    _screensForEmployee = widget.employeeScreens;
+    if (_screensForEmployee.dashboard) _selectedScreens.add(Screen.Dashboard);
+    if (_screensForEmployee.employees) _selectedScreens.add(Screen.Employees);
+    if (_screensForEmployee.attendance) _selectedScreens.add(Screen.Attendance);
+    if (_screensForEmployee.salaryMaster) _selectedScreens.add(Screen.SalaryMaster);
+    if (_screensForEmployee.salaryPayout) _selectedScreens.add(Screen.SalaryPayout);
+    if (_screensForEmployee.leaveSalary) _selectedScreens.add(Screen.LeaveSalary);
+    if (_screensForEmployee.clients) _selectedScreens.add(Screen.Clients);
+    if (_screensForEmployee.gratuity) _selectedScreens.add(Screen.Gratuity);
     _selectedPrivilege = '';
   }
 
@@ -78,45 +84,78 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
   }
 
   Widget _buildScreensTab() {
-    List<String> screens = [
-      "Dashboard",
-      "Employees",
-      "Attendance",
-      "Salary Master",
-      "Salary Payout",
-      "Leave Salary",
-      "Clients",
-      "Gratuity",
-    ];
 
-    List<Widget> checkboxes = screens.map((screen) {
+    List<Widget> checkboxes = Screen.values.map((selectedScreen) {
+      String screenName = selectedScreen.value;
       return CheckboxListTile(
         title: Text(
-          screen,
+          screenName,
           style: const TextStyle(fontSize: 13),
         ),
-        value: _selectedScreens.contains(screen),
+        value: _selectedScreens.contains(selectedScreen),
         onChanged: (value) {
           setState(() {
             if (value == true) {
-              _selectedScreens.add(screen);
+              _selectedScreens.add(selectedScreen);
+              _toggleValueForScreen(selectedScreen);
             } else {
-              _selectedScreens.remove(screen);
+              _selectedScreens.remove(selectedScreen);
+              _toggleValueForScreen(selectedScreen);
             }
           });
         },
       );
     }).toList();
 
-    return SingleChildScrollView(
-      child: GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        childAspectRatio: 5.0,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        children: checkboxes,
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SingleChildScrollView(
+          child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            childAspectRatio: 5.0,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            children: checkboxes,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ...getActionButtonsWithoutPrivilege(context: context, onSubmit: _onSubmit),
+          ],
+        ),
+      ],
     );
+  }
+
+  void _toggleValueForScreen(Screen screen) {
+    switch (screen) {
+      case Screen.Dashboard:
+        _screensForEmployee.dashboard = !_screensForEmployee.dashboard;
+        break;
+      case Screen.Employees:
+        _screensForEmployee.employees = !_screensForEmployee.employees;
+        break;
+      case Screen.Attendance:
+        _screensForEmployee.attendance = !_screensForEmployee.attendance;
+        break;
+      case Screen.SalaryMaster:
+        _screensForEmployee.salaryMaster = !_screensForEmployee.salaryMaster;
+        break;
+      case Screen.SalaryPayout:
+        _screensForEmployee.salaryPayout = !_screensForEmployee.salaryPayout;
+        break;
+      case Screen.LeaveSalary:
+        _screensForEmployee.leaveSalary = !_screensForEmployee.leaveSalary;
+        break;
+      case Screen.Clients:
+        _screensForEmployee.clients = !_screensForEmployee.clients;
+        break;
+      case Screen.Gratuity:
+        _screensForEmployee.gratuity = !_screensForEmployee.gratuity;
+        break;
+    }
   }
 
   Widget _buildPrivilegesTab() {
@@ -181,4 +220,53 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
       );
     }).toList();
   }
+
+  Future<void> _onSubmit() async {
+    _screensForEmployee.editBy = GlobalState.userEmpCode;
+    _screensForEmployee.editDt = DateTime.now();
+
+    bool status = await saveScreensForEmployee(_screensForEmployee);
+    if (status) {
+      showSaveSuccessfulMessage(context);
+      Navigator.pop(context);
+      setState(() {});
+    } else {
+      showSaveFailedMessage(context);
+    }
+    // if (_formKey.currentState!.validate()) {
+    //   _formKey.currentState?.save();
+    //   // Submit the form data to a backend API or do something else with it
+    //   print('Submitted form data:');
+    //   print('Employee Code: $_empCode');
+    //   print('Employee Name: $_name');
+    //   print('Mobile 1: $_mobile1');
+    //   print('Mobile 2: $_mobile2');
+    //   print('Department ID: $_selectedDepartment');
+    //   print('Status ID: $_selectedStatus');
+    //   print('Nationality ID: $_selectedNationality');
+    //   print('Date of Birth: $_dob');
+    //   print('Date of Joining: $_joiningDate');
+    // }
+    // _employeeDetails.empCode = _empCode.text;
+    // _employeeDetails.name = _name.text;
+    // _employeeDetails.mobile1 = _mobile1.text;
+    // _employeeDetails.mobile2 = _mobile2.text;
+    // _employeeDetails.depId = _selectedDepartment['id'];
+    // _employeeDetails.statusId = _selectedStatus['id'];
+    // _employeeDetails.natianalityId = _selectedNationality['id'];
+    // _employeeDetails.joinDt = DateTime.parse(_joiningDate.text);
+    // _employeeDetails.birthDt = DateTime.parse(_dob.text);
+    //
+    // bool status = await saveEmployeeDetails(_employeeDetails);
+    // if (status) {
+    //   showSaveSuccessfulMessage(context);
+    //   _dob.clear();
+    //   Navigator.pop(context);
+    //   widget.closeDialog();
+    //   setState(() {});
+    // } else {
+    //   showSaveFailedMessage(context);
+    // }
+  }
+
 }

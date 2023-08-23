@@ -1,5 +1,5 @@
 import 'package:admin/api.dart';
-import 'package:admin/constants/constants.dart';
+import 'package:admin/constants/privilege_constants.dart';
 import 'package:admin/globalState.dart';
 import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/utils/common_utils.dart';

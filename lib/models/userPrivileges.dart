@@ -7,6 +7,10 @@ class UserPrivileges {
   bool addPrivilege = false;
   bool editPrivilege = false;
   bool deletePrivilege = false;
+  String editBy = '';
+  DateTime editDt = DateTime.now();
+  String creatBy = '';
+  DateTime creatDt = DateTime.now();
 
   UserPrivileges();
 
@@ -18,6 +22,10 @@ class UserPrivileges {
     addPrivilege =  json['addPrivilege']??false;
     editPrivilege =  json['editPrivilege']??false;
     deletePrivilege =  json['deletePrivilege']??false;
+    editBy = json['editBy']??'';
+    editDt = DateTime.parse(json['editDt']);
+    creatBy = json['creatBy']??'';
+    creatDt = DateTime.parse(json['creatDt']);
   }
 
 }

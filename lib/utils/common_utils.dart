@@ -26,7 +26,44 @@ bool getViewPrivilege(UserPrivileges privileges) {
   return privileges.viewPrivilege == true ? true : false;
 }
 
-List<Widget> getActionButtonsForExpandedView(
+List<Widget> getActionButtonsWithoutPrivilege(
+    {required BuildContext context,
+      required void Function() onSubmit,
+      bool hasDeleteOption = false,
+      void Function()? onDelete}) {
+  List<Widget> widgetList = [
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: themeColor,
+      ),
+      onPressed: onSubmit,
+      child: const Text('Submit'),
+    ),
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: themeColor,
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: const Text('Cancel'),
+    ),
+  ];
+  if (hasDeleteOption) {
+    widgetList.add(
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: themeColor,
+        ),
+        onPressed: onDelete,
+        child: const Text('Delete'),
+      ),
+    );
+  }
+  return widgetList;
+}
+
+List<Widget> getActionButtonsWithPrivilege(
     {required BuildContext context,
     required UserPrivileges privileges,
     required bool hasData,
@@ -65,10 +102,16 @@ List<Widget> getActionButtonsForExpandedView(
   return widgetList;
 }
 
-void showSaveSuccessfulMessage(BuildContext context, [String message = "Save Successful"]) {
+void showSaveSuccessfulMessage(BuildContext context,
+    [String message = "Save Successful"]) {
   if (Platform.isWindows) {
     final snackBar = SnackBar(
-      content: Container(width: 200,child: Text(message, textAlign: TextAlign.center,)),
+      content: Container(
+          width: 200,
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+          )),
       backgroundColor: Colors.green,
       duration: const Duration(seconds: 3),
     );
@@ -88,7 +131,8 @@ void showSaveSuccessfulMessage(BuildContext context, [String message = "Save Suc
   }
 }
 
-void showSaveFailedMessage(BuildContext context, [String message = "Unable to save"]) {
+void showSaveFailedMessage(BuildContext context,
+    [String message = "Unable to save"]) {
   if (Platform.isWindows) {
     final snackBar = SnackBar(
       content: Text(
@@ -113,3 +157,4 @@ void showSaveFailedMessage(BuildContext context, [String message = "Unable to sa
     );
   }
 }
+

@@ -253,7 +253,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ...getActionButtonsForExpandedView(
+                        ...getActionButtonsWithPrivilege(
                             context: context,
                             privileges: widget.privileges,
                             hasData: widget.tableRow != null,

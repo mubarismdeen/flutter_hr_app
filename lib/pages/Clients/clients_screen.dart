@@ -7,7 +7,7 @@ import 'package:admin/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
-import '../../constants/constants.dart';
+import '../../constants/privilege_constants.dart';
 import '../../constants/controllers.dart';
 import '../../globalState.dart';
 import '../../helpers/responsiveness.dart';

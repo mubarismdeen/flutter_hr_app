@@ -143,7 +143,7 @@ class _ClientDetailsFormState extends State<ClientDetailsForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ...getActionButtonsForExpandedView(
+                ...getActionButtonsWithPrivilege(
                     context: context,
                     privileges: widget.privileges,
                     hasData: widget.tableRow != null,

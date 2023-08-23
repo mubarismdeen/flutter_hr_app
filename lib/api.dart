@@ -83,6 +83,12 @@ Future<List<UserScreens>> getScreensForEmployee (String empCode) async {
   return list;
 }
 
+Future<bool> saveScreensForEmployee(UserScreens userScreens) async {
+  String urlWithParams = "http://$ip/Hrms/saveScreensForEmployee";
+  var jsonData = jsonEncode(userScreens);
+  return await httpConnect(urlWithParams, HttpMethod.POST, jsonData) as bool;
+}
+
 Future<List<UserPrivileges>> getPrivilegesForUser(String username, String privilegeName) async {
   String urlWithParams = "http://$ip/Hrms/getPrivilegesForUser?userName=$username&privilege=$privilegeName";
   List<UserPrivileges> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)

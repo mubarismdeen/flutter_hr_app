@@ -1,5 +1,6 @@
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
+import 'package:admin/globalState.dart';
 import 'package:admin/models/userScreens.dart';
 import 'package:admin/pages/Employees/employee_accesses_dialog.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
@@ -98,7 +99,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         });
   }
 
-  void _openDialog(EmployeeDetails? tableRow) {
+  void _openUploadDialog(EmployeeDetails? tableRow) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -116,7 +117,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         padding: const EdgeInsets.all(16.0),
         backgroundColor: themeColor,
       ),
-      onPressed: () => _openDialog(null),
+      onPressed: () => _openUploadDialog(null),
       child: const Text('Add Employee',
           style: TextStyle(fontWeight: FontWeight.bold)),
     );
@@ -124,7 +125,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
   void _openPrivilegesDialog(EmployeeDetails employee) async {
     var screensData = await getScreensForEmployee(employee.empCode);
-    UserScreens empScreens = screensData.isNotEmpty ? screensData.first : UserScreens();
+    UserScreens empScreens = screensData.isNotEmpty
+        ? screensData.first
+        : UserScreens(creatBy: GlobalState.userEmpCode);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -144,9 +147,6 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   //     //   ),
   //     // ],
   // );
-
-
-
 
   Widget _getDataTable() {
     return DataTable(
@@ -239,7 +239,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                 ],
                 onSelectChanged: (selected) {
                   if (selected != null && selected) {
-                    _openDialog(employee);
+                    _openUploadDialog(employee);
                   }
                 },
               ))
