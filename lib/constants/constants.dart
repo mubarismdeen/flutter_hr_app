@@ -1,32 +1,32 @@
 enum Screen {
-  Dashboard,
-  Employees,
-  Attendance,
-  SalaryMaster,
-  SalaryPayout,
-  LeaveSalary,
-  Clients,
-  Gratuity,
+  dashboard,
+  employees,
+  attendance,
+  salaryMaster,
+  salaryPayout,
+  leaveSalary,
+  clients,
+  gratuity,
 }
 
 extension ScreenExtension on Screen {
   String get value {
     switch (this) {
-      case Screen.Dashboard:
+      case Screen.dashboard:
         return "Dashboard";
-      case Screen.Employees:
+      case Screen.employees:
         return "Employees";
-      case Screen.Attendance:
+      case Screen.attendance:
         return "Attendance";
-      case Screen.SalaryMaster:
+      case Screen.salaryMaster:
         return "Salary Master";
-      case Screen.SalaryPayout:
+      case Screen.salaryPayout:
         return "Salary Payout";
-      case Screen.LeaveSalary:
+      case Screen.leaveSalary:
         return "Leave Salary";
-      case Screen.Clients:
+      case Screen.clients:
         return "Clients";
-      case Screen.Gratuity:
+      case Screen.gratuity:
         return "Gratuity";
     }
   }

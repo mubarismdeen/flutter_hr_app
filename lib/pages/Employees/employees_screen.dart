@@ -1,6 +1,7 @@
 import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/globalState.dart';
+import 'package:admin/models/userDetails.dart';
 import 'package:admin/models/userScreens.dart';
 import 'package:admin/pages/Employees/employee_accesses_dialog.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
@@ -125,13 +126,20 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
   void _openPrivilegesDialog(EmployeeDetails employee) async {
     var screensData = await getScreensForEmployee(employee.empCode);
+    var userData = await getUserDetails(employee.empCode);
     UserScreens empScreens = screensData.isNotEmpty
         ? screensData.first
         : UserScreens(creatBy: GlobalState.userEmpCode);
+    UserDetails? userDetails = userData.isNotEmpty ? userData.first : null;
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return EmployeeAccessesDialog(empScreens, employee.name);
+        return EmployeeAccessesDialog(
+          userDetails: userDetails,
+          userScreens: empScreens,
+          employeeName: employee.name,
+          employeeCode: employee.empCode,
+        );
       },
     );
   }

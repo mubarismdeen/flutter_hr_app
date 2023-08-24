@@ -2,7 +2,7 @@ import 'package:admin/models/userScreens.dart';
 import 'package:admin/routes/routes.dart';
 
 import 'api.dart';
-import 'models/employeeDetails.dart';
+import 'models/userDetails.dart';
 
 class GlobalState {
 
@@ -59,9 +59,8 @@ class GlobalState {
   }
 
   static Future<void> setEmployeeCodeForSession(String givenUsername) async {
-    List<EmployeeDetails> employeesList = await getEmployeeDetails();
-    EmployeeDetails currentEmployee = employeesList.firstWhere((emp) => emp.name == givenUsername);
-    userEmpCode = currentEmployee.empCode;
+    UserDetails userDetails = (await getUserDetailsWithUsername(givenUsername)).first;
+    userEmpCode = userDetails.empCode;
   }
 
 }

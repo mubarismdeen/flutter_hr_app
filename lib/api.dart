@@ -19,6 +19,7 @@ import 'models/empMaster.dart';
 import 'models/salaryMaster.dart';
 import 'models/salaryMasterGet.dart';
 import 'models/salaryPay.dart';
+import 'models/userDetails.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 String ip = "localhost:5001";
@@ -74,6 +75,26 @@ Future<List<UserScreens>> authorizeUser(String username, String password) async 
   List<UserScreens> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
       .map((job) => UserScreens.fromJson(job)).toList();
   return list;
+}
+
+Future<List<UserDetails>> getUserDetails (String empCode) async {
+  String urlWithParams = "http://$ip/Hrms/getUserDetails?empCode=$empCode";
+  List<UserDetails> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => UserDetails.fromJson(job)).toList();
+  return list;
+}
+
+Future<List<UserDetails>> getUserDetailsWithUsername (String username) async {
+  String urlWithParams = "http://$ip/Hrms/getUserDetailsWithUsername?username=$username";
+  List<UserDetails> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => UserDetails.fromJson(job)).toList();
+  return list;
+}
+
+Future<bool> saveUserDetails(UserDetails userDetails) async {
+  String urlWithParams = "http://$ip/Hrms/saveUserDetails";
+  var jsonData = jsonEncode(userDetails);
+  return await httpConnect(urlWithParams, HttpMethod.POST, jsonData) as bool;
 }
 
 Future<List<UserScreens>> getScreensForEmployee (String empCode) async {
