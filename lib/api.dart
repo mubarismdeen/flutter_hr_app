@@ -215,7 +215,7 @@ Future<bool> saveQuotationDetails(QuotationDetails quotationDetails) async {
 }
 
 Future<bool> saveGratuity(String empCode, String type,String editBy) async {
-  String urlWithParams = "http://$ip/Hrms/SaveGratuityByDate?empCode=$empCode&type=$type&editBy=$editBy";
+  String urlWithParams = "http://$ip/Hrms/SaveGratuity?empCode=$empCode&type=$type&editBy=$editBy";
   return await httpConnect(urlWithParams, HttpMethod.GET) as bool;
 }
 

@@ -5,6 +5,7 @@ import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:supercharged/supercharged.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/style.dart';
@@ -105,7 +106,7 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
                   ],
                 ),
                 Container(
-                  height: 300,
+                  height: 400,
                   width: 600,
                   child: TabBarView(
                     children: [
@@ -277,137 +278,159 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              width: 250,
-              child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                  hintText: "Add Privilege",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                ),
-                items: Privilege.values.map((Privilege option) {
-                  return DropdownMenuItem<String>(
-                    value: option.displayValue,
-                    child: Text(option.displayValue),
-                  );
-                }).toList(),
-                onChanged: (selectedOption) {
-                  if (selectedOption != null &&
-                      !_selectedPrivileges.contains(selectedOption)) {
-                    _selectedPrivileges.add(selectedOption);
-
-                    UserPrivileges newPrivilege = UserPrivileges(
-                        userId: _userDetails.userCd,
-                        privilegeName: _getPrivilegeNameForDisplayValue(selectedOption),
-                        creatBy: GlobalState.userEmpCode,
-                        creatDt: DateTime.now(),
-                    );
-
-                    _privilegesList.add(newPrivilege);
-                    setState(() {
-                      _selectedPrivileges;
-                      _privilegesList;
-                    });
-                  } else {
-                    showSaveFailedMessage(context, "Privilege already present");
-                  }
-                },
-              ),
-            ),
-          ),
-          if (_privilegesList.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(30.0),
-              child: Text(
-                "No privileges set currently for the user. \nSelect required privileges from the dropdown to start adding.",
-                style: TextStyle(
-                  color: Colors.redAccent,
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          if (_privilegesList.isNotEmpty)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: const [
-                  DataColumn(
-                    label: Text("Privilege", style: tableHeaderStyle),
-                  ),
-                  DataColumn(
-                    label: Text("View", style: tableHeaderStyle),
-                  ),
-                  DataColumn(
-                    label: Text("Add", style: tableHeaderStyle),
-                  ),
-                  DataColumn(
-                    label: Text("Edit", style: tableHeaderStyle),
-                  ),
-                  DataColumn(
-                    label: Text("Delete", style: tableHeaderStyle),
-                  ),
-                ],
-                rows: _privilegesList.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final privilege = entry.value;
-                  return DataRow(cells: [
-                    DataCell(Text(privilege.privilegeName)),
-                    DataCell(
-                      Checkbox(
-                        value: privilege.viewPrivilege,
-                        onChanged: (value) {
-                          _privilegesList[index].viewPrivilege = value!;
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                    DataCell(
-                      Checkbox(
-                        value: privilege.addPrivilege,
-                        onChanged: (value) {
-                          _privilegesList[index].addPrivilege = value!;
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                    DataCell(
-                      Checkbox(
-                        value: privilege.editPrivilege,
-                        onChanged: (value) {
-                          _privilegesList[index].editPrivilege = value!;
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                    DataCell(
-                      Checkbox(
-                        value: privilege.deletePrivilege,
-                        onChanged: (value) {
-                          _privilegesList[index].deletePrivilege = value!;
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  ]);
-                }).toList(),
-              ),
-            ),
-          const SizedBox(height: 40),
-          if (_privilegesList.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: SizedBox(
+        height: 400,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
               children: [
-                ...getActionButtonsWithoutPrivilege(
-                    context: context, onSubmit: _onPrivilegesSubmit),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: 250,
+                    child: DropdownButtonFormField<String>(
+                      focusColor: Colors.white,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        hintText: "Add Privilege",
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                      ),
+                      items: Privilege.values.map((Privilege option) {
+                        return DropdownMenuItem<String>(
+                          value: option.displayValue,
+                          child: Text(option.displayValue),
+                        );
+                      }).toList(),
+                      onChanged: (selectedOption) {
+                        if (selectedOption != null &&
+                            !_selectedPrivileges.contains(selectedOption)) {
+                          _selectedPrivileges.add(selectedOption);
+
+                          UserPrivileges newPrivilege = UserPrivileges(
+                            userId: _userDetails.userCd,
+                            privilegeName:
+                                _getPrivilegeNameForDisplayValue(selectedOption),
+                            creatBy: GlobalState.userEmpCode,
+                            creatDt: DateTime.now(),
+                          );
+
+                          _privilegesList.add(newPrivilege);
+                          setState(() {
+                            _selectedPrivileges;
+                            _privilegesList;
+                          });
+                        } else {
+                          showSaveFailedMessage(
+                              context, "Privilege already present");
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                if (_privilegesList.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(30.0),
+                    child: Text(
+                      "No privileges set currently for the user. \nSelect required privileges from the dropdown to start adding.",
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                if (_privilegesList.isNotEmpty)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: const [
+                        DataColumn(
+                          label: Text("Privilege", style: tableHeaderStyle),
+                        ),
+                        DataColumn(
+                          label: Text("View", style: tableHeaderStyle),
+                        ),
+                        DataColumn(
+                          label: Text("Add", style: tableHeaderStyle),
+                        ),
+                        DataColumn(
+                          label: Text("Edit", style: tableHeaderStyle),
+                        ),
+                        DataColumn(
+                          label: Text("Delete", style: tableHeaderStyle),
+                        ),
+                      ],
+                      rows: _privilegesList.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final privilege = entry.value;
+                        final privilegeDisplayValue = Privilege.values
+                            .filter(
+                                (element) => element.name == privilege.privilegeName)
+                            .first
+                            .displayValue;
+                        return DataRow(cells: [
+                          DataCell(Text(privilegeDisplayValue)),
+                          DataCell(
+                            Checkbox(
+                              value: privilege.viewPrivilege,
+                              activeColor: Colors.blueAccent,
+                              onChanged: (value) {
+                                _privilegesList[index].viewPrivilege = value!;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          DataCell(
+                            Checkbox(
+                              value: privilege.addPrivilege,
+                              activeColor: Colors.blueAccent,
+                              onChanged: (value) {
+                                _privilegesList[index].addPrivilege = value!;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          DataCell(
+                            Checkbox(
+                              value: privilege.editPrivilege,
+                              activeColor: Colors.blueAccent,
+                              onChanged: (value) {
+                                _privilegesList[index].editPrivilege = value!;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          DataCell(
+                            Checkbox(
+                              value: privilege.deletePrivilege,
+                              activeColor: Colors.blueAccent,
+                              onChanged: (value) {
+                                _privilegesList[index].deletePrivilege = value!;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ]);
+                      }).toList(),
+                    ),
+                  ),
               ],
             ),
-        ],
+            if (_privilegesList.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ...getActionButtonsWithoutPrivilege(
+                        context: context, onSubmit: _onPrivilegesSubmit),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -455,7 +478,7 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
   }
 
   Future<void> _onPrivilegesSubmit() async {
-    for (int i=0; i<_privilegesList.length; i++) {
+    for (int i = 0; i < _privilegesList.length; i++) {
       _privilegesList[i].editBy = GlobalState.userEmpCode;
       _privilegesList[i].editDt = DateTime.now();
     }
