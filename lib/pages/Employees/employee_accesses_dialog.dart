@@ -1,5 +1,7 @@
 import 'package:admin/api.dart';
+import 'package:admin/constants/privilege_constants.dart';
 import 'package:admin/globalState.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +15,13 @@ import '../../widget/custom_alert_dialog.dart';
 class EmployeeAccessesDialog extends StatefulWidget {
   UserScreens userScreens;
   UserDetails? userDetails;
+  List<UserPrivileges> userPrivilegesList;
   String employeeName;
   String employeeCode;
+
   EmployeeAccessesDialog(
       {required this.userScreens,
+      required this.userPrivilegesList,
       required this.employeeName,
       required this.employeeCode,
       required this.userDetails});
@@ -28,8 +33,9 @@ class EmployeeAccessesDialog extends StatefulWidget {
 class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
   late UserScreens _userScreens;
   late UserDetails _userDetails;
+  late List<UserPrivileges> _privilegesList;
   late List<Screen> _selectedScreens;
-  late String _selectedPrivilege;
+  late List<String> _selectedPrivileges;
   late bool _isProfileSet;
 
   var _username = TextEditingController();
@@ -41,6 +47,7 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
   void initState() {
     super.initState();
     _selectedScreens = [];
+    _selectedPrivileges = [];
     _userScreens = widget.userScreens;
     _isProfileSet = widget.userDetails != null;
     if (_isProfileSet) {
@@ -48,7 +55,8 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
       _username.text = _userDetails.name;
       _password.text = _userDetails.password;
     } else {
-      _userDetails = UserDetails(creatBy: GlobalState.userEmpCode, empCode: widget.employeeCode);
+      _userDetails = UserDetails(
+          creatBy: GlobalState.userEmpCode, empCode: widget.employeeCode);
     }
     if (_userScreens.dashboard) _selectedScreens.add(Screen.dashboard);
     if (_userScreens.employees) _selectedScreens.add(Screen.employees);
@@ -58,16 +66,22 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
     if (_userScreens.leaveSalary) _selectedScreens.add(Screen.leaveSalary);
     if (_userScreens.clients) _selectedScreens.add(Screen.clients);
     if (_userScreens.gratuity) _selectedScreens.add(Screen.gratuity);
-    _selectedPrivilege = '';
+    _privilegesList = widget.userPrivilegesList;
+    for (UserPrivileges priv in _privilegesList) {
+      for (Privilege p in Privilege.values) {
+        if (p.name == priv.privilegeName) {
+          _selectedPrivileges.add(p.displayValue);
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomAlertDialog(
-      title: "Set Privileges for ${widget.employeeName}",
+      title: "${widget.employeeName} (${widget.employeeCode})",
       titleStyle: const TextStyle(fontWeight: FontWeight.w500),
       child: Container(
-        // height: 200,
         child: SingleChildScrollView(
           child: DefaultTabController(
             length: 3,
@@ -92,7 +106,7 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
                 ),
                 Container(
                   height: 300,
-                  width: 400,
+                  width: 600,
                   child: TabBarView(
                     children: [
                       _buildProfileTab(),
@@ -117,14 +131,18 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (!_isProfileSet)
-            const Text(
-              "User profile not set in the system",
-              style: TextStyle(color: Colors.redAccent, fontSize: 13),
-              textAlign: TextAlign.start,
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "User profile not set in the system",
+                style: TextStyle(color: Colors.redAccent, fontSize: 13),
+                textAlign: TextAlign.start,
+              ),
             )
           else
             const SizedBox(width: 1),
           Container(
+            width: 450,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
@@ -154,13 +172,16 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
               ],
             ),
           ),
-          const SizedBox(height: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ...getActionButtonsWithoutPrivilege(
-                  context: context, onSubmit: _onUserDetailsSubmit),
-            ],
+          const SizedBox(height: 5.0),
+          SizedBox(
+            width: 400,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ...getActionButtonsWithoutPrivilege(
+                    context: context, onSubmit: _onUserDetailsSubmit),
+              ],
+            ),
           ),
         ],
       ),
@@ -197,19 +218,25 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          childAspectRatio: 5.0,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          children: checkboxes,
+        SizedBox(
+          width: 500,
+          child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            childAspectRatio: 5.0,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            children: checkboxes,
+          ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ...getActionButtonsWithoutPrivilege(
-                context: context, onSubmit: _onScreensSubmit),
-          ],
+        SizedBox(
+          width: 400,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ...getActionButtonsWithoutPrivilege(
+                  context: context, onSubmit: _onScreensSubmit),
+            ],
+          ),
         ),
       ],
     );
@@ -248,65 +275,141 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
     if (!_isProfileSet) {
       return _getProfileNotSetMessage();
     }
-    List<String> privilegeOptions = [
-      "",
-      "Document Details",
-      "Job Details",
-      "Quotation Details",
-      "Client Details",
-    ];
 
-    return Column(
-      children: [
-        DropdownButton<String>(
-          items: privilegeOptions.map((String option) {
-            return DropdownMenuItem<String>(
-              value: option,
-              child: Text(option),
-            );
-          }).toList(),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 250,
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  hintText: "Add Privilege",
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                ),
+                items: Privilege.values.map((Privilege option) {
+                  return DropdownMenuItem<String>(
+                    value: option.displayValue,
+                    child: Text(option.displayValue),
+                  );
+                }).toList(),
+                onChanged: (selectedOption) {
+                  if (selectedOption != null &&
+                      !_selectedPrivileges.contains(selectedOption)) {
+                    _selectedPrivileges.add(selectedOption);
 
-          onChanged: (value) =>
-              setState(() => _selectedPrivilege = value.toString()),
-          // onChanged: (String selectedOption) {
-          //   setState(() {
-          //     _selectedPrivilege = selectedOption;
-          //   });
-          // },
-          value: _selectedPrivilege,
-        ),
-        DataTable(
-          columns: [
-            const DataColumn(label: Text("Privilege")),
-            const DataColumn(label: Text("View")),
-            const DataColumn(label: Text("Add")),
-            const DataColumn(label: Text("Edit")),
-            const DataColumn(label: Text("Delete")),
-          ],
-          rows: _buildPrivilegeRows(),
-        ),
-      ],
-    );
-  }
+                    UserPrivileges newPrivilege = UserPrivileges(
+                        userId: _userDetails.userCd,
+                        privilegeName: _getPrivilegeNameForDisplayValue(selectedOption),
+                        creatBy: GlobalState.userEmpCode,
+                        creatDt: DateTime.now(),
+                    );
 
-  List<DataRow> _buildPrivilegeRows() {
-    if (_selectedPrivilege == null) {
-      return [];
-    }
-
-    List<String> privileges = ["View", "Add", "Edit", "Delete"];
-
-    return privileges.map((privilege) {
-      return DataRow(
-        cells: [
-          DataCell(Text(_selectedPrivilege)),
-          DataCell(Text(privilege == "View" ? "true" : "false")),
-          const DataCell(Text("false")),
-          const DataCell(Text("false")),
-          const DataCell(Text("false")),
+                    _privilegesList.add(newPrivilege);
+                    setState(() {
+                      _selectedPrivileges;
+                      _privilegesList;
+                    });
+                  } else {
+                    showSaveFailedMessage(context, "Privilege already present");
+                  }
+                },
+              ),
+            ),
+          ),
+          if (_privilegesList.isEmpty)
+            const Padding(
+              padding: EdgeInsets.all(30.0),
+              child: Text(
+                "No privileges set currently for the user. \nSelect required privileges from the dropdown to start adding.",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          if (_privilegesList.isNotEmpty)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: const [
+                  DataColumn(
+                    label: Text("Privilege", style: tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text("View", style: tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text("Add", style: tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text("Edit", style: tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text("Delete", style: tableHeaderStyle),
+                  ),
+                ],
+                rows: _privilegesList.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final privilege = entry.value;
+                  return DataRow(cells: [
+                    DataCell(Text(privilege.privilegeName)),
+                    DataCell(
+                      Checkbox(
+                        value: privilege.viewPrivilege,
+                        onChanged: (value) {
+                          _privilegesList[index].viewPrivilege = value!;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    DataCell(
+                      Checkbox(
+                        value: privilege.addPrivilege,
+                        onChanged: (value) {
+                          _privilegesList[index].addPrivilege = value!;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    DataCell(
+                      Checkbox(
+                        value: privilege.editPrivilege,
+                        onChanged: (value) {
+                          _privilegesList[index].editPrivilege = value!;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    DataCell(
+                      Checkbox(
+                        value: privilege.deletePrivilege,
+                        onChanged: (value) {
+                          _privilegesList[index].deletePrivilege = value!;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ]);
+                }).toList(),
+              ),
+            ),
+          const SizedBox(height: 40),
+          if (_privilegesList.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ...getActionButtonsWithoutPrivilege(
+                    context: context, onSubmit: _onPrivilegesSubmit),
+              ],
+            ),
         ],
-      );
-    }).toList();
+      ),
+    );
   }
 
   Future<void> _onUserDetailsSubmit() async {
@@ -351,6 +454,23 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
     }
   }
 
+  Future<void> _onPrivilegesSubmit() async {
+    for (int i=0; i<_privilegesList.length; i++) {
+      _privilegesList[i].editBy = GlobalState.userEmpCode;
+      _privilegesList[i].editDt = DateTime.now();
+    }
+    bool status = await savePrivilegesForUser(_privilegesList);
+    if (status) {
+      showSaveSuccessfulMessage(context);
+      _privilegesList = await getAllPrivilegesForUser(widget.employeeCode);
+      setState(() {
+        _privilegesList;
+      });
+    } else {
+      showSaveFailedMessage(context);
+    }
+  }
+
   Widget _getProfileNotSetMessage() {
     return const Center(
       child: Text(
@@ -362,5 +482,14 @@ class _EmployeeAccessesDialogState extends State<EmployeeAccessesDialog> {
         ),
       ),
     );
+  }
+
+  String _getPrivilegeNameForDisplayValue(String value) {
+    for (Privilege priv in Privilege.values) {
+      if (priv.displayValue == value) {
+        return priv.name;
+      }
+    }
+    return "";
   }
 }

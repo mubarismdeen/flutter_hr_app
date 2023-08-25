@@ -20,11 +20,11 @@ class Dashboard extends StatelessWidget {
   List<Widget> screenList = [];
 
   initPageData() async {
-    List<UserPrivileges> docScreenPrivileges = await getPrivilegesForUser(
+    List<UserPrivileges> docScreenPrivileges = await getAPrivilegeForUser(
         GlobalState.username, documentDetailsScreenPrivilege);
-    List<UserPrivileges> quotationScreenPrivileges = await getPrivilegesForUser(
+    List<UserPrivileges> quotationScreenPrivileges = await getAPrivilegeForUser(
         GlobalState.username, quotationDetailsScreenPrivilege);
-    List<UserPrivileges> jobScreenPrivileges = await getPrivilegesForUser(
+    List<UserPrivileges> jobScreenPrivileges = await getAPrivilegeForUser(
         GlobalState.username, jobDetailsScreenPrivilege);
 
     if (docScreenPrivileges.isNotEmpty &&
@@ -44,10 +44,11 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-        future: initPageData(),
-        builder: (context, AsyncSnapshot<dynamic> _data) {
-          return SingleChildScrollView(
-            child: Column(children: [
+      future: initPageData(),
+      builder: (context, AsyncSnapshot<dynamic> _data) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
               Obx(() => Row(
                     children: [
                       Container(
@@ -87,9 +88,11 @@ class Dashboard extends StatelessWidget {
                       const Expanded(child: SizedBox(height: 1)),
                     ],
                   ),
-                )
-            ]),
-          );
-        });
+                ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

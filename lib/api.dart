@@ -110,11 +110,24 @@ Future<bool> saveScreensForEmployee(UserScreens userScreens) async {
   return await httpConnect(urlWithParams, HttpMethod.POST, jsonData) as bool;
 }
 
-Future<List<UserPrivileges>> getPrivilegesForUser(String username, String privilegeName) async {
-  String urlWithParams = "http://$ip/Hrms/getPrivilegesForUser?userName=$username&privilege=$privilegeName";
+Future<List<UserPrivileges>> getAllPrivilegesForUser(String empCode) async {
+  String urlWithParams = "http://$ip/Hrms/getAllPrivilegesForUser?empCode=$empCode";
   List<UserPrivileges> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
       .map((job) => UserPrivileges.fromJson(job)).toList();
   return list;
+}
+
+Future<List<UserPrivileges>> getAPrivilegeForUser(String username, String privilegeName) async {
+  String urlWithParams = "http://$ip/Hrms/getAPrivilegeForUser?userName=$username&privilege=$privilegeName";
+  List<UserPrivileges> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => UserPrivileges.fromJson(job)).toList();
+  return list;
+}
+
+Future<bool> savePrivilegesForUser(List<UserPrivileges> privilegesList) async {
+  String urlWithParams = "http://$ip/Hrms/savePrivilegesForUser";
+  var jsonData = jsonEncode(privilegesList);
+  return await httpConnect(urlWithParams, HttpMethod.POST, jsonData) as bool;
 }
 
 Future<List<Map<String, dynamic>>> getDocDetails() async {

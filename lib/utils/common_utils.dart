@@ -137,6 +137,7 @@ void showSaveFailedMessage(BuildContext context,
     final snackBar = SnackBar(
       content: Text(
         message,
+        textAlign: TextAlign.center,
         style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.redAccent,

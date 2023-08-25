@@ -2,6 +2,7 @@ import 'package:admin/api.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/globalState.dart';
 import 'package:admin/models/userDetails.dart';
+import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/models/userScreens.dart';
 import 'package:admin/pages/Employees/employee_accesses_dialog.dart';
 import 'package:admin/widget/custom_alert_dialog.dart';
@@ -125,20 +126,24 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   }
 
   void _openPrivilegesDialog(EmployeeDetails employee) async {
-    var screensData = await getScreensForEmployee(employee.empCode);
-    var userData = await getUserDetails(employee.empCode);
+    String empCode = employee.empCode;
+    var screensData = await getScreensForEmployee(empCode);
+    var userData = await getUserDetails(empCode);
     UserScreens empScreens = screensData.isNotEmpty
         ? screensData.first
         : UserScreens(creatBy: GlobalState.userEmpCode);
     UserDetails? userDetails = userData.isNotEmpty ? userData.first : null;
+    List<UserPrivileges> privilegesList =
+        await getAllPrivilegesForUser(empCode);
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return EmployeeAccessesDialog(
           userDetails: userDetails,
           userScreens: empScreens,
+          userPrivilegesList: privilegesList,
           employeeName: employee.name,
-          employeeCode: employee.empCode,
+          employeeCode: empCode,
         );
       },
     );
@@ -217,7 +222,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         ),
         DataColumn(
           label: Expanded(
-            child: Text('Action', style: tableHeaderStyle),
+            child: Text('Settings', style: tableHeaderStyle),
           ),
         ),
       ],
@@ -235,15 +240,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   DataCell(Text(getDateStringFromDateTime(employee.joinDt))),
                   DataCell(Text(employee.createBy)),
                   DataCell(Text(getDateStringFromDateTime(employee.createDt))),
-                  DataCell(TextButton(
-                    onPressed: () => _openPrivilegesDialog(employee),
-                    child: const Text(
-                      "Manage Accesses",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                  DataCell(
+                    IconButton(
+                      icon: const Icon(Icons.settings_outlined,
                           color: Colors.blueAccent),
+                      onPressed: () => _openPrivilegesDialog(employee),
                     ),
-                  )),
+                  ),
                 ],
                 onSelectChanged: (selected) {
                   if (selected != null && selected) {

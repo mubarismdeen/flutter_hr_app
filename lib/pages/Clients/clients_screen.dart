@@ -23,11 +23,11 @@ class ClientsScreen extends StatefulWidget {
 
 class _ClientsScreenState extends State<ClientsScreen> {
   List<ClientDetails> _clientDetails = List<ClientDetails>.empty();
-  UserPrivileges privileges = UserPrivileges();
+  UserPrivileges privileges = UserPrivileges(userId: 0, privilegeName: "", creatBy: "", creatDt: DateTime.now());
 
   getTableData() async {
     _clientDetails = await getClientDetails();
-    List<UserPrivileges> clientScreenPrivileges = await getPrivilegesForUser(
+    List<UserPrivileges> clientScreenPrivileges = await getAPrivilegeForUser(
         GlobalState.username, clientDetailsScreenPrivilege);
     if (clientScreenPrivileges.isNotEmpty) {
       privileges = clientScreenPrivileges.first;
@@ -156,11 +156,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
                                                     client.creatDt))),
                                           ],
                                           onSelectChanged: (selected) {
-                                            if (selected != null &&
-                                                selected &&
+                                            if (selected != null && selected &&
                                                 (privileges.editPrivilege ||
-                                                    privileges
-                                                        .deletePrivilege)) {
+                                                    privileges.deletePrivilege)) {
                                               _openDialog(client, privileges);
                                             }
                                           }))

@@ -12,7 +12,7 @@ class UserPrivileges {
   String creatBy = '';
   DateTime creatDt = DateTime.now();
 
-  UserPrivileges();
+  UserPrivileges({required this.userId, required this.privilegeName, required this.creatBy, required this.creatDt});
 
   UserPrivileges.fromJson(Map<String, dynamic> json) {
     id =  json['id']??"0";
@@ -27,5 +27,19 @@ class UserPrivileges {
     creatBy = json['creatBy']??'';
     creatDt = DateTime.parse(json['creatDt']);
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'userId': userId,
+    'privilegeName': privilegeName,
+    'viewPrivilege': viewPrivilege,
+    'addPrivilege': addPrivilege,
+    'editPrivilege': editPrivilege,
+    'deletePrivilege': deletePrivilege,
+    'editBy': editBy,
+    'editDt': editDt.toIso8601String(),
+    'creatBy': creatBy,
+    'creatDt': creatDt.toIso8601String(),
+  };
 
 }
