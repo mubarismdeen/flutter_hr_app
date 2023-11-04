@@ -366,4 +366,15 @@ Future<bool> deleteClientDetails(int clientId) async {
   return await httpConnect(urlWithParams, HttpMethod.GET) as bool;
 }
 
-
+Future<String> createDatabaseBackup() async {
+  String urlWithParams = "http://$ip/Hrms/createBackup";
+  try {
+    http.Response response = await http.get(Uri.parse(urlWithParams));
+    if (response.statusCode == 200){
+      return response.body;
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+  return "Failed";
+}

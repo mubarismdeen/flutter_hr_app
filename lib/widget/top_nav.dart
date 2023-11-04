@@ -1,9 +1,11 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/helpers/responsiveness.dart';
+import 'package:admin/widget/settings_popup.dart';
 import 'package:flutter/material.dart';
 
 import '../globalState.dart';
 import '../helpers/image_placeholder.dart';
+import 'custom_alert_dialog.dart';
 import 'custom_text.dart';
 
 AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
@@ -46,7 +48,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                 Icons.settings,
                 color: lightGrey.withOpacity(.7),
               ),
-              onPressed: () {},
+              onPressed: () {_openSettings(context);},
             ),
             Stack(
               children: [
@@ -107,3 +109,16 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
       iconTheme: const IconThemeData(color: lightGrey),
       backgroundColor: Colors.transparent,
     );
+
+void _openSettings(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CustomAlertDialog(
+        title: 'Settings',
+        titleStyle: TextStyle(fontWeight: FontWeight.bold),
+        child: SettingsPopup(),
+      );
+    },
+  );
+}

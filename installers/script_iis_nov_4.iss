@@ -2,14 +2,14 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "HR Mate"
-#define MyAppVersion "2.7"
+#define MyAppVersion "2.8"
 #define MyAppPublisher "CodeWave Technologies"
 #define MyAppExeName "flutter_hr_app.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{A34E3287-30A8-4EB6-9842-812B8F13D0CE}
+AppId={{D17F28B5-E39A-4BD2-B9CC-5B4821C36F11}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -19,7 +19,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\mubar\OneDrive\Desktop\flutter project\flutter_hr_app\installers
-OutputBaseFilename=hrm_setup_iis_4_nov
+OutputBaseFilename=hr_mate_setup_iis_nov_4
 SetupIconFile=C:\Users\mubar\Downloads\app_icon (2).ico
 Compression=lzma
 SolidCompression=yes
