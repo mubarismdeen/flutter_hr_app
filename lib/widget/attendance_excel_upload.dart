@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:admin/api.dart';
+import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/globalState.dart';
 import 'package:admin/models/attendanceModel.dart';
@@ -92,16 +93,17 @@ class _AttendanceExcelUploadState extends State<AttendanceExcelUpload> {
           }
         }
       }
-      bool status = await saveAttendance(_attendanceList);
-      if (status) {
+      String response = await saveAttendance(_attendanceList);
+      if (response == successfulResponse) {
         showSaveSuccessfulMessage(context);
       } else {
-        showSaveFailedMessage(context);
+        showSaveFailedMessage(context, response);
       }
       Navigator.pop(context);
       widget.closeDialog();
     } catch (e) {
       print('Error: $e');
+      showSaveFailedMessage(context, e.toString());
     }
   }
 

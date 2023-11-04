@@ -23,7 +23,7 @@ import 'models/userDetails.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 String ip = "localhost:5001";
-// String ip = "localhost:81";       // IIS
+// String ip = "localhost:81";     // IIS
 // String ip = "172.11.7.254:88"; //live
 // String ip = "172.11.7.254:98"; //test
 
@@ -63,11 +63,6 @@ Future<dynamic> httpConnect(String urlWithParams, HttpMethod method, [dynamic js
     throw Exception('Failed');
   }
 
-}
-
-Future<bool> userValidate(String userID, String password) async {
-  String urlWithParams = "http://$ip/Hrms/userValidat?userCd=$userID&password=$password";
-  return await httpConnect(urlWithParams, HttpMethod.GET) as bool;
 }
 
 Future<List<UserScreens>> authorizeUser(String username, String password) async {
@@ -219,10 +214,18 @@ Future<bool> saveGratuity(String empCode, String type,String editBy) async {
   return await httpConnect(urlWithParams, HttpMethod.GET) as bool;
 }
 
-Future<bool> saveAttendance(List<AttendanceModel> attendanceList) async {
+Future<String> saveAttendance(List<AttendanceModel> attendanceList) async {
   String urlWithParams = "http://$ip/Hrms/saveAttendance";
   var jsonData = jsonEncode(attendanceList);
-  return await httpConnect(urlWithParams, HttpMethod.POST, jsonData) as bool;
+  try {
+    http.Response response = await http.post(Uri.parse(urlWithParams), headers: {"Content-Type": "application/json"}, body: jsonData);
+    if (response.statusCode == 200){
+      return response.body;
+    }
+  } catch (e) {
+    throw Exception('Failed');
+  }
+  return "Failed";
 }
 
 

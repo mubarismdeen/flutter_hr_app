@@ -1,3 +1,4 @@
+import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/globalState.dart';
 import 'package:admin/models/attendanceModel.dart';
@@ -542,12 +543,11 @@ class _AttendanceState extends State<Attendance> {
   Widget _saveButton() {
     return CustomElevatedButton(
       handleOnPress: () async {
-        // await _loadData();
-        bool status = await saveAttendance(_attendanceList);
-        if (status) {
+        String responseString = await saveAttendance(_attendanceList);
+        if (responseString.toLowerCase() == successfulResponse) {
           showSaveSuccessfulMessage(context);
         } else {
-          showSaveFailedMessage(context);
+          showSaveFailedMessage(context, responseString);
         }
         setState(() {
           _editable = false;

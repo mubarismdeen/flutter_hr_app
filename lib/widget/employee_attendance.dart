@@ -1,4 +1,5 @@
 import 'package:admin/api.dart';
+import 'package:admin/constants/constants.dart';
 import 'package:admin/constants/style.dart';
 import 'package:admin/globalState.dart';
 import 'package:admin/models/empMaster.dart';
@@ -529,11 +530,11 @@ class _EmployeeAttendanceState extends State<EmployeeAttendance> {
   Widget _saveButton() {
     return CustomElevatedButton(
       handleOnPress: () async {
-        bool status = await saveAttendance(_attendanceList);
-        if (status) {
+        String response = await saveAttendance(_attendanceList);
+        if (response == successfulResponse) {
           showSaveSuccessfulMessage(context);
         } else {
-          showSaveFailedMessage(context);
+          showSaveFailedMessage(context, response);
         }
         setState(() {
           _editable = false;

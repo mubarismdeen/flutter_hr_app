@@ -31,3 +31,5 @@ extension ScreenExtension on Screen {
     }
   }
 }
+
+const String successfulResponse = "true";
