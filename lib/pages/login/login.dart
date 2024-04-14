@@ -10,6 +10,7 @@ import '../../api.dart';
 import '../../helpers/colors.dart';
 import '../../helpers/image_placeholder.dart';
 import '../../layout.dart';
+import '../../utils/common_utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -104,27 +105,34 @@ class _MainViewState extends State<_MainView> {
               showLoading = true;
             });
 
-            List<UserScreens> screensForUser = await authorizeUser(
-              widget.usernameController!.text,
-              widget.passwordController!.text,
-            );
-            if (screensForUser.isNotEmpty) {
-              logStatus1 = true;
-              GlobalState.setScreensForUser(widget.usernameController!.text, screensForUser.first);
+            try {
+              List<UserScreens> screensForUser = await authorizeUser(
+                widget.usernameController!.text,
+                widget.passwordController!.text,
+              );
+              if (screensForUser.isNotEmpty) {
+                logStatus1 = true;
+                GlobalState.setScreensForUser(widget.usernameController!.text, screensForUser.first);
+              }
+              if (logStatus1) {
+                showError = false;
+                setState(() {
+                  showLoading = false;
+                });
+                _login(context);
+              } else {
+                showError = true;
+                setState(() {
+                  showLoading = false;
+                });
+              }
+            } catch (e) {
+              e.printError();
+              showSaveFailedMessage(context, "Error in establishing connection");
             }
-
-            if (logStatus1) {
-              showError = false;
-              setState(() {
-                showLoading = false;
-              });
-              _login(context);
-            } else {
-              showError = true;
-              setState(() {
-                showLoading = false;
-              });
-            }
+            setState(() {
+              showLoading = false;
+            });
           },
           status: showError,
         ),
