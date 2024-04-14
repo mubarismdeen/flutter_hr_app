@@ -72,9 +72,9 @@ class _GratuityScreenState extends State<GratuityScreen> {
                         )
                       ],
                     )),
-                if (_empDetails.isNotEmpty)
-                GratuityCalculateWidget(
-                    _empDetails, _gratuityType, closeDialog),
+                // if (_empDetails.isNotEmpty)
+                // GratuityCalculateWidget(
+                //     _empDetails, _gratuityType, closeDialog),
                 GratuityDetailsWidget(_gratuityDetails, closeDialog),
               ]),
             );
