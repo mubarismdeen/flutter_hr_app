@@ -7,6 +7,7 @@ class EmployeeDetails {
   String department = '';
   String status = '';
   String nationality = '';
+  DateTime? resignDt;
   DateTime birthDt = DateTime.now();
   DateTime joinDt = DateTime.now();
   String editBy = '';
@@ -23,6 +24,7 @@ class EmployeeDetails {
     required this.department,
     required this.status,
     required this.nationality,
+    this.resignDt,
     required this.birthDt,
     required this.joinDt,
     required this.editBy,
@@ -32,19 +34,20 @@ class EmployeeDetails {
   });
 
   EmployeeDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id']>>0;
-    empCode = json['empCode']??'';
-    name = json['name']??'';
-    mobile1 = json['mobile1']??'';
-    mobile2 = json['mobile2']??'';
-    department = json['department']??'';
-    status = json['status']??'';
-    nationality = json['nationality']??'';
-    birthDt = DateTime.parse(json['birthDt']);
-    joinDt = DateTime.parse(json['joinDt']);
-    editBy = json['editBy']??'';
-    editDt = DateTime.parse(json['editDt']);
-    createBy = json['createBy']??'';
-    createDt = DateTime.parse(json['createDt']);
+    id = json['id'] ?? 0;
+    empCode = json['empCode'] ?? '';
+    name = json['name'] ?? '';
+    mobile1 = json['mobile1'] ?? '';
+    mobile2 = json['mobile2'] ?? '';
+    department = json['department'] ?? '';
+    status = json['status'] ?? '';
+    nationality = json['nationality'] ?? '';
+    resignDt = json['resignDt'] != null ? DateTime.parse(json['resignDt']) : null;
+    birthDt = json['birthDt'] != null ? DateTime.parse(json['birthDt']) : DateTime.now();
+    joinDt = json['joinDt'] != null ? DateTime.parse(json['joinDt']) : DateTime.now();
+    editBy = json['editBy'] ?? '';
+    editDt = json['editDt'] != null ? DateTime.parse(json['editDt']) : DateTime.now();
+    createBy = json['createBy'] ?? '';
+    createDt = json['createDt'] != null ? DateTime.parse(json['createDt']) : DateTime.now();
   }
 }

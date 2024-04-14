@@ -43,6 +43,8 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
   List<Map<String, dynamic>> statuses = <Map<String, dynamic>>[];
   List<EmpMaster> assignedToOptions = <EmpMaster>[];
 
+  // bool _showResignedDateField = false;
+
   getDropdownInputs() async {
     departments = await getDepartments();
     nationalities = await getEmployeeNationalities();
@@ -72,6 +74,12 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
         (nationality) => nationality['description'] == _nationality);
     _selectedStatus =
         statuses.firstWhere((status) => status['description'] == _status);
+    // _showResignedDateField = _status == "Resigned";
+    // if (_showResignedDateField) {
+    //   _resignDate.text = widget.tableRow!.resignDt != null
+    //       ? DateFormat('yyyy-MM-dd').format(widget.tableRow!.resignDt!)
+    //       : '';
+    // }
   }
 
   SaveEmployeeDetails _employeeDetails = SaveEmployeeDetails(
@@ -115,6 +123,10 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
     _employeeDetails.natianalityId = _selectedNationality['id'];
     _employeeDetails.joinDt = DateTime.parse(_joiningDate.text);
     _employeeDetails.birthDt = DateTime.parse(_dob.text);
+    // if (_showResignedDateField) {
+    //   _employeeDetails.resignDt = DateTime.parse(_resignDate.text);
+    // }
+
 
     bool status = await saveEmployeeDetails(_employeeDetails);
     if (status) {
@@ -294,16 +306,45 @@ class _EmployeeDetailsFormState extends State<EmployeeDetailsForm> {
                       );
                     }).toList(),
                     onChanged: (String? value) {
-                      // setState(() {
                       _selectedStatus = statuses.firstWhere(
                           (status) => status['description'] == value);
-                      // });
                       if (value == 'Resigned') {
+                        // setState(() {
+                        //   _showResignedDateField = true;
+                        // });
                         _resignPopup();
+                      } else {
+                        // setState(() {
+                        //   _showResignedDateField = false;
+                        // });
                       }
                     },
                     value: _status,
                   ),
+                  // if (_showResignedDateField)
+                  // TextFormField(
+                  //   controller: _resignDate,
+                  //   decoration: const InputDecoration(labelText: 'Resigned Date'),
+                  //   onTap: () async {
+                  //     DateTime? date = DateTime(1900);
+                  //     FocusScope.of(context).requestFocus(FocusNode());
+                  //     date = await showDatePicker(
+                  //         context: context,
+                  //         initialDate: DateTime.now(),
+                  //         firstDate: DateTime(1900),
+                  //         lastDate: DateTime(2100));
+                  //     if (date != null) {
+                  //       _resignDate.text =
+                  //           DateFormat('yyyy-MM-dd').format(date);
+                  //     }
+                  //   },
+                  //   validator: (value) {
+                  //     if (value!.isEmpty) {
+                  //       return 'Please select resigned date';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   DropdownButtonFormField(
                     validator: (value) {
                       if (value == null) {

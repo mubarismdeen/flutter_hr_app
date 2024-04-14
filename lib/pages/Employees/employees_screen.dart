@@ -212,6 +212,11 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         ),
         DataColumn(
           label: Expanded(
+            child: Text('Resigned\nDate', style: tableHeaderStyle),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
             child: Text('Created\nBy', style: tableHeaderStyle),
           ),
         ),
@@ -238,6 +243,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   DataCell(Text(employee.status)),
                   DataCell(Text(getDateStringFromDateTime(employee.birthDt))),
                   DataCell(Text(getDateStringFromDateTime(employee.joinDt))),
+                  DataCell(Text(employee.resignDt == null ? "N/A" : employee.resignDt.toString())),
                   DataCell(Text(employee.createBy)),
                   DataCell(Text(getDateStringFromDateTime(employee.createDt))),
                   DataCell(
