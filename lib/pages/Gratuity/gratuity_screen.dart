@@ -38,7 +38,7 @@ class _GratuityScreenState extends State<GratuityScreen> {
     return FutureBuilder<dynamic>(
         future: getTableData(),
         builder: (context, AsyncSnapshot<dynamic> _data) {
-          if (_empDetails.isEmpty) {
+          if (_empDetails.isEmpty && _gratuityDetails.isEmpty) {
             return const Center(
               child: Text(
                 "No employees have resigned currently.",
@@ -72,6 +72,7 @@ class _GratuityScreenState extends State<GratuityScreen> {
                         )
                       ],
                     )),
+                if (_empDetails.isNotEmpty)
                 GratuityCalculateWidget(
                     _empDetails, _gratuityType, closeDialog),
                 GratuityDetailsWidget(_gratuityDetails, closeDialog),
