@@ -74,7 +74,7 @@ class _MainViewState extends State<_MainView> {
   BoxDecoration? borderDecoration;
   bool showError = false;
   bool showLoading = false;
-  void _login(BuildContext context) {
+  void _login() {
     Get.to(SiteLayout());
   }
 
@@ -83,7 +83,6 @@ class _MainViewState extends State<_MainView> {
     var screenw = MediaQuery.of(context).size.width;
     final isDesktop = screenw > 700 ? true : false;
     List<Widget> listViewChildren;
-    bool logStatus1 = false;
 
     if (isDesktop) {
       listViewChildren = [
@@ -111,24 +110,17 @@ class _MainViewState extends State<_MainView> {
                 widget.passwordController!.text,
               );
               if (screensForUser.isNotEmpty) {
-                logStatus1 = true;
-                GlobalState.setScreensForUser(widget.usernameController!.text, screensForUser.first);
-              }
-              if (logStatus1) {
+                GlobalState.setScreensForUser(
+                    widget.usernameController!.text, screensForUser.first);
                 showError = false;
-                setState(() {
-                  showLoading = false;
-                });
-                _login(context);
+                _login();
               } else {
                 showError = true;
-                setState(() {
-                  showLoading = false;
-                });
               }
             } catch (e) {
               e.printError();
-              showSaveFailedMessage(context, "Error in establishing connection");
+              showSaveFailedMessage(
+                  context, "Error in establishing connection");
             }
             setState(() {
               showLoading = false;
@@ -149,7 +141,7 @@ class _MainViewState extends State<_MainView> {
         ),
         _ThumbButton(
           onTap: () {
-            _login(context);
+            _login();
           },
         ),
       ];
