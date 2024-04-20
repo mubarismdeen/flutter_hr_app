@@ -145,7 +145,7 @@ class _DocExpiryState extends State<DocExpiry> {
       builder: (BuildContext context) {
         return CustomAlertDialog(
           title: 'Document Details',
-          child: DocExpiryExpanded(widget.privileges),
+          child: DocExpiryExpanded(widget.privileges, closeDialog),
         );
       },
     );

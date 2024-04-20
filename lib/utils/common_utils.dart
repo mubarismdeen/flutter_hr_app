@@ -171,3 +171,11 @@ class StatusEntity {
   }
 }
 
+List<StatusEntity> addBlankOption (List<StatusEntity> options) {
+  StatusEntity blankOption = StatusEntity();
+  return [
+    blankOption,
+    ...options
+  ];
+}
+

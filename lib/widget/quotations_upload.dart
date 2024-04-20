@@ -212,10 +212,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                       decoration:
                           const InputDecoration(labelText: 'Quotation Type'),
                       items:
-                          types.map<DropdownMenuItem<String>>((dynamic value) {
+                          types.map<DropdownMenuItem<String>>((StatusEntity quotationType) {
                         return DropdownMenuItem<String>(
-                          value: value['description'].toString(),
-                          child: Text(value['description']),
+                          value: quotationType.description,
+                          child: Text(quotationType.description),
                         );
                       }).toList(),
                       onChanged: (String? t) {
@@ -258,10 +258,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                       },
                       decoration: const InputDecoration(labelText: 'PO Status'),
                       items: poStatuses
-                          .map<DropdownMenuItem<String>>((dynamic value) {
+                          .map<DropdownMenuItem<String>>((StatusEntity poStatus) {
                         return DropdownMenuItem<String>(
-                          value: value['description'].toString(),
-                          child: Text(value['description']),
+                          value: poStatus.description,
+                          child: Text(poStatus.description),
                         );
                       }).toList(),
                       onChanged: (String? value) {
@@ -303,10 +303,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                       decoration:
                           const InputDecoration(labelText: 'Invoice Status'),
                       items: invoiceStatuses
-                          .map<DropdownMenuItem<String>>((dynamic value) {
+                          .map<DropdownMenuItem<String>>((StatusEntity invStatus) {
                         return DropdownMenuItem<String>(
-                          value: value['description'].toString(),
-                          child: Text(value['description']),
+                          value: invStatus.description,
+                          child: Text(invStatus.description),
                         );
                       }).toList(),
                       onChanged: (String? value) {

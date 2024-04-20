@@ -61,10 +61,22 @@ class _QuotationsFilterState extends State<QuotationsFilter> {
   }
 
   Future<void> _initializeDropdownInputs() async {
-    invoiceStatuses = await getInvoiceStatus();
-    poStatuses = await getPoStatus();
-    types = await getQuotationType();
-    clients = await getClientDetails();
+    invoiceStatuses = addBlankOption(await getInvoiceStatus());
+    poStatuses = addBlankOption(await getPoStatus());
+    types = addBlankOption(await getQuotationType());
+    clients = [
+      ClientDetails(
+          id: 0,
+          name: '',
+          address: '',
+          mobile1: '',
+          mobile2: '',
+          editBy: '',
+          editDt: DateTime.now(),
+          creatBy: '',
+          creatDt: DateTime.now()),
+      ...await getClientDetails()
+    ];
 
     setState(() {
       _showLoading = false;
@@ -83,12 +95,12 @@ class _QuotationsFilterState extends State<QuotationsFilter> {
   Widget build(BuildContext context) {
     return _showLoading
         ? const SizedBox(
-          height: 200,
-          child: SpinKitWave(
+            height: 200,
+            child: SpinKitWave(
               color: themeColor,
               size: 30,
             ),
-        )
+          )
         : Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -132,15 +144,16 @@ class _QuotationsFilterState extends State<QuotationsFilter> {
                       onChanged: (String? value) {
                         setState(() {
                           _selectedType = types
-                              .firstWhere(
-                                  (type) => type.description == value);
+                              .firstWhere((type) => type.description == value);
                         });
                       }),
                   DropdownButtonFormField(
                       decoration: const InputDecoration(labelText: 'PO Status'),
-                      value: _selectedPoStatus.description.isNotEmpty ? _selectedPoStatus.description : null,
-                      items: poStatuses
-                          .map<DropdownMenuItem<String>>((StatusEntity poStatus) {
+                      value: _selectedPoStatus.description.isNotEmpty
+                          ? _selectedPoStatus.description
+                          : null,
+                      items: poStatuses.map<DropdownMenuItem<String>>(
+                          (StatusEntity poStatus) {
                         return DropdownMenuItem<String>(
                           value: poStatus.description,
                           child: Text(poStatus.description),
@@ -148,9 +161,8 @@ class _QuotationsFilterState extends State<QuotationsFilter> {
                       }).toList(),
                       onChanged: (String? value) {
                         setState(() {
-                          _selectedPoStatus = poStatuses
-                              .firstWhere((poStatus) =>
-                                  poStatus.description == value);
+                          _selectedPoStatus = poStatuses.firstWhere(
+                              (poStatus) => poStatus.description == value);
                         });
                       }),
                   DropdownButtonFormField(
@@ -159,8 +171,8 @@ class _QuotationsFilterState extends State<QuotationsFilter> {
                       value: _selectedInvoiceStatus.description.isNotEmpty
                           ? _selectedInvoiceStatus.description
                           : null,
-                      items: invoiceStatuses
-                          .map<DropdownMenuItem<String>>((StatusEntity invStatus) {
+                      items: invoiceStatuses.map<DropdownMenuItem<String>>(
+                          (StatusEntity invStatus) {
                         return DropdownMenuItem<String>(
                           value: invStatus.description.toString(),
                           child: Text(invStatus.description),
@@ -168,9 +180,8 @@ class _QuotationsFilterState extends State<QuotationsFilter> {
                       }).toList(),
                       onChanged: (String? value) {
                         setState(() {
-                          _selectedInvoiceStatus = invoiceStatuses
-                              .firstWhere((invStatus) =>
-                                  invStatus.description == value);
+                          _selectedInvoiceStatus = invoiceStatuses.firstWhere(
+                              (invStatus) => invStatus.description == value);
                         });
                       }),
                   const SizedBox(height: 16.0),

@@ -8,8 +8,9 @@ import 'custom_alert_dialog.dart';
 
 class DocExpiryExpanded extends StatefulWidget {
   UserPrivileges privileges;
+  Function() closeDialog;
 
-  DocExpiryExpanded(this.privileges, {Key? key}) : super(key: key);
+  DocExpiryExpanded(this.privileges, this.closeDialog, {Key? key}) : super(key: key);
 
   @override
   _DocExpiryExpandedState createState() => _DocExpiryExpandedState();
@@ -161,6 +162,7 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
 
   closeDialog() {
     setState(() {
+      widget.closeDialog();
       getTableData();
     });
   }

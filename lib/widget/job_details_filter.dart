@@ -37,11 +37,6 @@ class _JobDetailsFilterState extends State<JobDetailsFilter> {
   late List<StatusEntity> jobStatuses;
   late List<EmpMaster> assignedToOptions;
 
-  getDropdownInputs() async {
-    jobStatuses = await getJobStatuses();
-    assignedToOptions = await getEmpDetails();
-  }
-
   Future<void> _applyForm() async {
     _selectedDueDate = _dueDate.text;
     widget.applyFilter(
@@ -62,14 +57,28 @@ class _JobDetailsFilterState extends State<JobDetailsFilter> {
   }
 
   Future<void> _initializeDropdownInputs() async {
-    jobStatuses = await getJobStatuses();
-    assignedToOptions = await getEmpDetails();
-
+    jobStatuses = addBlankOption(await getJobStatuses());
+    assignedToOptions = [
+      EmpMaster(
+          id: 0,
+          empCode: '',
+          name: '',
+          mobile1: '',
+          mobile2: '',
+          depId: 0,
+          statusId: 0,
+          nationalityId: 0,
+          joinDt: DateTime.now(),
+          birthDt: DateTime.now(),
+          editBy: '',
+          editDate: DateTime.now(),
+          creatBy: '',
+          creatDate: DateTime.now()),
+      ...await getEmpDetails()
+    ];
     setState(() {
       _showLoading = false;
     });
-
-    return null;
   }
 
   @override

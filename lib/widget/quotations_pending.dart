@@ -150,7 +150,7 @@ class _QuotationsPendingState extends State<QuotationsPending> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return QuotationsExpandedWithFilter(widget.privileges);
+        return QuotationsExpandedWithFilter(widget.privileges, closeDialog);
       },
     );
   }

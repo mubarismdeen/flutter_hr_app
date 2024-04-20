@@ -11,8 +11,9 @@ import 'custom_alert_dialog.dart';
 
 class QuotationsExpandedWithFilter extends StatefulWidget {
   UserPrivileges privileges;
+  Function() closeDialog;
 
-  QuotationsExpandedWithFilter(this.privileges);
+  QuotationsExpandedWithFilter(this.privileges, this.closeDialog);
 
   @override
   State<QuotationsExpandedWithFilter> createState() =>
@@ -362,6 +363,7 @@ class _QuotationsExpandedWithFilterState
 
   closeDialog() {
     setState(() {
+      widget.closeDialog();
       getTableData();
     });
   }
