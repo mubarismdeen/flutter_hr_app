@@ -8,7 +8,6 @@ import 'package:admin/widget/job_details_upload.dart';
 import 'package:flutter/material.dart';
 
 import '../api.dart';
-import 'package:intl/intl.dart';
 
 import 'custom_add_new_button.dart';
 import 'custom_view_details_button.dart';
@@ -105,7 +104,7 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
                           .map(
                             (tableRow) => DataRow(
                                 color: MaterialStateColor.resolveWith(
-                                    (states) => _getRowColor(
+                                    (states) => getRowColor(
                                         DateTime.parse(tableRow['dueDate']))),
                                 cells: [
                                   DataCell(
@@ -118,10 +117,7 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
                                     Text(tableRow['assignedTo']),
                                   ),
                                   DataCell(
-                                    Text(DateFormat("yyyy-MM-dd")
-                                        .format(
-                                            DateTime.parse(tableRow['dueDate']))
-                                        .toString()),
+                                    Text(tableRow['dueDate']),
                                   ),
                                 ]),
                           )
@@ -137,18 +133,6 @@ class _JobDetailsWidgetState extends State<JobDetailsWidget> {
             ),
           );
         });
-  }
-
-  Color _getRowColor(DateTime docDate) {
-    DateTime today = DateTime.now();
-    int differenceInDays = docDate.difference(today).inDays;
-    Color rowColor = Colors.transparent;
-    if (differenceInDays < 0) {
-      rowColor = Colors.red.shade300;
-    } else if (differenceInDays < 10) {
-      rowColor = Colors.orange.shade200;
-    }
-    return rowColor;
   }
 
   void _openViewDialog() {

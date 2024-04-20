@@ -195,6 +195,9 @@ class _JobDetailsExpandedWithFilterState
                       rows: tableData
                           .map(
                             (tableRow) => DataRow(
+                              color: MaterialStateColor.resolveWith(
+                                      (states) => getRowColor(
+                                      DateTime.parse(tableRow['dueDate']))),
                               cells: [
                                 DataCell(
                                   Text(tableRow['job'].toString()),

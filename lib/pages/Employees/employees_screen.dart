@@ -241,11 +241,11 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   DataCell(Text(employee.nationality)),
                   DataCell(Text(employee.department)),
                   DataCell(Text(employee.status)),
-                  DataCell(Text(getDateStringFromDateTime(employee.birthDt))),
-                  DataCell(Text(getDateStringFromDateTime(employee.joinDt))),
+                  DataCell(Text(yyyyMMddFromDateTime(employee.birthDt))),
+                  DataCell(Text(yyyyMMddFromDateTime(employee.joinDt))),
                   DataCell(Text(employee.resignDt == null ? "N/A" : employee.resignDt.toString())),
                   DataCell(Text(employee.createBy)),
-                  DataCell(Text(getDateStringFromDateTime(employee.createDt))),
+                  DataCell(Text(yyyyMMddFromDateTime(employee.createDt))),
                   DataCell(
                     IconButton(
                       icon: const Icon(Icons.settings_outlined,

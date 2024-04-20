@@ -7,7 +7,6 @@ import 'package:admin/widget/doc_expiry_expanded.dart';
 import 'package:flutter/material.dart';
 
 import '../api.dart';
-import 'package:intl/intl.dart';
 import '../models/userPrivileges.dart';
 import 'custom_add_new_button.dart';
 import 'custom_view_details_button.dart';
@@ -96,7 +95,7 @@ class _DocExpiryState extends State<DocExpiry> {
                           .map(
                             (tableRow) => DataRow(
                                 color: MaterialStateColor.resolveWith(
-                                    (states) => _getRowColor(
+                                    (states) => getRowColor(
                                         DateTime.parse(tableRow['dueDate']))),
                                 cells: [
                                   DataCell(
@@ -106,10 +105,10 @@ class _DocExpiryState extends State<DocExpiry> {
                                     Text(tableRow['docType']),
                                   ),
                                   DataCell(
-                                    Text(DateFormat("yyyy-MM-dd")
-                                        .format(
-                                            DateTime.parse(tableRow['dueDate']))
-                                        .toString()),
+                                    Text(
+                                      yyyyMMddFromDateTime(
+                                          DateTime.parse(tableRow['dueDate'])),
+                                    ),
                                   ),
                                 ]),
                           )
@@ -127,17 +126,6 @@ class _DocExpiryState extends State<DocExpiry> {
         });
   }
 
-  Color _getRowColor(DateTime docDate) {
-    DateTime today = DateTime.now();
-    int differenceInDays = docDate.difference(today).inDays;
-    Color rowColor = Colors.transparent;
-    if (differenceInDays < 0) {
-      rowColor = Colors.red.shade300;
-    } else if (differenceInDays < 10) {
-      rowColor = Colors.orange.shade200;
-    }
-    return rowColor;
-  }
 
   void _openViewDialog() {
     showDialog(

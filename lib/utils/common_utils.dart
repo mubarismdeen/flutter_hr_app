@@ -6,7 +6,7 @@ import 'dart:io' show Platform;
 
 import '../constants/style.dart';
 
-String getDateStringFromDateTime(DateTime dateTime) {
+String yyyyMMddFromDateTime(DateTime dateTime) {
   return DateFormat('yyyy-MM-dd').format(dateTime);
 }
 
@@ -177,5 +177,17 @@ List<StatusEntity> addBlankOption (List<StatusEntity> options) {
     blankOption,
     ...options
   ];
+}
+
+Color getRowColor(DateTime docDate) {
+  DateTime today = DateTime.now();
+  int differenceInDays = docDate.difference(today).inDays;
+  Color rowColor = Colors.transparent;
+  if (differenceInDays < 0) {
+    rowColor = Colors.red.shade300;
+  } else if (differenceInDays < 10) {
+    rowColor = Colors.orange.shade200;
+  }
+  return rowColor;
 }
 

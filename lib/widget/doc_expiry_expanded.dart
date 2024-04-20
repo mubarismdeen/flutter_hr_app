@@ -4,13 +4,15 @@ import 'package:admin/widget/doc_details_upload.dart';
 import 'package:flutter/material.dart';
 
 import '../api.dart';
+import '../utils/common_utils.dart';
 import 'custom_alert_dialog.dart';
 
 class DocExpiryExpanded extends StatefulWidget {
   UserPrivileges privileges;
   Function() closeDialog;
 
-  DocExpiryExpanded(this.privileges, this.closeDialog, {Key? key}) : super(key: key);
+  DocExpiryExpanded(this.privileges, this.closeDialog, {Key? key})
+      : super(key: key);
 
   @override
   _DocExpiryExpandedState createState() => _DocExpiryExpandedState();
@@ -104,6 +106,8 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
                   rows: tableData
                       .map(
                         (tableRow) => DataRow(
+                          color: MaterialStateColor.resolveWith((states) =>
+                              getRowColor(DateTime.parse(tableRow['dueDate']))),
                           cells: [
                             DataCell(
                               Text(tableRow['narration'].toString()),
@@ -112,10 +116,16 @@ class _DocExpiryExpandedState extends State<DocExpiryExpanded> {
                               Text(tableRow['docType'].toString()),
                             ),
                             DataCell(
-                              Text(tableRow['dueDate'].toString()),
+                              Text(
+                                yyyyMMddFromDateTime(
+                                    DateTime.parse(tableRow['dueDate'])),
+                              ),
                             ),
                             DataCell(
-                              Text(tableRow['renewedDate'].toString()),
+                              Text(
+                                yyyyMMddFromDateTime(
+                                    DateTime.parse(tableRow['renewedDate'])),
+                              ),
                             ),
                             DataCell(
                               Text(tableRow['editBy'].toString()),

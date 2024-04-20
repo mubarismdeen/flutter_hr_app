@@ -152,7 +152,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                                             DataCell(Text(
                                                 client.creatBy)),
                                             DataCell(Text(
-                                                getDateStringFromDateTime(
+                                                yyyyMMddFromDateTime(
                                                     client.creatDt))),
                                           ],
                                           onSelectChanged: (selected) {
