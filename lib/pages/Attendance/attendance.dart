@@ -36,6 +36,10 @@ class _AttendanceState extends State<Attendance> {
   void onDateChange(DateTime newDate) {
     setState(() {
       _pickedDate = newDate;
+      attendances = List<AttendanceDto>.empty();
+      _attendanceList = List<AttendanceModel>.empty();
+      _enterAttendance = false;
+      getAttendanceData();
     });
   }
 
