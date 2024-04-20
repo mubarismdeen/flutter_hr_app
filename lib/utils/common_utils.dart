@@ -28,9 +28,9 @@ bool getViewPrivilege(UserPrivileges privileges) {
 
 List<Widget> getActionButtonsWithoutPrivilege(
     {required BuildContext context,
-      required void Function() onSubmit,
-      bool hasDeleteOption = false,
-      void Function()? onDelete}) {
+    required void Function() onSubmit,
+    bool hasDeleteOption = false,
+    void Function()? onDelete}) {
   List<Widget> widgetList = [
     ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -78,15 +78,11 @@ List<Widget> getActionButtonsWithPrivilege(
         onPressed: onSubmit,
         child: const Text('Submit'),
       ),
-    ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: themeColor,
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-      child: const Text('Cancel'),
-    ),
+    getThemedButton(
+        buttonText: 'Cancel',
+        onPressed: () {
+          Navigator.of(context).pop();
+        }),
   ];
   if (hasData && privileges.deletePrivilege) {
     widgetList.add(
@@ -100,6 +96,16 @@ List<Widget> getActionButtonsWithPrivilege(
     );
   }
   return widgetList;
+}
+
+Widget getThemedButton({required String buttonText, Function()? onPressed}) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: themeColor,
+    ),
+    onPressed: onPressed,
+    child: Text(buttonText),
+  );
 }
 
 void showSaveSuccessfulMessage(BuildContext context,
@@ -166,17 +172,14 @@ class StatusEntity {
   StatusEntity();
 
   StatusEntity.fromJson(Map<String, dynamic> json) {
-    id =  json['id']??"0";
-    description = json['description']??'';
+    id = json['id'] ?? "0";
+    description = json['description'] ?? '';
   }
 }
 
-List<StatusEntity> addBlankOption (List<StatusEntity> options) {
+List<StatusEntity> addBlankOption(List<StatusEntity> options) {
   StatusEntity blankOption = StatusEntity();
-  return [
-    blankOption,
-    ...options
-  ];
+  return [blankOption, ...options];
 }
 
 Color getRowColor(DateTime docDate) {
@@ -190,4 +193,3 @@ Color getRowColor(DateTime docDate) {
   }
   return rowColor;
 }
-

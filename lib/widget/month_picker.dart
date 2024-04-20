@@ -1,6 +1,7 @@
+import 'package:admin/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class MonthPicker extends StatefulWidget {
   DateTime pickedDate;
@@ -9,32 +10,51 @@ class MonthPicker extends StatefulWidget {
   MonthPicker(this.pickedDate, this.onDateChange);
 
   @override
-  _MonthPickerState createState() => _MonthPickerState(pickedDate, onDateChange);
+  _MonthPickerState createState() => _MonthPickerState();
 }
 
 class _MonthPickerState extends State<MonthPicker> {
-  DateTime _dateTime;
-  void Function(DateTime newDate) onDateChange;
+  DateTime picked = DateTime.now();
 
-  _MonthPickerState(this._dateTime, this.onDateChange);
+  void onCancel() {
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final DateTime? picked = await showDatePicker(
+        showMonthPicker(
           context: context,
-          initialDate: _dateTime,
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2100),
-        );
-
-        if (picked != null && picked != _dateTime) {
-          setState(() {
-            _dateTime = picked;
-          });
-          onDateChange(picked);
-        }
+          initialDate: widget.pickedDate,
+          selectedMonthBackgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
+          headerColor: themeColor,
+          roundedCornersRadius: 10,
+          cancelWidget: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+                color: themeColor, borderRadius: BorderRadius.circular(5)),
+            child: const Text('CANCEL',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white)),
+          ),
+          confirmWidget:Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+            decoration: BoxDecoration(
+                color: Colors.blue, borderRadius: BorderRadius.circular(5)),
+            child: const Text('OK',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white)),
+          ),
+        ).then((date) {
+          if (date != null) {
+            setState(() {
+              picked = date;
+              widget.onDateChange(picked);
+            });
+          }
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
@@ -46,7 +66,7 @@ class _MonthPickerState extends State<MonthPicker> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              DateFormat('MMM-yyyy').format(_dateTime),
+              DateFormat('MMM-yyyy').format(picked),
               style:
                   const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
             ),
