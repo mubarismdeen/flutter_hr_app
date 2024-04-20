@@ -1,5 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/userPrivileges.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:admin/widget/quotations_filter.dart';
 import 'package:admin/widget/quotations_upload.dart';
 import 'package:flutter/material.dart';
@@ -24,23 +25,33 @@ class _QuotationsExpandedWithFilterState
 
   String _selectedClientName = '';
   String _selectedName = '';
-  String _selectedPoStatus = '';
-  String _selectedInvoiceStatus = '';
-  String _selectedType = '';
+  StatusEntity _selectedPoStatus = StatusEntity();
+  StatusEntity _selectedInvoiceStatus = StatusEntity();
+  StatusEntity _selectedType = StatusEntity();
+
+  bool _isFilterApplied = false;
 
   getTableData() async {
+    String selectedTypeId = _selectedType.id == 0 ? '' : _selectedType.id.toString();
+    String selectedInvStatusId = _selectedInvoiceStatus.id == 0 ? '' : _selectedInvoiceStatus.id.toString();
+    String selectedPoStatusId = _selectedPoStatus.id == 0 ? '' : _selectedPoStatus.id.toString();
     tableData = await getQuotationDetails(_selectedClientName, _selectedName,
-        _selectedPoStatus, _selectedInvoiceStatus, _selectedType);
+        selectedPoStatusId, selectedInvStatusId, selectedTypeId);
   }
 
-  applyFilter(String clientName, String name, String poStatus,
-      String invoiceStatus, String type) {
+  applyFilter(String clientName, String name, StatusEntity poStatus,
+      StatusEntity invoiceStatus, StatusEntity type) {
     setState(() {
       _selectedClientName = clientName;
       _selectedName = name;
       _selectedPoStatus = poStatus;
       _selectedInvoiceStatus = invoiceStatus;
       _selectedType = type;
+      _isFilterApplied = _selectedClientName.isNotEmpty ||
+          _selectedName.isNotEmpty ||
+          _selectedPoStatus.description.isNotEmpty ||
+          _selectedInvoiceStatus.description.isNotEmpty ||
+          _selectedType.description.isNotEmpty;
       getTableData();
     });
   }
@@ -62,11 +73,28 @@ class _QuotationsExpandedWithFilterState
                       const SizedBox(width: 15),
                       IconButton(
                         onPressed: _openFilterDialog,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.filter_alt_sharp,
-                          color: Colors.grey,
+                          color: _isFilterApplied ? Colors.blue : Colors.grey,
                         ),
                       ),
+                      if (_isFilterApplied)  // Conditionally render the button if _isFilterApplied is true
+                        Container(
+                          decoration: BoxDecoration(
+
+                            borderRadius: BorderRadius.circular(20),border: Border.all(color: Colors.blue),
+                            color: Colors.white, // Adjust color as needed
+                          ),
+                          child: TextButton(
+                            onPressed: () => {
+                              applyFilter('', '', StatusEntity(), StatusEntity(), StatusEntity())
+                            },
+                            child: const Text(
+                              'Clear Filter',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                   TextButton(
@@ -307,7 +335,15 @@ class _QuotationsExpandedWithFilterState
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(content: QuotationsFilter(applyFilter));
+        return AlertDialog(
+            content: QuotationsFilter(
+                applyFilter: applyFilter,
+                selectedClientName: _selectedClientName,
+                selectedName: _selectedName,
+                selectedPoStatus: _selectedPoStatus,
+                selectedInvoiceStatus: _selectedInvoiceStatus,
+                selectedType: _selectedType,
+            ));
       },
     );
   }

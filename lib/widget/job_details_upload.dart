@@ -27,12 +27,12 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
   var _assignedDate = TextEditingController();
   var _dueDate = TextEditingController();
   late EmpMaster _selectedAssignedTo;
-  late Map<String, dynamic> _selectedJobStatus;
+  late StatusEntity _selectedJobStatus;
   String? _assignedTo;
   String? _status;
 
-  List<Map<String, dynamic>> jobStatuses = <Map<String, dynamic>>[];
-  List<EmpMaster> assignedToOptions = <EmpMaster>[];
+  late List<StatusEntity> jobStatuses;
+  late List<EmpMaster> assignedToOptions;
 
   getDropdownInputs() async {
     jobStatuses = await getJobStatuses();
@@ -54,7 +54,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
     _selectedAssignedTo = assignedToOptions
         .firstWhere((assignedTo) => assignedTo.name == _assignedTo);
     _selectedJobStatus = jobStatuses
-        .firstWhere((jobStatus) => jobStatus['description'] == _status);
+        .firstWhere((jobStatus) => jobStatus.description == _status);
   }
 
   JobDetails _jobDetails = JobDetails(
@@ -88,7 +88,7 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
     _jobDetails.assignedTo = _selectedAssignedTo.empCode;
     _jobDetails.assignedDate =
         DateFormat('yyyy-MM-dd').format(DateTime.parse(_assignedDate.text));
-    _jobDetails.jobStatus = _selectedJobStatus['id'];
+    _jobDetails.jobStatus = _selectedJobStatus.id;
     _jobDetails.dueDate =
         DateFormat('yyyy-MM-dd').format(DateTime.parse(_dueDate.text));
 
@@ -214,16 +214,16 @@ class _JobDetailsUploadState extends State<JobDetailsUpload> {
                         },
                         decoration: const InputDecoration(labelText: 'Status'),
                         items: jobStatuses
-                            .map<DropdownMenuItem<String>>((dynamic value) {
+                            .map<DropdownMenuItem<String>>((StatusEntity jobStatus) {
                           return DropdownMenuItem<String>(
-                            value: value['description'].toString(),
-                            child: Text(value['description']),
+                            value: jobStatus.description,
+                            child: Text(jobStatus.description),
                           );
                         }).toList(),
                         onChanged: (String? value) {
                           // setState(() {
                           _selectedJobStatus = jobStatuses.firstWhere(
-                              (jobStatus) => jobStatus['description'] == value);
+                              (jobStatus) => jobStatus.description == value);
                           // });
                         },
                         value: _status),

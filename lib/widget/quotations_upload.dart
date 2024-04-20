@@ -30,18 +30,18 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
   var _reportNo = TextEditingController();
   var _invoiceAmt = TextEditingController();
   var _dueDate = TextEditingController();
-  late Map<String, dynamic> _selectedInvStatus;
-  late Map<String, dynamic> _selectedPoStatus;
-  late Map<String, dynamic> _selectedType;
+  late StatusEntity _selectedInvStatus;
+  late StatusEntity _selectedPoStatus;
+  late StatusEntity _selectedType;
   late ClientDetails _selectedClient;
   String? _clientName;
   String? _type;
   String? _invStatus;
   String? _poStatus;
 
-  List<Map<String, dynamic>> invoiceStatuses = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> poStatuses = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> types = <Map<String, dynamic>>[];
+  late List<StatusEntity> invoiceStatuses;
+  late List<StatusEntity> poStatuses;
+  late List<StatusEntity> types;
   List<ClientDetails> clients = <ClientDetails>[];
 
   getDropdownInputs() async {
@@ -70,10 +70,10 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
     _clientName = widget.tableRow!['clientName'];
 
     _selectedInvStatus = invoiceStatuses
-        .firstWhere((invStatus) => invStatus['description'] == _invStatus);
+        .firstWhere((invStatus) => invStatus.description == _invStatus);
     _selectedPoStatus = poStatuses
-        .firstWhere((poStatus) => poStatus['description'] == _poStatus);
-    _selectedType = types.firstWhere((type) => type['description'] == _type);
+        .firstWhere((poStatus) => poStatus.description == _poStatus);
+    _selectedType = types.firstWhere((type) => type.description == _type);
     _selectedClient =
         clients.firstWhere((client) => client.name == _clientName);
   }
@@ -107,9 +107,9 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
       print('Name: $_name');
       print('Narration: $_narration');
       print('Invoice No: $_invocieNo');
-      print('PO Status: ${_selectedPoStatus['id']}');
-      print('Invoice Status: ${_selectedInvStatus['id']}');
-      print('Type: ${_selectedType['id']}');
+      print('PO Status: ${_selectedPoStatus.id}');
+      print('Invoice Status: ${_selectedInvStatus.id}');
+      print('Type: ${_selectedType.id}');
       print('Due Date: $_dueDate');
     }
     _quotationDetails.clientId = _selectedClient.id;
@@ -120,9 +120,9 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
     _quotationDetails.poRefNo = int.parse(_poRefNo.text);
     _quotationDetails.reportNo = int.parse(_reportNo.text);
     _quotationDetails.invoiceAmt = double.parse(_invoiceAmt.text);
-    _quotationDetails.poStatus = _selectedPoStatus['id'];
-    _quotationDetails.invStatus = _selectedInvStatus['id'];
-    _quotationDetails.type = _selectedType['id'];
+    _quotationDetails.poStatus = _selectedPoStatus.id;
+    _quotationDetails.invStatus = _selectedInvStatus.id;
+    _quotationDetails.type = _selectedType.id;
     _quotationDetails.dueDate =
         DateFormat('yyyy-MM-dd').format(DateTime.parse(_dueDate.text));
 
@@ -220,7 +220,7 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                       }).toList(),
                       onChanged: (String? t) {
                         _selectedType = types
-                            .firstWhere((type) => type['description'] == t);
+                            .firstWhere((type) => type.description == t);
                         //   setState(() {
                         // });
                       },
@@ -266,7 +266,7 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                       }).toList(),
                       onChanged: (String? value) {
                         _selectedPoStatus = poStatuses.firstWhere(
-                            (poStatus) => poStatus['description'] == value);
+                            (poStatus) => poStatus.description == value);
                       },
                       value: _poStatus,
                     ),
@@ -311,7 +311,7 @@ class _QuotationsUploadState extends State<QuotationsUpload> {
                       }).toList(),
                       onChanged: (String? value) {
                         _selectedInvStatus = invoiceStatuses.firstWhere(
-                            (invStatus) => invStatus['description'] == value);
+                            (invStatus) => invStatus.description == value);
                       },
                       value: _invStatus,
                     ),

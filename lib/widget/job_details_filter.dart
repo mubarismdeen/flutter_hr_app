@@ -1,5 +1,7 @@
 import 'package:admin/constants/style.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 import '../api.dart';
@@ -7,7 +9,15 @@ import '../models/empMaster.dart';
 
 class JobDetailsFilter extends StatefulWidget {
   dynamic applyFilter;
-  JobDetailsFilter(this.applyFilter, {Key? key}) : super(key: key);
+  StatusEntity selectedJobStatus;
+  StatusEntity selectedAssignedTo;
+  String selectedDueDate;
+
+  JobDetailsFilter(
+      {required this.applyFilter,
+      required this.selectedAssignedTo,
+      required this.selectedJobStatus,
+      required this.selectedDueDate});
 
   @override
   State<JobDetailsFilter> createState() => _JobDetailsFilterState();
@@ -16,14 +26,16 @@ class JobDetailsFilter extends StatefulWidget {
 class _JobDetailsFilterState extends State<JobDetailsFilter> {
   final _formKey = GlobalKey<FormState>();
 
-  var _dueDate = TextEditingController();
+  final _dueDate = TextEditingController();
 
-  String _selectedJobStatus = '';
-  String _selectedAssignedTo = '';
+  StatusEntity _selectedJobStatus = StatusEntity();
+  StatusEntity _selectedAssignedTo = StatusEntity();
   String _selectedDueDate = '';
 
-  List<Map<String, dynamic>> jobStatuses = <Map<String, dynamic>>[];
-  List<EmpMaster> assignedToOptions = <EmpMaster>[];
+  bool _showLoading = true;
+
+  late List<StatusEntity> jobStatuses;
+  late List<EmpMaster> assignedToOptions;
 
   getDropdownInputs() async {
     jobStatuses = await getJobStatuses();
@@ -32,39 +44,75 @@ class _JobDetailsFilterState extends State<JobDetailsFilter> {
 
   Future<void> _applyForm() async {
     _selectedDueDate = _dueDate.text;
-    widget.applyFilter(_selectedJobStatus, _selectedAssignedTo, _selectedDueDate);
+    widget.applyFilter(
+        _selectedJobStatus, _selectedAssignedTo, _selectedDueDate);
     Navigator.of(context).pop();
   }
 
   @override
+  void initState() {
+    super.initState();
+    _selectedJobStatus = widget.selectedJobStatus;
+    _selectedAssignedTo = widget.selectedAssignedTo;
+    _selectedDueDate = widget.selectedDueDate;
+
+    _dueDate.text = _selectedDueDate;
+
+    _initializeDropdownInputs();
+  }
+
+  Future<void> _initializeDropdownInputs() async {
+    jobStatuses = await getJobStatuses();
+    assignedToOptions = await getEmpDetails();
+
+    setState(() {
+      _showLoading = false;
+    });
+
+    return null;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-        future: getDropdownInputs(),
-        builder: (context, AsyncSnapshot<dynamic> _data) {
-          return Form(
+    return _showLoading
+        ? const SizedBox(
+            height: 200,
+            child: SpinKitWave(
+              color: themeColor,
+              size: 30,
+            ),
+          )
+        : Form(
             key: _formKey,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: 'Job Status'),
+                      decoration:
+                          const InputDecoration(labelText: 'Job Status'),
+                      value: _selectedJobStatus.description.isNotEmpty
+                          ? _selectedJobStatus.description
+                          : null,
                       items: jobStatuses.map<DropdownMenuItem<String>>(
-                              (dynamic jobStatus) {
-                            return DropdownMenuItem<String>(
-                              value: jobStatus['description'].toString(),
-                              child: Text(jobStatus['description']),
-                            );
-                          }).toList(),
+                          (StatusEntity jobStatus) {
+                        return DropdownMenuItem<String>(
+                          value: jobStatus.description,
+                          child: Text(jobStatus.description),
+                        );
+                      }).toList(),
                       onChanged: (String? value) {
                         setState(() {
                           _selectedJobStatus = jobStatuses.firstWhere(
-                                  (jobStatus) => jobStatus['description'] == value)['id'].toString();
+                              (jobStatus) => jobStatus.description == value);
                         });
                       }),
                   DropdownButtonFormField(
                       decoration:
-                      const InputDecoration(labelText: 'Assigned To'),
+                          const InputDecoration(labelText: 'Assigned To'),
+                      value: _selectedAssignedTo.description.isNotEmpty
+                          ? _selectedAssignedTo.description
+                          : null,
                       items: assignedToOptions
                           .map<DropdownMenuItem<String>>((EmpMaster emp) {
                         return DropdownMenuItem<String>(
@@ -74,8 +122,10 @@ class _JobDetailsFilterState extends State<JobDetailsFilter> {
                       }).toList(),
                       onChanged: (String? value) {
                         setState(() {
-                          _selectedAssignedTo = assignedToOptions.firstWhere(
-                                  (emp) => emp.name == value).id.toString();
+                          _selectedAssignedTo.id = assignedToOptions
+                              .firstWhere((emp) => emp.name == value)
+                              .id;
+                          _selectedAssignedTo.description = value ?? '';
                         });
                       }),
                   TextFormField(
@@ -120,6 +170,5 @@ class _JobDetailsFilterState extends State<JobDetailsFilter> {
               ),
             ),
           );
-        });
   }
 }

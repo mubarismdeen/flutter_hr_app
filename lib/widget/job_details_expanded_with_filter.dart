@@ -1,5 +1,6 @@
 import 'package:admin/constants/style.dart';
 import 'package:admin/models/userPrivileges.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:admin/widget/job_details_filter.dart';
 import 'package:admin/widget/job_details_upload.dart';
 import 'package:flutter/material.dart';
@@ -22,20 +23,29 @@ class _JobDetailsExpandedWithFilterState
     extends State<JobDetailsExpandedWithFilter> {
   List<Map<String, dynamic>> tableData = <Map<String, String>>[];
 
-  String _selectedJobStatus = '';
-  String _selectedAssignedTo = '';
+  StatusEntity _selectedJobStatus = StatusEntity();
+  StatusEntity _selectedAssignedTo = StatusEntity();
   String _selectedDueDate = '';
 
+  bool _isFilterApplied = false;
+
   getTableData() async {
+    String selectedJobStatusId =
+        _selectedJobStatus.id == 0 ? '' : _selectedJobStatus.id.toString();
+    String selectedAssignedToId =
+        _selectedAssignedTo.id == 0 ? '' : _selectedAssignedTo.id.toString();
     tableData = await getJobDetails(
-        _selectedJobStatus, _selectedAssignedTo, _selectedDueDate);
+        selectedJobStatusId, selectedAssignedToId, _selectedDueDate);
   }
 
-  applyFilter(String jobStatus, String assignedTo, String dueDate) {
+  applyFilter(StatusEntity jobStatus, StatusEntity assignedTo, String dueDate) {
     setState(() {
       _selectedJobStatus = jobStatus;
       _selectedAssignedTo = assignedTo;
       _selectedDueDate = dueDate;
+      _isFilterApplied = _selectedDueDate.isNotEmpty ||
+          _selectedJobStatus.description.isNotEmpty ||
+          _selectedAssignedTo.description.isNotEmpty;
       getTableData();
     });
   }
@@ -57,11 +67,28 @@ class _JobDetailsExpandedWithFilterState
                       const SizedBox(width: 15),
                       IconButton(
                         onPressed: _openFilterDialog,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.filter_alt_sharp,
-                          color: Colors.grey,
+                          color: _isFilterApplied ? Colors.blue : Colors.grey,
                         ),
                       ),
+                      if (_isFilterApplied) // Conditionally render the button if _isFilterApplied is true
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.blue),
+                            color: Colors.white, // Adjust color as needed
+                          ),
+                          child: TextButton(
+                            onPressed: () => {
+                              applyFilter(StatusEntity(), StatusEntity(), '')
+                            },
+                            child: const Text(
+                              'Clear Filter',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                   TextButton(
@@ -225,7 +252,13 @@ class _JobDetailsExpandedWithFilterState
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(content: JobDetailsFilter(applyFilter));
+        return AlertDialog(
+            content: JobDetailsFilter(
+          applyFilter: applyFilter,
+          selectedAssignedTo: _selectedAssignedTo,
+          selectedJobStatus: _selectedJobStatus,
+          selectedDueDate: _selectedDueDate,
+        ));
       },
     );
   }

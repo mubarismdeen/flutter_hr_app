@@ -9,6 +9,7 @@ import 'package:admin/models/salaryPaid.dart';
 import 'package:admin/models/saveEmployeeDetails.dart';
 import 'package:admin/models/userPrivileges.dart';
 import 'package:admin/models/userScreens.dart';
+import 'package:admin/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -139,24 +140,24 @@ Future<List<Map<String, dynamic>>> getDocType() async {
   return list;
 }
 
-Future<List<Map<String, dynamic>>> getQuotationType() async {
+Future<List<StatusEntity>> getQuotationType() async {
   String urlWithParams = "http://$ip/Hrms/getQuotationType";
-  List<Map<String, dynamic>> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
-      .map((dynamic e) => e as Map<String, dynamic>).toList();
+  List<StatusEntity> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => StatusEntity.fromJson(job)).toList();
   return list;
 }
 
-Future<List<Map<String, dynamic>>> getPoStatus() async {
+Future<List<StatusEntity>> getPoStatus() async {
   String urlWithParams = "http://$ip/Hrms/getpoStatus";
-  List<Map<String, dynamic>> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
-      .map((dynamic e) => e as Map<String, dynamic>).toList();
+  List<StatusEntity> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => StatusEntity.fromJson(job)).toList();
   return list;
 }
 
-Future<List<Map<String, dynamic>>> getInvoiceStatus() async {
+Future<List<StatusEntity>> getInvoiceStatus() async {
   String urlWithParams = "http://$ip/Hrms/getinvStatus";
-  List<Map<String, dynamic>> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
-      .map((dynamic e) => e as Map<String, dynamic>).toList();
+  List<StatusEntity> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => StatusEntity.fromJson(job)).toList();
   return list;
 }
 
@@ -313,10 +314,10 @@ Future<bool> deleteEmployeeDetails(int employeeId) async {
 }
 
 
-Future<List<Map<String, dynamic>>> getJobStatuses() async {
+Future<List<StatusEntity>> getJobStatuses() async {
   String urlWithParams = "http://$ip/Hrms/getjobStatus";
-  List<Map<String, dynamic>> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
-      .map((dynamic e) => e as Map<String, dynamic>).toList();
+  List<StatusEntity> list = (await httpConnect(urlWithParams, HttpMethod.GET) as List)
+      .map((job) => StatusEntity.fromJson(job)).toList();
   return list;
 }
 
