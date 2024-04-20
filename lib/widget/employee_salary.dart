@@ -8,13 +8,20 @@ import '../models/salaryPaid.dart';
 import '../models/salaryPay.dart';
 
 class EmployeeSalary extends StatefulWidget {
+  DateTime pickedDate;
+
+  EmployeeSalary(this.pickedDate);
+
   @override
   _EmployeeSalaryState createState() => _EmployeeSalaryState();
 }
 
 class _EmployeeSalaryState extends State<EmployeeSalary> {
+
   List<SalaryPay> _salaryPay = List<SalaryPay>.empty();
   double _paidAmount = 0;
+
+
   SalaryPaid _salaryPaid = SalaryPaid(
       id: 0,
       empCode: '',
@@ -33,7 +40,7 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
 
   getData() async {
     _salaryPay =
-        await getSalaryPay(DateFormat('yyyy-MM').format(DateTime.now()));
+        await getSalaryPay(DateFormat('yyyy-MM').format(widget.pickedDate));
   }
 
   Future<void> _submitForm(SalaryPay salary) async {
@@ -279,4 +286,5 @@ class _EmployeeSalaryState extends State<EmployeeSalary> {
           );
         });
   }
+
 }

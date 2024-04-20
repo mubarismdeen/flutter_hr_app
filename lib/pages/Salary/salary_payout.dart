@@ -1,13 +1,11 @@
-import 'package:admin/constants/style.dart';
-import 'package:admin/widget/custom_alert_dialog.dart';
 import 'package:admin/widget/custom_text.dart';
-import 'package:admin/widget/employee_salary_form.dart';
 import 'package:admin/widget/employee_salary.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../constants/controllers.dart';
 import '../../helpers/responsiveness.dart';
+import '../../widget/month_picker.dart';
 
 class SalaryPayout extends StatefulWidget {
   const SalaryPayout({Key? key}) : super(key: key);
@@ -17,6 +15,14 @@ class SalaryPayout extends StatefulWidget {
 }
 
 class _SalaryPayoutState extends State<SalaryPayout> {
+
+  DateTime _pickedDate = DateTime.now();
+  void onDateChange(DateTime newDate) {
+    setState(() {
+      _pickedDate = newDate;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +43,17 @@ class _SalaryPayoutState extends State<SalaryPayout> {
             )
           ],
         )),
-        const SizedBox(height: 20),
-        EmployeeSalary(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 25.0, top: 35.0),
+              child: MonthPicker(_pickedDate, onDateChange),
+            ),
+          ],
+        ),
+        const SizedBox(height: 15),
+        EmployeeSalary(_pickedDate),
       ]),
     );
   }

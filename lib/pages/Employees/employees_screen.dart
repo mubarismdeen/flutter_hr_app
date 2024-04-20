@@ -149,18 +149,6 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
     );
   }
 
-  //   CustomAlertDialog(
-  //     // [
-  //     //   TextButton(
-  //     //     onPressed: () {
-  //     //       // Implement submission logic here
-  //     //       Navigator.pop(context);
-  //     //     },
-  //     //     child: const Text("Submit"),
-  //     //   ),
-  //     // ],
-  // );
-
   Widget _getDataTable() {
     return DataTable(
       showCheckboxColumn: false,
@@ -250,12 +238,15 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                     IconButton(
                       icon: const Icon(Icons.settings_outlined,
                           color: Colors.blueAccent),
-                      onPressed: () => _openPrivilegesDialog(employee),
+                      onPressed: () => {
+                        if (employee.name != 'admin')
+                          _openPrivilegesDialog(employee)
+                      },
                     ),
                   ),
                 ],
                 onSelectChanged: (selected) {
-                  if (selected != null && selected) {
+                  if (selected != null && selected && employee.name != 'admin') {
                     _openUploadDialog(employee);
                   }
                 },
